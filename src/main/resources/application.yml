@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/goshop
+    username: root
+    password: root
+  jpa:
+    generate-ddl: true
+    show-sql: true
+
