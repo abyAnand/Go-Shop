@@ -2,10 +2,7 @@ package io.ecommerce.GoShop.model;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
@@ -13,24 +10,16 @@ import java.util.Collection;
 @Getter
 @Setter
 @ToString
-@RequiredArgsConstructor
 @AllArgsConstructor
 @NoArgsConstructor
 public class Role extends BaseEntity{
 
-    private String name;
+    private String roleName;
 
 
-    @ManyToMany(mappedBy = "roles")
-    @ToString.Exclude
-    private Collection<User> users;
 
-    @ManyToMany
-    @JoinTable(name = "role_privileges",
-    joinColumns = @JoinColumn(name = "role_id"),
-    inverseJoinColumns = @JoinColumn(name = "privilege_id"))
-    @ToString.Exclude
-    private Collection<Privilege> privileges;
+
+
 
 
 }

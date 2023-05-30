@@ -1,0 +1,191 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+        crossorigin="anonymous">
+
+  <style>
+
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .signup-form {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 30px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .signup-form h2 {
+      color: #343a40;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .signup-form .hint-text {
+      color: #999;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .signup-form .error-text {
+      color: #dc3545;
+      margin-bottom: 30px;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    .signup-form form {
+      margin-bottom: 15px;
+    }
+
+    .signup-form .form-group {
+      margin-bottom: 20px;
+    }
+
+    .signup-form input[type="text"],
+    .signup-form input[type="email"],
+    .signup-form input[type="tel"],
+    .signup-form input[type="password"] {
+      height: 40px;
+      box-shadow: none;
+      color: #333;
+    }
+
+    .signup-form input[type="text"]:focus,
+    .signup-form input[type="email"]:focus,
+    .signup-form input[type="tel"]:focus,
+    .signup-form input[type="password"]:focus {
+      border-color: #80bdff;
+    }
+
+    .signup-form .btn {
+      font-size: 16px;
+      font-weight: bold;
+      min-width: 140px;
+      outline: none !important;
+    }
+
+    .signup-form .text-center a {
+      color: #343a40;
+      text-decoration: underline;
+    }
+
+    .signup-form .text-center a:hover {
+      text-decoration: none;
+    }
+  </style>
+
+  <style>
+    .error {
+        color: red;
+    }
+</style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body>
+<div class="signup-form">
+  <h2>Register</h2>
+  <p class="hint-text">Create account.</p>
+  <p id="errorMsg" hidden class="error-text">Please enter all fields</p>
+  <form th:action="@{/user/register}" th:object="${user}" method="post">
+    <div class="form-group">
+      <input oninput="validate()" id="firstName" type="text" class="form-control" name="firstName"
+             placeholder="First Name" required="required">
+    </div>
+
+
+    <div class="form-group">
+      <input oninput="validate()" id="lastName" type="text" class="form-control" name="lastName"
+             placeholder="Last Name" required="required">
+    </div>
+
+    <div class="form-group">
+      <input oninput="validate()" type="text" class="form-control" id="username" name="username"
+             placeholder="Username" th:field="*{username}" required="required">
+      <p th:errors="*{username}" class="error"></p>
+      <div th:if="${#fields.hasErrors('username')}" class="error">
+        <p th:each="error : ${#fields.errors('username')}" th:text="${error}"></p>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <input oninput="validate()" type="email" class="form-control" name="email" placeholder="Email"
+             required="required">
+    </div>
+
+    <div class="form-group">
+      <input oninput="validate()" type="tel" class="form-control" name="phoneNumber" placeholder="Phone"
+             required="required">
+    </div>
+
+    <div class="form-group">
+      <input type="password" oninput="validate()" class="form-control" name="password" placeholder="Password"
+             required="required" id="pass1">
+    </div>
+
+    <div class="form-group">
+      <input type="password" oninput="validate()" class="form-control" name="confirm_password"
+             placeholder="Confirm Password" required="required" id="pass2">
+    </div>
+
+    <div class="form-group">
+      <button disabled id="registerButton" type="submit" value="UserInfo"
+              class="btn btn-primary btn-block">Register
+      </button>
+    </div>
+  </form>
+  <div class="text-center">Already have an account? <a th:href="@{/user/login}">Sign in</a></div>
+</div>
+
+<script>
+  function validateRegrex(text) {
+    // letters, numbers, underscores, and periods.
+    const usernameRegex = /^[a-z0-9_.]+$/;
+    return usernameRegex.test(text);
+  }
+
+  function validate() {
+    const pass1 = document.getElementById("pass1").value;
+    const pass2 = document.getElementById("pass2").value;
+    const firstName = document.getElementById("firstName").value;
+    const lastName = document.getElementById("lastName").value;
+    const username = document.getElementById("username").value;
+    const registerBtn = document.getElementById("registerButton");
+    const errorMsg = document.getElementById("errorMsg");
+
+    if (
+      pass1 !== pass2 ||
+      pass1 === "" ||
+      pass2 === "" ||
+      firstName === "" ||
+      lastName === "" ||
+      username === ""
+    ) {
+      console.log("Validation Failed");
+      registerBtn.disabled = true;
+      errorMsg.hidden = false;
+    } else if (!validateRegrex(username) || !validateRegrex(pass1)) {
+      console.log("Validation Failed");
+      registerBtn.disabled = true;
+      errorMsg.hidden = false;
+    } else {
+      console.log("Validation Passed");
+      registerBtn.disabled = false;
+      errorMsg.hidden = true;
+    }
+  }
+</script>
+</body>
+</html>
