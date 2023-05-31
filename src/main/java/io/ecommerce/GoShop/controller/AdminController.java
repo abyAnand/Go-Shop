@@ -26,33 +26,25 @@ public class AdminController {
     RoleService roleService;
 
     @GetMapping("/users")
-    public String userList(Model model){
+    public String userList(Model model) {
 
 
-        List<User> userList= userService.findAll();
-        model.addAttribute("users",userList);
+        List<User> userList = userService.findAll();
+        model.addAttribute("users", userList);
 
         return "/admin/user-management";
     }
 
-    @GetMapping("/users/create")
-    public String createUser(@ModelAttribute User user, Model model, BindingResult result) {
-        List<Role> roles = roleService.getRoles();
-        model.addAttribute("user", new User());
-        model.addAttribute("roles", roles);
+@GetMapping("/users/create")
+public String createUser(Model model){
 
-        String userName = user.getUsername();
-        // check if the username is already present
-        Optional<User> existingUser = userService.findByUsername(userName);
-        if (existingUser.isPresent()) {
-            result.rejectValue("username", "error.username", "Username already exists");
-            return "/admin/create-user";
-        }
+    List<Role> roles = roleService.getRoles();
+    model.addAttribute("user", new User());
+    model.addAttribute("roles", roles);
 
-        userService.save(user);
 
-        return "redirect:/admin/users";
-    }
+        return "/admin/create-user";
+}
 
     @GetMapping("/users/update/{id}")
     public String updateUser(@PathVariable UUID id, RedirectAttributes attributes, Model model){
@@ -87,6 +79,32 @@ public class AdminController {
             result.rejectValue("username", "error.username", "Username already exists");
             model.addAttribute("roles", role);
             return "/admin/new-user";
+        }
+
+        userService.save(user);
+
+        return "redirect:/admin/users";
+    }
+
+    @PostMapping("/saveNewUser")
+    public String saveNewUser(@ModelAttribute User user,
+                           BindingResult result,
+                           Model model) {
+
+        List<Role> role = roleService.getRoles();
+
+        if (result.hasErrors()) {
+            model.addAttribute("user", user);
+            model.addAttribute("roles", role);
+            return "/admin/create-user";
+        }
+
+        Optional<User> existingUser = userService.findByUsername(user.getUsername());
+
+        if (existingUser.isPresent() && !existingUser.get().getId().equals(user.getId())) {
+            result.rejectValue("username", "error.username", "Username already exists");
+            model.addAttribute("roles", role);
+            return "/admin/create-user";
         }
 
         userService.save(user);

@@ -78,23 +78,29 @@
 </div>
 
 <script>
-  // Get references to the password and confirm password fields
-  var passwordInput = document.getElementById("password");
-  var confirmPasswordInput = document.getElementById("confirm_password");
+  // Update the user role value
+  function updateUserRole(role) {
+    document.getElementById('userRole').value = role;
+  }
 
-  // Add an event listener to the form on submit
+  // Validate the form on submit
   document.querySelector("form").addEventListener("submit", function(event) {
+    var passwordInput = document.getElementById("password");
+    var confirmPasswordInput = document.getElementById("confirm_password");
+
+    // Check if the password and confirm password fields are empty
+    if (passwordInput.value.trim() === "" || confirmPasswordInput.value.trim() === "") {
+      event.preventDefault();
+      alert("Please fill in both password fields.");
+      return;
+    }
+
     // Check if the password and confirm password fields have matching values
     if (passwordInput.value !== confirmPasswordInput.value) {
-      // Passwords do not match, prevent form submission and show an error message
       event.preventDefault();
       alert("Passwords do not match!");
     }
   });
-
-  function updateUserRole(role) {
-    document.getElementById('userRole').value = role;
-  }
 </script>
 
 </body>

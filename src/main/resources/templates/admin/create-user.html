@@ -12,7 +12,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <form role="form" th:action="@{/admin/save}" method="post" th:object="${user}">
+            <form role="form" th:action="@{/admin/saveNewUser}" method="post" th:object="${user}">
                 <legend class="text-center">Register</legend>
                 <fieldset>
                     <legend>Account Details <input class="text-center form-control" readonly></legend>
@@ -51,8 +51,8 @@
                 <fieldset>
                     <legend>Optional Details</legend>
                     <div class="form-group col-md-6">
-                        <label for="userEnabled">User Enabled</label>
-                        <select class="form-control" name="userEnabled" id="userEnabled">
+                        <label for="enabled">User Enabled</label>
+                        <select class="form-control" name="enabled" id="enabled">
                             <option value="true" th:selected="${user.enabled == true}">Enabled</option>
                             <option value="false" th:selected="${user.enabled == false}">Disabled</option>
                         </select>
@@ -60,9 +60,9 @@
                     <div class="form-group col-md-12">
                         <label for="userRole">User Role</label>
                         <select class="form-control" name="role.roleName" id="userRole" onchange="updateUserRole(this.value)">
-                            <option th:each="option : ${roles}"
+                            <option th:each="option : ${roles}" th:value="${option.roleName}"
                                     th:text="${option.roleName == 'ROLE_ADMIN' ? 'ADMIN' : (option.roleName == 'ROLE_USER' ? 'USER' : 'VENDOR')}"
-                                    th:selected="${option.roleName == user.role.roleName}"></option>
+                                    th:selected="${option == user.role}"></option>
                         </select>
                     </div>
                 </fieldset>
