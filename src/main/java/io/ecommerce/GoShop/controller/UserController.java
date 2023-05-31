@@ -8,13 +8,12 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/user")
@@ -27,6 +26,7 @@ public class UserController {
     public String homePage(){
         return "index";
     }
+
 
     @GetMapping(value = {"/register","/signup"})
     public String register(Model model){
@@ -67,6 +67,14 @@ public class UserController {
             }
             userService.save(user);
         }
+
+        return "index";
+    }
+
+    @GetMapping("/update/{id}")
+    public String updateUser(@PathVariable UUID id, RedirectAttributes attributes, Model model){
+
+        User user = userService.findById(id);
 
         return "index";
     }

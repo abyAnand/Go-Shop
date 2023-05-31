@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -39,7 +40,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(userdto.getPassword()));
         user.setEnabled(true);
 
-        Role role = roleRepository.findByRoleName(RoleEnum.ROLE_USER.toString());
+        Role role = roleRepository.findByRoleName("ROLE_USER");
 
         user.setRole(role);
 
@@ -52,6 +53,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void save(User user) {
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setEnabled(user.isEnabled());
+
+        userRepository.save(user);
+    }
+
+    @Override
     public Optional<User> findByUsername(String username) {
 
         return userRepository.findByUsername(username);
@@ -60,5 +70,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public User findById(UUID uuid) {
+        return userRepository.findById(uuid).orElse(null);
     }
 }
