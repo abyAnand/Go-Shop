@@ -27,6 +27,7 @@ $(document).ready(function(){
                 <div class="row">
                     <div class="col-sm-5">
                         <h2>User <b>Management</b></h2>
+
                     </div>
                     <div class="col-sm-7">
                         <a th:href="@{/admin/users/create}" class="btn btn-secondary"><i class="material-icons">&#xE147;</i> <span>Add New User</span></a>
@@ -37,6 +38,9 @@ $(document).ready(function(){
 
             <div th:if="${error}">
                 <div th:text="${error}"></div>
+            </div>
+            <div th:if="${message}" class="alert alert-success">
+                <span th:text="${message}"></span>
             </div>
             <table class="table table-striped table-hover">
                 <thead>
@@ -65,8 +69,11 @@ $(document).ready(function(){
                         <span th:text="${user.enabled} ? 'Active' : 'Blocked'"></span>
                     </td>
                     <td>
-                        <a th:href="@{/admin/users/update/{id}(id=${user.id})}" class="settings" title="Settings" data-toggle="tooltip"><i class="material-icons">&#xE8B8;</i></a>
-                        <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE5C9;</i></a>
+                        <a th:href="@{/admin/users/update/{id}(id=${user.id})}" class="edit" title="edit" data-toggle="tooltip"><i class="material-icons">&#xE8B8;</i></a>
+                        <a th:href="@{/admin/users/delete/{id}(id=${user.id})}" onclick="return confirmDeleteUser()" class="delete" title="Delete" data-toggle="tooltip">
+                            <i class="material-icons">&#xE5C9;</i>
+                        </a>
+
                     </td>
 
                 </tr>
@@ -76,5 +83,10 @@ $(document).ready(function(){
         </div>
     </div>
 </div>
+<script>
+    function confirmDeleteUser() {
+        return confirm("Are you sure you want to delete this user?");
+    }
+</script>
 </body>
 </html>

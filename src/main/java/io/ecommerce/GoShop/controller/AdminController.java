@@ -59,6 +59,22 @@ public String createUser(Model model){
         return "/admin/update-user";
     }
 
+    @GetMapping("/users/delete/{id}")
+    public String deleteUser(@PathVariable UUID id,
+                             RedirectAttributes attributes,
+                             Model model) {
+
+        Optional<User> user = Optional.ofNullable(userService.findById(id));
+
+        if (user.isPresent()) {
+            UUID userId = user.get().getId();
+            userService.delete(userId);
+            attributes.addFlashAttribute("message", "User deleted successfully");
+        }
+
+        return "redirect:/admin/users";
+    }
+
 
     @PostMapping("/save")
     public String saveUser(@ModelAttribute User user,

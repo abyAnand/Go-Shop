@@ -21,4 +21,6 @@ public interface UserService {
     List<User> findAll();
 
     User findById(UUID uuid);
+
+    void delete(UUID id);
 }
