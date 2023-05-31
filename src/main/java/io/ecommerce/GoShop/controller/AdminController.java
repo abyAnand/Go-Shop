@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -103,15 +104,14 @@ public String createUser(Model model){
     }
 
     @PostMapping("/saveNewUser")
-    public String saveNewUser(@ModelAttribute User user,
-                           BindingResult result,
-                           Model model) {
+    public String saveNewUser(@ModelAttribute("user") @Valid User user,
+                              BindingResult result,
+                              Model model) {
 
-        List<Role> role = roleService.getRoles();
+        List<Role> roles = roleService.getRoles();
 
         if (result.hasErrors()) {
-            model.addAttribute("user", user);
-            model.addAttribute("roles", role);
+            model.addAttribute("roles", roles);
             return "/admin/create-user";
         }
 
@@ -119,7 +119,7 @@ public String createUser(Model model){
 
         if (existingUser.isPresent() && !existingUser.get().getId().equals(user.getId())) {
             result.rejectValue("username", "error.username", "Username already exists");
-            model.addAttribute("roles", role);
+            model.addAttribute("roles", roles);
             return "/admin/create-user";
         }
 

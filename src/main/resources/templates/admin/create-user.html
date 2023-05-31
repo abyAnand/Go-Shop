@@ -4,6 +4,7 @@
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/form-validation-create-user.js}"></script>
 
     <!------ Include the above in your HEAD tag ---------->
 </head>
@@ -20,11 +21,11 @@
 
                     <div class="form-group col-md-6">
                         <label for="firstname">First name</label>
-                        <input  name="firstName" type="text" id="firstName" class="form-control" placeHolder="First Name">
+                        <input th:field="${user.firstName}"  name="firstName" type="text" id="firstName" class="form-control" placeHolder="First Name">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="lastName">Last name</label>
-                        <input  name="lastName" type="text" id="lastName" class="form-control" placeHolder="Last Name">
+                        <input th:field="${user.lastName}" name="lastName" type="text" id="lastName" class="form-control" placeHolder="Last Name">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="username">Username</label>
@@ -33,19 +34,21 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label for="phonenumber">Phonenumber</label>
-                        <input type="text" class="form-control" name="phoneNumber" id="phonenumber" placeholder="Phonenumber">
+                        <input th:field="${user.phoneNumber}" type="text" class="form-control" name="phoneNumber" id="phonenumber" placeholder="Phonenumber" pattern="[0-9]{10}" required>
+                        <span class="text-danger" id="phoneNumberError"></span>
+                        <span id="phoneNumberCount"></span>
                     </div>
                     <div class="form-group col-md-12">
                         <label for="email">Email</label>
-                        <input type="email" class="form-control" name="email" id="email" placeholder="Email">
+                        <input th:field="${user.email}" type="email" class="form-control" name="email" id="email" placeholder="Email">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="password">Password</label>
-                        <input  type="password" class="form-control" name="password" id="password" placeholder="Password">
+                        <input th:field="${user.password}" type="password" class="form-control" name="password" id="password" placeholder="Password">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="confirm_password">Confirm Password</label>
-                        <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
+                        <input  type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
                     </div>
                 </fieldset>
                 <fieldset>
@@ -59,7 +62,7 @@
                     </div>
                     <div class="form-group col-md-12">
                         <label for="userRole">User Role</label>
-                        <select class="form-control" name="role.roleName" id="userRole" onchange="updateUserRole(this.value)">
+                        <select class="form-control" th:field="${user.role.roleName}" name="role.roleName" id="userRole" onchange="updateUserRole(this.value)">
                             <option th:each="option : ${roles}" th:value="${option.roleName}"
                                     th:text="${option.roleName == 'ROLE_ADMIN' ? 'ADMIN' : (option.roleName == 'ROLE_USER' ? 'USER' : 'VENDOR')}"
                                     th:selected="${option == user.role}"></option>
