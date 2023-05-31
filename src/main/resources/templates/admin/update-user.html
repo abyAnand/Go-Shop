@@ -41,11 +41,14 @@
 					</div>
 					<div class="form-group col-md-6">
 						<label for="password">Password</label>
-						<input  type="password" class="form-control" name="password" id="password" placeholder="Password">
+						<input type="password" class="form-control" name="password" id="password" placeholder="Password" readonly>
 					</div>
 					<div class="form-group col-md-6">
 						<label for="confirm_password">Confirm Password</label>
-						<input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
+						<input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password" readonly>
+					</div>
+					<div class="form-group col-md-12">
+						<button type="button" class="btn btn-primary" id="passwordEditButton">Edit Password</button>
 					</div>
 				</fieldset>
 				<fieldset>
@@ -83,11 +86,29 @@
     document.getElementById('userRole').value = role;
   }
 
-  // Validate the form on submit
-  document.querySelector("form").addEventListener("submit", function(event) {
+  // Enable password fields and validate the form on button click
+  document.getElementById("passwordEditButton").addEventListener("click", function(event) {
     var passwordInput = document.getElementById("password");
     var confirmPasswordInput = document.getElementById("confirm_password");
 
+    if (passwordInput.readOnly) {
+      passwordInput.readOnly = false;
+      confirmPasswordInput.readOnly = false;
+      event.target.textContent = "Cancel";
+    } else {
+      passwordInput.readOnly = true;
+      confirmPasswordInput.readOnly = true;
+      event.target.textContent = "Edit Password";
+    }
+  });
+
+  // Validate the form on submit
+document.querySelector("form").addEventListener("submit", function(event) {
+  var passwordInput = document.getElementById("password");
+  var confirmPasswordInput = document.getElementById("confirm_password");
+
+  // Check if the password fields are editable
+  if (!passwordInput.readOnly && !confirmPasswordInput.readOnly) {
     // Check if the password and confirm password fields are empty
     if (passwordInput.value.trim() === "" || confirmPasswordInput.value.trim() === "") {
       event.preventDefault();
@@ -100,7 +121,8 @@
       event.preventDefault();
       alert("Passwords do not match!");
     }
-  });
+  }
+});
 </script>
 
 </body>
