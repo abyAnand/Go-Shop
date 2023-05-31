@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+
+<!------ Include the above in your HEAD tag ---------->
+</head>
+<body>
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<form role="form" th:action="@{/admin/save}" method="post" th:object="${user}">
+				<legend class="text-center">Register</legend>
+				<fieldset>
+					<legend>Account Details <input class="text-center form-control" th:value="${user.id}" name="id" type="text" id="id" readonly></legend>
+
+
+					<div class="form-group col-md-6">
+						<label for="firstname">First name</label>
+						<input th:value="${user.firstName}" name="firstName" type="text" id="firstName" class="form-control" placeHolder="First Name">
+					</div>
+					<div class="form-group col-md-6">
+						<label for="lastName">Last name</label>
+						<input th:value="${user.lastName}" name="lastName" type="text" id="lastName" class="form-control" placeHolder="Last Name">
+					</div>
+					<div class="form-group col-md-6">
+						<label for="username">Username</label>
+						<input th:value="${user.username}" name="username"  type="text" id="username" class="form-control" placeholder="Username">
+						<span class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="phonenumber">Phonenumber</label>
+						<input th:value="${user.phoneNumber}" type="text" class="form-control" name="phoneNumber" id="phonenumber" placeholder="Phonenumber">
+					</div>
+					<div class="form-group col-md-12">
+						<label for="email">Email</label>
+						<input th:value="${user.email}" type="email" class="form-control" name="email" id="email" placeholder="Email">
+					</div>
+					<div class="form-group col-md-6">
+						<label for="password">Password</label>
+						<input  type="password" class="form-control" name="password" id="password" placeholder="Password">
+					</div>
+					<div class="form-group col-md-6">
+						<label for="confirm_password">Confirm Password</label>
+						<input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
+					</div>
+				</fieldset>
+				<fieldset>
+					<legend>Optional Details</legend>
+					<div class="form-group col-md-6">
+						<label for="enabled">User Enabled</label>
+						<select class="form-control" name="enabled" id="enabled">
+							<option value="true" th:selected="${user.enabled == true}">Enabled</option>
+							<option value="false" th:selected="${user.enabled == false}">Disabled</option>
+						</select>
+					</div>
+					<div class="form-group col-md-12">
+						<label for="userRole">User Role</label>
+						<select class="form-control" name="role.roleName" id="userRole" onchange="updateUserRole(this.value)">
+							<option th:each="option : ${roles}" th:value="${option.roleName}"
+									th:text="${option.roleName == 'ROLE_ADMIN' ? 'ADMIN' : (option.roleName == 'ROLE_USER' ? 'USER' : 'VENDOR')}"
+									th:selected="${option == user.role}"></option>
+						</select>
+					</div>
+
+				</fieldset>
+				<div class="form-group">
+					<div class="col-md-12">
+						<button type="submit" class="btn btn-primary">Register</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script>
+  // Get references to the password and confirm password fields
+  var passwordInput = document.getElementById("password");
+  var confirmPasswordInput = document.getElementById("confirm_password");
+
+  // Add an event listener to the form on submit
+  document.querySelector("form").addEventListener("submit", function(event) {
+    // Check if the password and confirm password fields have matching values
+    if (passwordInput.value !== confirmPasswordInput.value) {
+      // Passwords do not match, prevent form submission and show an error message
+      event.preventDefault();
+      alert("Passwords do not match!");
+    }
+  });
+
+  function updateUserRole(role) {
+    document.getElementById('userRole').value = role;
+  }
+</script>
+
+</body>
+</html>

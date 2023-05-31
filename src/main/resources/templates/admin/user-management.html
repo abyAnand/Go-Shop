@@ -59,7 +59,7 @@ $(document).ready(function(){
                     <td> <span th:text="${user.firstName + ' ' + user.lastName}"> Name </span></td>
                     <td> <span th:text="${user.username}"> username </span></td>
                     <td><span th:text="${user.createdDate}"> Date Created </span></td>
-                    <td th:text="${user.role.roleName == 'ROLE_ADMIN' ? 'ADMIN' : 'USER'}"></td>
+                    <td th:text="${user.role.roleName == 'ROLE_ADMIN' ? 'ADMIN' : (user.role.roleName == 'ROLE_USER' ? 'USER' : 'VENDOR')}"></td>
                     <td>
                         <span th:class="${user.enabled} ? 'status text-success' : 'status text-danger'">&bull;</span>
                         <span th:text="${user.enabled} ? 'Active' : 'Blocked'"></span>
