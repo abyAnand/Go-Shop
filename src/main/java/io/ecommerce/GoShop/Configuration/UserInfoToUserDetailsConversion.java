@@ -15,8 +15,6 @@ public class UserInfoToUserDetailsConversion implements UserDetails {
     private final String username;
     private final String password;
     private final List<GrantedAuthority> authorities;
-    private boolean enabled;
-    //tried to implement user blocking here, but it is throwing an error whenever a new variable is created in this class
 
     public UserInfoToUserDetailsConversion(User user) {
         username = user.getUsername();
@@ -24,7 +22,7 @@ public class UserInfoToUserDetailsConversion implements UserDetails {
         authorities = Arrays.stream(user.getRole().getRoleName().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
-        enabled = user.isEnabled();
+
 
     }
 
