@@ -28,6 +28,7 @@ public class User extends BaseEntity{
     @Column(name = "phone_number")
     private long phoneNumber;
 
+    @Column(name = "username")
     private String username;
 
     private String password;
