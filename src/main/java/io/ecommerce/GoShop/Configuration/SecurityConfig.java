@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .successHandler(new RefererAuthenticationSuccessHandler())
                 .and()
                 .exceptionHandling()
-                .accessDeniedPage("/403");// Custom forbidden error page
+                .accessDeniedPage("/access-denied");// Custom forbidden error page
         return http.build();
     }
 
