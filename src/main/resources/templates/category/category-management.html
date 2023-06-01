@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>List of Categories</title>
+    <link rel="stylesheet" th:href="@{/css/admin/admin.css}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <style>
+        .category-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .category-actions .action-icon {
+            margin-right: 5px;
+        }
+
+        .category-actions .action-icon:last-child {
+            margin-right: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container-xl">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <h2>List of <b>Categories</b></h2>
+                    </div>
+                    <div class="col-sm-7">
+                        <a th:href="@{/category/create}" class="btn btn-secondary"><i class="material-icons">&#xE147;</i> <span>Add New Category</span></a>
+                        <a th:href="@{/admin/users}" class="btn btn-secondary"><i class="material-icons">&#xE147;</i> <span>Back to User Management</span></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Table -->
+            <div th:if="${error}">
+                <div th:text="${error}"></div>
+            </div>
+            <div th:if="${message}" class="alert alert-success">
+                <span th:text="${message}"></span>
+            </div>
+            <table id="categoryTable" class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th style="width:40%">Category ID</th>
+                    <th style="width: 40%">Category Name</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${categories.empty}">
+                    <td colspan="3">No Categories</td>
+                </tr>
+                <tr th:each="category: ${categories}">
+                    <td th:text="${category.id}"></td>
+                    <td th:text="${category.categoryName}"></td>
+                    <td>
+                        <div class="category-actions">
+                            <a th:href="@{/category/update/{id}(id=${category.id})}" class="edit action-icon" title="Edit" data-toggle="tooltip">
+                                <i class="material-icons">&#xE254;</i>
+                            </a>
+                            <a th:href="@{/category/delete/{id}(id=${category.id})}" onclick="return confirmDeleteCategory()" class="delete action-icon" title="Delete" data-toggle="tooltip">
+                                <i class="material-icons">&#xE5C9;</i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    function confirmDeleteCategory() {
+        return confirm("Are you sure you want to delete this category?");
+    }
+</script>
+</body>
+</html>

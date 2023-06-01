@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Add Category</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                <div class="card-header">
+                    <h3>Add New Category</h3>
+                </div>
+                <div class="card-body">
+                    <form id="addCategoryForm" th:action="@{/category/save}" th:object="${category}" method="post">
+                        <div class="form-group">
+                            <label for="categoryName">Category Name:</label>
+                            <input type="text" class="form-control" name="categoryName" id="categoryName" required
+                                   th:class="${#fields.hasErrors('categoryName')} ? 'form-control is-invalid' : 'form-control'">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('categoryName')}" th:errors="*{categoryName}"></div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Category</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -98,7 +98,7 @@
 <div class="signup-form">
   <h2>Register</h2>
   <p class="hint-text">Create account.</p>
-  <p id="errorMsg" hidden class="error-text">Please enter all fields</p>
+  <p id="errorMsg" th:text="${errorMsg}" th:if="${errorMsg}" class="error-text"></p>
   <form th:action="@{/user/register}" th:object="${user}" method="post">
     <div class="form-group">
       <input oninput="validate()" id="firstName" type="text" class="form-control" name="firstName"
@@ -117,6 +117,7 @@
       <p th:errors="*{username}" class="error"></p>
       <div th:if="${#fields.hasErrors('username')}" class="error">
         <p th:each="error : ${#fields.errors('username')}" th:text="${error}"></p>
+        <span class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
       </div>
     </div>
 

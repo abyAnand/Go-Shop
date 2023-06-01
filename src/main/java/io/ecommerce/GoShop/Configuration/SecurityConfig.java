@@ -27,7 +27,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .antMatchers("/static/**")
                 .permitAll()
-                .antMatchers("/")
+                .antMatchers("/","/register")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
