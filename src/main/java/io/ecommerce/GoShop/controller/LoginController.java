@@ -27,7 +27,6 @@ public class LoginController {
 
     @GetMapping(value = {"/","/index"})
     public String homePage(){
-        System.out.println("inside index in logincontroller");
         return "index";
     }
 
