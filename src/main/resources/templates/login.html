@@ -1,0 +1,76 @@
+<!doctype html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!--    <link th:href="@{/assets/css/style.css}" rel="stylesheet">-->
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+
+
+</head>
+<style>
+        .login-form {
+                width: 340px;
+                margin: 100px auto;
+                  font-size: 15px;
+            }
+            .login-form form {
+                margin-bottom: 15px;
+                background: #f7f7f7;
+                box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+                padding: 30px;
+            }
+            .login-form h2 {
+                margin: 0 0 15px;
+            }
+</style>
+<body class="">
+
+
+<div class="login-form ">
+    <!--    <form action="/authenticate" method="post">-->
+    <!--        &lt;!&ndash; Form fields... &ndash;&gt;-->
+    <!--        <div th:if="${param.error}" class="error-message">-->
+    <!--            Invalid username or password. Please try again.-->
+    <!--        </div>-->
+    <!--        &lt;!&ndash; Other form elements... &ndash;&gt;-->
+    <!--    </form>-->
+    <form th:action="@{/login}"  method="post" class=" login-background">
+        <h2 class="text-center">Sign in</h2>
+        <p th:if="${param.error}" class="text-danger">Username or Password Incorrect</p>
+        <p th:if="${signedUp}" class="text-success">User Registered</p>
+        <div class="row">
+            <input  type="text" name="username" class="form-control m-1" placeholder="username" required="required">
+        </div>
+        <div class="row">
+            <input type="password" name="password" class="form-control m-1" placeholder="password" required="required">
+        </div>
+        <div class="row">
+            <button  type="submit" value="Login" class="btn btn-primary m-1">Login</button>
+        </div>
+        <div class="row">
+            <a class="btn btn-secondary m-1" href="/app/signup">Signup</a>
+        </div>
+
+        <div class="text-center mt-5">
+            <a  href="/resetPassword">Forgot Password</a>
+        </div>
+
+    </form>
+
+
+</div>
+
+
+
+
+</body>
+</html>
