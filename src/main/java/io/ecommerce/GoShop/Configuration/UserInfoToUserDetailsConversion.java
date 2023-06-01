@@ -10,11 +10,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 public class UserInfoToUserDetailsConversion implements UserDetails {
 
-    private final String username;
-    private final String password;
-    private final List<GrantedAuthority> authorities;
+    private  String username;
+    private  String password;
+    private  List<GrantedAuthority> authorities;
 
     public UserInfoToUserDetailsConversion(User user) {
         username = user.getUsername();

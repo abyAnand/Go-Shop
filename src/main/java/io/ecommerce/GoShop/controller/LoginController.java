@@ -12,18 +12,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class LoginController {
 
     @GetMapping("/login")
-    public String login(){
-
+    public String login() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
             return "login";
         }
-        return "/index";
+        return "redirect:/";
     }
 
     @GetMapping("/access-denied")
-    public String accessDenied(){
+    public String accessDenied() {
         return "access-denied";
+    }
+
+    @GetMapping(value = {"/","/index"})
+    public String homePage(){
+        System.out.println("inside index in logincontroller");
+        return "index";
     }
 
 }

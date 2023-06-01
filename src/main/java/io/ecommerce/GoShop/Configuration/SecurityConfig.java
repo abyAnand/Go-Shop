@@ -27,7 +27,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .antMatchers("/static/**")
                 .permitAll()
-                .antMatchers("/index")
+                .antMatchers("/")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -38,7 +38,15 @@ public class SecurityConfig {
                 .successHandler(new RefererAuthenticationSuccessHandler())
                 .and()
                 .exceptionHandling()
-                .accessDeniedPage("/access-denied");// Custom forbidden error page
+                .accessDeniedHandler((request, response, accessDeniedException) -> response.sendRedirect("/access-denied"))
+                .and()
+                //logout logic
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .permitAll();
         return http.build();
     }
 

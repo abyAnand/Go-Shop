@@ -22,10 +22,6 @@ public class UserController {
     @Autowired
     UserServiceImpl userService;
 
-    @GetMapping("/")
-    public String homePage(){
-        return "index";
-    }
 
 
     @GetMapping(value = {"/register","/signup"})
