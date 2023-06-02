@@ -36,13 +36,7 @@
 
 
 <div class="login-form ">
-    <!--    <form action="/authenticate" method="post">-->
-    <!--        &lt;!&ndash; Form fields... &ndash;&gt;-->
-    <!--        <div th:if="${param.error}" class="error-message">-->
-    <!--            Invalid username or password. Please try again.-->
-    <!--        </div>-->
-    <!--        &lt;!&ndash; Other form elements... &ndash;&gt;-->
-    <!--    </form>-->
+
     <form th:action="@{/login}"  method="post" class=" login-background">
         <h2 class="text-center">Sign in</h2>
         <p th:if="${param.error}" class="text-danger">Username or Password Incorrect</p>
@@ -57,7 +51,7 @@
             <button  type="submit" value="Login" class="btn btn-primary m-1">Login</button>
         </div>
         <div class="row">
-            <a class="btn btn-secondary m-1" href="/app/signup">Signup</a>
+            <a class="btn btn-secondary m-1" th:href="@{/register}">Signup</a>
         </div>
 
         <div class="text-center mt-5">

@@ -49,7 +49,8 @@
                     </div>
                     <div class="col-sm-7">
                         <a th:href="@{/admin/users/create}" class="btn btn-secondary"><i class="material-icons">&#xE147;</i> <span>Add New User</span></a>
-<!--                        <a href="#" class="btn btn-secondary"><i class="material-icons">&#xE24D;</i> <span>Export to Excel</span></a>-->
+                        <a th:href="@{/category}" class="btn btn-secondary"><i class="material-icons">&#xE24D;</i> <span>Category</span></a>
+                        <a th:href="@{/products/}" class="btn btn-secondary"><i class="material-icons">shopping_cart</i> <span>Product</span></a>
                         <a th:href="@{/logout}" class="btn btn-danger btn-default"><i class="material-icons">&#xE879;</i> <span>Logout</span></a>
                     </div>
                 </div>
@@ -95,8 +96,8 @@
                 <tr th:each="user: ${users}">
                     <td th:text="${user.id}"></td>
                     <td> <span th:text="${user.firstName + ' ' + user.lastName}"> Name </span></td>
-                    <td> <span th:text="${user.username}"> username </span></td>
-                    <td><span th:text="${user.createdDate}"> Date Created </span></td>
+                    <td> <span th:text="${user.username}"> Username </span></td>
+                    <td><span th:text="${user.email}"> Email </span></td>
                     <td th:text="${user.role.roleName == 'ROLE_ADMIN' ? 'ADMIN' : (user.role.roleName == 'ROLE_USER' ? 'USER' : 'VENDOR')}"></td>
                     <td>
                         <span th:class="${user.enabled} ? 'status text-success' : 'status text-danger'">&bull;</span>

@@ -24,14 +24,14 @@ public class UserController {
 
 
 
-    @GetMapping(value = {"/register","/signup"})
-    public String register(Model model){
-
-        UserDTO user = new UserDTO();
-
-        model.addAttribute("user", user);
-        return "user/register";
-    }
+//    @GetMapping(value = {"/register","/signup"})
+//    public String register(Model model){
+//
+//        UserDTO user = new UserDTO();
+//
+//        model.addAttribute("user", user);
+//        return "user/register";
+//    }
 
     @GetMapping("/login")
     public String login(){
@@ -47,18 +47,17 @@ public class UserController {
     @PostMapping("/register")
     public String saveUser(@Valid @ModelAttribute UserDTO user,
                            BindingResult result,
-                           Model model){
+                           Model model) {
 
-
-
-        if(result.hasErrors()){
+        if (result.hasErrors()) {
             model.addAttribute("user", user);
             return "user/register";
-        }else{
+        } else {
             Optional<User> existingUser = userService.findByUsername(user.getUsername());
             if (existingUser.isPresent()) {
-                result.rejectValue("username", "error.user", "Username already exists");
+                result.rejectValue("username", "error.username", "Username already exists");
                 model.addAttribute("user", user);
+                model.addAttribute("errorMsg", "Username already exists");
                 return "user/register";
             }
             userService.save(user);
@@ -68,7 +67,7 @@ public class UserController {
     }
 
     @GetMapping("/update/{id}")
-    public String updateUser(@PathVariable UUID id, RedirectAttributes attributes, Model model){
+    public String updateUser(@PathVariable UUID id, Model model){
 
         User user = userService.findById(id);
 

@@ -1,0 +1,26 @@
+package io.ecommerce.GoShop.service.product;
+
+import io.ecommerce.GoShop.model.Product;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+
+public interface ProductService {
+
+
+
+    Product getByName(String productName);
+
+    void save(Product product);
+
+    List<Product> getAll();
+
+    Optional<Product> findById(UUID id);
+
+    boolean existsByName(String productName);
+
+
+    void deleteById(UUID id);
+}

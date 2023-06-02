@@ -89,7 +89,7 @@ public String createUser(Model model){
         if (result.hasErrors()) {
             model.addAttribute("user", user);
             model.addAttribute("roles", role);
-            return "/admin/new-user";
+            return "/admin/update-user";
         }
 
         Optional<User> existingUser = userService.findByUsername(user.getUsername());
@@ -97,7 +97,7 @@ public String createUser(Model model){
         if (existingUser.isPresent() && !existingUser.get().getId().equals(user.getId())) {
             result.rejectValue("username", "error.username", "Username already exists");
             model.addAttribute("roles", role);
-            return "/admin/new-user";
+            return "/admin/update-user";
         }
 
         userService.save(user);
