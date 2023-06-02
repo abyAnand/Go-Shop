@@ -67,7 +67,7 @@ public class UserController {
     }
 
     @GetMapping("/update/{id}")
-    public String updateUser(@PathVariable UUID id, RedirectAttributes attributes, Model model){
+    public String updateUser(@PathVariable UUID id, Model model){
 
         User user = userService.findById(id);
 

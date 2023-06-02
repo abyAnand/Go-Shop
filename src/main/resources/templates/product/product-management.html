@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Product Management</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+    /* Custom styles */
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .table-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      padding-top: 1rem;
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    .table-title h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0;
+    }
+
+    .btn-container {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .add-product-btn {
+      background-color: #007bff;
+      color: #fff;
+    }
+
+    .add-product-btn:hover {
+      background-color: #0056b3;
+      color: #fff;
+    }
+
+    .delete-product-btn {
+      background-color: #dc3545;
+      color: #fff;
+    }
+
+    .delete-product-btn:hover {
+      background-color: #a71d2a;
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+<div class="container-xl">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h2>Product <b>Management</b></h2>
+                    </div>
+                    <div class="col-sm-6 btn-container">
+                        <a th:href="@{/products/create}" class="btn btn-primary add-product-btn"><i class="material-icons">&#xE147;</i> <span>Add New Product</span></a>
+                        <a th:href="@{/category}" class="btn btn-secondary"><i class="material-icons">&#xE24D;</i> <span>Category</span></a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${message}" class="alert alert-success">
+                <span th:text="${message}"></span>
+            </div>
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Product Category</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${products.empty}">
+                    <td colspan="4">No Products</td>
+                </tr>
+                <tr th:each="product: ${products}">
+                    <td th:text="${product.id}"></td>
+                    <td th:text="${product.productName}"></td>
+                    <td th:text="${product.category.categoryName}"></td>
+                    <td>
+                        <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-primary btn-sm">Edit</a>
+                        <a th:href="@{/products/delete/{id}(id=${product.id})}" class="btn btn-danger btn-sm delete-product-btn" onclick="return confirm('Are you sure you want to delete this product?')">Delete</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>>
+</body>
+
+</html>
