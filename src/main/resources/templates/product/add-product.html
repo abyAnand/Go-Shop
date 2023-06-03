@@ -102,6 +102,22 @@
             reader.readAsDataURL(file);
         }
     });
+
+        document.getElementById('images').addEventListener('change', function(event) {
+        var previewContainer = document.getElementById('imagePreview');
+        var files = event.target.files;
+
+        // Check if the number of selected files exceeds the limit
+        if (files.length > 5) {
+            event.target.value = ''; // Clear the selected files
+            alert("You can only upload a maximum of 5 images.");
+            return;
+        }
+
+        previewContainer.innerHTML = ''; // Clear previous previews
+
+        // Rest of the code...
+    });
 </script>
 </body>
 </html>

@@ -46,4 +46,9 @@ public class ProductServiceImpl implements ProductService{
         productRepository.deleteById(id);
     }
 
+    @Override
+    public Optional<Product> findByName(String productName) {
+        return Optional.ofNullable(productRepository.findByProductName(productName));
+    }
+
 }

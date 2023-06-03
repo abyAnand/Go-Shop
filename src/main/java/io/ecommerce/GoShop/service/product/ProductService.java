@@ -24,4 +24,6 @@ public interface ProductService {
 
 
     void deleteById(UUID id);
+
+    Optional<Product> findByName(String productName);
 }

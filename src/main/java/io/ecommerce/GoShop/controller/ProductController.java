@@ -109,6 +109,13 @@ public class ProductController {
                               @RequestParam("images") List<MultipartFile> imageFiles,
                               Model model) throws IOException {
 
+        Optional<Product> existingProduct = productService.findByName(product.getProductName());
+        if (existingProduct.isPresent()) {
+            result.rejectValue("productName", "error.productName", "Product already exists");
+            model.addAttribute("categories", categoryService.findAll());
+            return "product/add-product";
+        }
+
         product = productService.save(product);
 
 
@@ -124,6 +131,8 @@ public class ProductController {
 
         return "/index";
     }
+
+
 
     private String handleFileUpload(MultipartFile file) throws IOException {
         // Define the directory to save the file in
@@ -145,6 +154,7 @@ public class ProductController {
         Path path = Paths.get(filePath);
         System.out.println(path);
         Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+        System.gc();
 
         // Return the file path
         return fileName;
