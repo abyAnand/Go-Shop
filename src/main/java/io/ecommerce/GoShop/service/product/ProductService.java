@@ -13,7 +13,8 @@ public interface ProductService {
 
     Product getByName(String productName);
 
-    void save(Product product);
+    Product save(Product product);
+
 
     List<Product> getAll();
 

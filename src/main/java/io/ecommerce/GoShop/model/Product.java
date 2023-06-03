@@ -3,6 +3,7 @@ package io.ecommerce.GoShop.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.awt.*;
 import java.util.List;
 
 @Entity
@@ -16,6 +17,10 @@ import java.util.List;
 public class Product extends BaseEntity{
 
     private String productName;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<Image> images;
 
     @OneToMany(mappedBy = "product")
     @ToString.Exclude
