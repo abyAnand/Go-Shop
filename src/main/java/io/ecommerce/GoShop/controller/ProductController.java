@@ -45,9 +45,11 @@ public class ProductController {
     public String listProducts(Model model){
 
         List<Product> products = productService.getAll();
+
+
+
         model.addAttribute("products", products);
         return "product/product-management";
-
     }
 
     @GetMapping("/create")
@@ -57,6 +59,8 @@ public class ProductController {
 
         model.addAttribute("categories", categoryList);
         model.addAttribute("product", new Product());
+
+
 
         return "product/add-product";
     }
@@ -82,27 +86,47 @@ public class ProductController {
     }
 
     @PostMapping("/update")
-    public String updateProduct(@Valid @ModelAttribute Product product,
+    public String updateProduct(@ModelAttribute("product") @Valid Product product,
                                 BindingResult result,
-                                Model model) {
+                                @RequestParam(value = "deletedImages", required = false) List<String> deletedImages,
+                                @RequestParam(value = "newImages", required = false) List<MultipartFile> newImages,
+                                Model model) throws IOException {
         if (result.hasErrors()) {
             model.addAttribute("categories", categoryService.findAll());
-            return "product/update-product";
+            return "update-product";
         }
 
-        Optional<Product> existingProduct = Optional.ofNullable(productService.getByName(product.getProductName()));
-
-        if (existingProduct.isPresent() && !existingProduct.get().getId().equals(product.getId())) {
-            // Product with the same name already exists
-            result.rejectValue("productName", "error.productName", "Product already exists");
-            model.addAttribute("categories", categoryService.findAll());
-            return "product/update-product";
+        // Update the product details
+        Product existingProduct = productService.findById(product.getId()).orElse(null);
+        if (existingProduct == null) {
+            return "redirect:/products";
         }
 
-        productService.save(product);
+        existingProduct.setProductName(product.getProductName());
+        existingProduct.setCategory(product.getCategory());
+
+        // Handle deleted images
+        if (deletedImages != null && !deletedImages.isEmpty()) {
+            for (String imageId : deletedImages) {
+                imageService.deleteImageById(UUID.fromString(imageId));
+            }
+        }
+
+        // Handle new images
+        if (newImages != null && !newImages.isEmpty()) {
+            for (MultipartFile newImage : newImages) {
+                String fileLocation = handleFileUpload(newImage); // Save the new image and get its file location
+                Image imageEntity = new Image(fileLocation, existingProduct); // Create an Image entity with the file location
+                imageEntity = imageService.saveImage(imageEntity);
+                existingProduct.getImages().add(imageEntity); // Add the Image entity to the Product's list of images
+            }
+        }
+
+        productService.save(existingProduct);
 
         return "redirect:/products";
     }
+
 
     @PostMapping("/save")
     public String saveProduct(@ModelAttribute Product product, BindingResult result,

@@ -1,5 +1,6 @@
 package io.ecommerce.GoShop.service.product;
 
+import io.ecommerce.GoShop.model.Image;
 import io.ecommerce.GoShop.model.Product;
 
 import java.util.List;
@@ -26,4 +27,8 @@ public interface ProductService {
     void deleteById(UUID id);
 
     Optional<Product> findByName(String productName);
+
+    void deleteImage(Image deletedImage);
+
+    void deleteImageById(UUID imageId);
 }
