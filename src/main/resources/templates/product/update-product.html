@@ -72,9 +72,8 @@
                         <div class="form-group">
                             <label for="newImages">New Images:</label>
                             <input type="file" class="form-control-file" id="newImages" name="newImages" multiple>
-
+                            <div id="newImagesContainer" class="image-grid"></div>
                         </div>
-                        <div id="newImagesContainer" class="image-grid"></div>
                         <input type="hidden" id="deletedImages" name="deletedImages">
                         <button type="submit" class="btn btn-primary">Update Product</button>
                     </form>
@@ -84,11 +83,38 @@
     </div>
 </div>
 <script>
-function deleteNewImage(imageIndex) {
-    var newImagesContainer = document.getElementById('newImagesContainer');
-    var imageDiv = document.getElementById('newImageDiv' + imageIndex);
-    if (imageDiv) {
-        newImagesContainer.removeChild(imageDiv);
+function deleteImage(imageId, imageIndex, isNewImage) {
+    if (isNewImage) {
+        // For newly uploaded images, remove the image preview and clear the corresponding file input
+        var newImageDiv = document.getElementById('newImageDiv' + imageIndex);
+        var newImagesInput = document.getElementById('newImages');
+
+        if (newImageDiv) {
+            newImageDiv.parentNode.removeChild(newImageDiv);
+        }
+
+        if (newImagesInput) {
+            var files = Array.from(newImagesInput.files);
+            files.splice(imageIndex, 1); // Remove the deleted image from the file list
+            newImagesInput.files = new DataTransfer().files.add(files); // Update the file input with the modified file list
+        }
+    } else {
+        // For existing images, follow the original delete logic
+        var imageDiv = document.getElementById('imageDiv' + imageIndex);
+        if (imageDiv) {
+            imageDiv.parentNode.removeChild(imageDiv);
+        }
+
+        // Add the image ID to the deletedImages input field
+        var deletedImagesInput = document.getElementById('deletedImages');
+        if (deletedImagesInput) {
+            var deletedImages = deletedImagesInput.value;
+            if (deletedImages.length > 0) {
+                deletedImages += ',';
+            }
+            deletedImages += imageId;
+            deletedImagesInput.value = deletedImages;
+        }
     }
 }
 
@@ -119,13 +145,13 @@ document.getElementById('newImages').addEventListener('change', function(event) 
                 var deleteButton = document.createElement('button');
                 deleteButton.type = 'button';
                 deleteButton.className = 'btn btn-danger delete-button';
+                deleteButton.setAttribute('data-new-image-index', imageIndex);
+                deleteButton.onclick = function() {
+                    deleteImage(null, this.getAttribute('data-new-image-index'), true);
+                };
                 deleteButton.textContent = 'Delete';
-                deleteButton.addEventListener('click', function() {
-                    deleteNewImage(imageIndex);
-                });
 
                 var imageDiv = document.createElement('div');
-                imageDiv.className = 'image-grid-item';
                 imageDiv.id = 'newImageDiv' + imageIndex;
                 imageDiv.appendChild(image);
                 imageDiv.appendChild(deleteButton);

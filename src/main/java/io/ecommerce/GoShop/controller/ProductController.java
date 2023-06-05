@@ -121,7 +121,8 @@ public class ProductController {
 
 
     @PostMapping("/save")
-    public String saveProduct(@ModelAttribute Product product, BindingResult result,
+    public String saveProduct(@ModelAttribute Product product,
+                              BindingResult result,
                               @RequestParam("images") List<MultipartFile> imageFiles,
                               Model model) throws IOException {
 
@@ -155,16 +156,13 @@ public class ProductController {
         String rootPath = System.getProperty("user.dir");
         String uploadDir = rootPath + "/src/main/resources/static/images/product";
 
-
         // Create the directory if it doesn't exist
         File dir = new File(uploadDir);
         if (!dir.exists()) {
             dir.mkdirs();
         }
-
         // Generate a unique file name for the uploaded file
         String fileName = UUID.randomUUID().toString() + "-" + file.getOriginalFilename();
-
         // Save the file to the upload directory
         String filePath = uploadDir + "/" + fileName;
         Path path = Paths.get(filePath);
