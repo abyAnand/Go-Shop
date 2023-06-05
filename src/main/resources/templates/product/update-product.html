@@ -52,23 +52,28 @@
                         <div class="form-group">
                             <label for="categoryId">Category:</label>
                             <select class="form-control" name="category.id" id="categoryId" required>
-                                <option th:each="category, categoryIndex : ${categories}"
-                                        th:value="${category.id}"
-                                        th:text="${category.categoryName}"
-                                        th:selected="${category.id == product.category.id}"
-                                        th:unless="${categoryIndex == 0}"></option>
+                                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.categoryName}" th:selected="${category.id == product.category.id}"></option>
                             </select>
                         </div>
                         <input type="hidden" name="id" th:value="*{id}">
                         <div class="form-group">
                             <label>Product Images:</label>
-                            <div class="row image-grid">
-                                <!-- Loop through each image in the product object -->
-                                <div th:each="image : ${product.images}" class="image-grid-item">
-                                    <img th:src="@{/images/product/{imageName}(imageName=${image.imagePath})}" alt="Product Image">
+                            <div class="row">
+                                <div class="col">
+                                    <div th:each="image, imageIndex : *{images}" id="imageDiv${imageIndex.index}">
+                                        <img th:src="@{/images/product/{imagePath}(imagePath=${image.imagePath})}" class="img-thumbnail" style="width: 200px;" id="image${imageIndex.index}">
+                                        <div>
+                                            <button type="button" class="btn btn-danger delete-button" th:attr="data-image-id=${image.id}, data-image-index=${imageIndex.index}" onclick="deleteImage(this.getAttribute('data-image-id'), this.getAttribute('data-image-index'))">Delete</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label for="newImages">New Images:</label>
+                            <input type="file" class="form-control-file" id="newImages" name="newImages" multiple>
+                        </div>
+                        <input type="hidden" id="deletedImages" name="deletedImages">
                         <button type="submit" class="btn btn-primary">Update Product</button>
                     </form>
                 </div>
@@ -77,7 +82,31 @@
     </div>
 </div>
 <script>
+function deleteImage(imageId, imageIndex) {
+    // Check if the image div exists before removing it
+    var imageDiv = document.getElementById('imageDiv' + imageIndex);
+    if (imageDiv) {
+        imageDiv.parentNode.removeChild(imageDiv);
+    }
 
+    // Add the image ID to the deletedImages input field
+    var deletedImagesInput = document.getElementById('deletedImages');
+    if (deletedImagesInput) {
+        var deletedImages = deletedImagesInput.value;
+        if (deletedImages.length > 0) {
+            deletedImages += ',';
+        }
+        deletedImages += imageId;
+        deletedImagesInput.value = deletedImages;
+    }
+}
+document.getElementById('updateProductForm').addEventListener('submit', function(event) {
+    var newImagesInput = document.getElementById('newImages');
+    if (newImagesInput && newImagesInput.files.length === 0) {
+        // No new images selected, remove the newImages field and input element from the form data
+        newImagesInput.parentNode.removeChild(newImagesInput);
+    }
+});
 </script>
 </body>
 </html>
