@@ -1,4 +1,7 @@
 spring:
+  devtools:
+    restart:
+      log-condition-evaluation-delta: false
   datasource:
     url: jdbc:mysql://localhost:3306/goshop
     username: root

@@ -4,12 +4,11 @@ import io.ecommerce.GoShop.DTO.UserDTO;
 import io.ecommerce.GoShop.model.User;
 import io.ecommerce.GoShop.service.user.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 import javax.validation.Valid;
 import java.util.Optional;
@@ -72,6 +71,11 @@ public class UserController {
         User user = userService.findById(id);
 
         return "index";
+    }
+
+    @GetMapping("/category")
+    public String shop(){
+        return "category";
     }
 
 }

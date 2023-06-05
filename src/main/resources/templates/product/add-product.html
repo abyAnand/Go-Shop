@@ -5,6 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Add Product</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <style>
+    .image-grid {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            margin-bottom: 40px; /* Add margin to the bottom */
+        }
+
+    .image-grid-item {
+        position: relative; /* Add this line */
+        width: 100px;
+        height: 100px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        /* overflow: hidden; Remove this line */
+    }
+
+    .image-grid-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .image-grid-item .delete-button { /* Add this CSS for the delete button */
+        position: absolute;
+        top: 5px;
+        right: 5px;
+    }
+</style>
 </head>
 <body>
 <div class="container">
@@ -15,7 +44,7 @@
                     <h3>Add New Product</h3>
                 </div>
                 <div class="card-body">
-                    <form id="addProductForm" th:action="@{/products/save}" th:object="${product}" method="post">
+                    <form id="addProductForm" th:action="@{/products/save}" th:object="${product}" method="post" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="productName">Product Name:</label>
                             <input type="text" class="form-control" name="productName" id="productName" required>
@@ -27,8 +56,13 @@
                                 <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.categoryName}"></option>
                             </select>
                         </div>
-                        <!-- Hidden input field for category object -->
-                        <input type="hidden" name="category" th:value="${product.category}" />
+                        <div class="form-group">
+                            <label for="images">Images:</label>
+                            <input type="file" class="form-control-file" name="images" id="images" multiple>
+                        </div>
+                        <div class="image-grid" id="imagePreview">
+                            <!-- Image previews will be added dynamically here -->
+                        </div>
                         <button type="submit" class="btn btn-primary">Add Product</button>
                     </form>
                 </div>
@@ -36,5 +70,80 @@
         </div>
     </div>
 </div>
+<script>
+    document.getElementById('images').addEventListener('change', function(event) {
+        var previewContainer = document.getElementById('imagePreview');
+        var files = event.target.files;
+
+        // Check if the number of selected files exceeds the limit
+        if (files.length > 5) {
+            event.target.value = ''; // Clear the selected files
+            alert("You can only upload a maximum of 5 images.");
+            return;
+        }
+
+        previewContainer.innerHTML = ''; // Clear previous previews
+
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                var imageContainer = document.createElement('div');
+                imageContainer.className = 'image-grid-item';
+
+                var imageElement = document.createElement('img');
+                imageElement.src = e.target.result;
+                imageContainer.appendChild(imageElement);
+
+                var deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.className = 'btn btn-sm btn-danger';
+                deleteButton.addEventListener('click', function() {
+                    previewContainer.removeChild(imageContainer);
+                });
+                imageContainer.appendChild(deleteButton);
+
+                previewContainer.appendChild(imageContainer);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+
+    document.getElementById('addProductForm').addEventListener('submit', function(event) {
+        var previewContainer = document.getElementById('imagePreview');
+        var previewImages = previewContainer.getElementsByClassName('image-grid-item');
+
+        // Remove deleted images from the FormData object
+        var formData = new FormData(this);
+        for (var i = 0; i < previewImages.length; i++) {
+            var imageContainer = previewImages[i];
+            if (!previewContainer.contains(imageContainer)) {
+                var imageElement = imageContainer.querySelector('img');
+                var imageName = imageElement.src;
+                var file = dataURLToFile(imageName, 'image_' + i + '.png');
+                formData.delete('images'); // Remove all images
+                formData.append('images', file); // Append only the remaining images
+            }
+        }
+
+        // Update the form's FormData object with the modified data
+        event.formData = formData;
+    });
+
+    // Function to convert data URL to File object
+    function dataURLToFile(dataURL, filename) {
+        var arr = dataURL.split(',');
+        var mime = arr[0].match(/:(.*?);/)[1];
+        var bstr = atob(arr[1]);
+        var n = bstr.length;
+        var u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, { type: mime });
+    }
+</script>
 </body>
 </html>

@@ -5,6 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Update Product</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <style>
+        .image-grid {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            margin-bottom: 40px;
+        }
+
+        .image-grid-item {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .image-grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-grid-item .delete-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
@@ -15,21 +43,38 @@
                     <h3>Update Product</h3>
                 </div>
                 <div class="card-body">
-                    <form id="updateProductForm" th:action="@{/products/update}" th:object="${product}" method="post">
+                    <form id="updateProductForm" th:action="@{/products/update}" th:object="${product}" method="post" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="productName">Product Name:</label>
-                            <input type="text" class="form-control" name="productName" id="productName" th:value="${product.productName}" required>
+                            <input type="text" class="form-control" name="productName" id="productName" th:value="*{productName}" required>
                             <span class="text-danger" th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}"></span>
                         </div>
                         <div class="form-group">
                             <label for="categoryId">Category:</label>
-                            <select class="form-control" name="category" id="categoryId" required>
+                            <select class="form-control" name="category.id" id="categoryId" required>
                                 <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.categoryName}" th:selected="${category.id == product.category.id}"></option>
                             </select>
                         </div>
-                        <!-- Hidden input field for category object -->
-                        <input type="hidden" name="category.id" th:value="${product.category.id}" />
-                        <input type="hidden" name="id" th:value="${id}">
+                        <input type="hidden" name="id" th:value="*{id}">
+                        <div class="form-group">
+                            <label>Product Images:</label>
+                            <div class="row">
+                                <div class="col">
+                                    <div th:each="image, imageIndex : *{images}" id="imageDiv${imageIndex.index}">
+                                        <img th:src="@{/images/product/{imagePath}(imagePath=${image.imagePath})}" class="img-thumbnail" style="width: 200px;" id="image${imageIndex.index}">
+                                        <div>
+                                            <button type="button" class="btn btn-danger delete-button" th:attr="data-image-id=${image.id}, data-image-index=${imageIndex.index}" onclick="deleteImage(this.getAttribute('data-image-id'), this.getAttribute('data-image-index'))">Delete</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="newImages">New Images:</label>
+                            <input type="file" class="form-control-file" id="newImages" name="newImages" multiple>
+                            <div id="newImagesContainer" class="image-grid"></div>
+                        </div>
+                        <input type="hidden" id="deletedImages" name="deletedImages">
                         <button type="submit" class="btn btn-primary">Update Product</button>
                     </form>
                 </div>
@@ -37,5 +82,87 @@
         </div>
     </div>
 </div>
+<script>
+function deleteImage(imageId, imageIndex, isNewImage) {
+    if (isNewImage) {
+        // For newly uploaded images, remove the image preview and clear the corresponding file input
+        var newImageDiv = document.getElementById('newImageDiv' + imageIndex);
+        var newImagesInput = document.getElementById('newImages');
+
+        if (newImageDiv) {
+            newImageDiv.parentNode.removeChild(newImageDiv);
+        }
+
+        if (newImagesInput) {
+            var files = Array.from(newImagesInput.files);
+            files.splice(imageIndex, 1); // Remove the deleted image from the file list
+            newImagesInput.files = new DataTransfer().files.add(files); // Update the file input with the modified file list
+        }
+    } else {
+        // For existing images, follow the original delete logic
+        var imageDiv = document.getElementById('imageDiv' + imageIndex);
+        if (imageDiv) {
+            imageDiv.parentNode.removeChild(imageDiv);
+        }
+
+        // Add the image ID to the deletedImages input field
+        var deletedImagesInput = document.getElementById('deletedImages');
+        if (deletedImagesInput) {
+            var deletedImages = deletedImagesInput.value;
+            if (deletedImages.length > 0) {
+                deletedImages += ',';
+            }
+            deletedImages += imageId;
+            deletedImagesInput.value = deletedImages;
+        }
+    }
+}
+
+document.getElementById('updateProductForm').addEventListener('submit', function(event) {
+    var newImagesInput = document.getElementById('newImages');
+    if (newImagesInput && newImagesInput.files.length === 0) {
+        // No new images selected, remove the newImages field and input element from the form data
+        newImagesInput.parentNode.removeChild(newImagesInput);
+    }
+});
+
+document.getElementById('newImages').addEventListener('change', function(event) {
+    var newImagesContainer = document.getElementById('newImagesContainer');
+    newImagesContainer.innerHTML = ''; // Clear the container
+
+    var files = event.target.files;
+    for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        var reader = new FileReader();
+
+        reader.onload = (function(imageFile, imageIndex) {
+            return function(e) {
+                var image = document.createElement('img');
+                image.src = e.target.result;
+                image.className = 'img-thumbnail';
+                image.style.width = '200px';
+
+                var deleteButton = document.createElement('button');
+                deleteButton.type = 'button';
+                deleteButton.className = 'btn btn-danger delete-button';
+                deleteButton.setAttribute('data-new-image-index', imageIndex);
+                deleteButton.onclick = function() {
+                    deleteImage(null, this.getAttribute('data-new-image-index'), true);
+                };
+                deleteButton.textContent = 'Delete';
+
+                var imageDiv = document.createElement('div');
+                imageDiv.id = 'newImageDiv' + imageIndex;
+                imageDiv.appendChild(image);
+                imageDiv.appendChild(deleteButton);
+
+                newImagesContainer.appendChild(imageDiv);
+            };
+        })(file, i);
+
+        reader.readAsDataURL(file);
+    }
+});
+</script>
 </body>
 </html>

@@ -1,9 +1,13 @@
 package io.ecommerce.GoShop.service.product;
 
+import io.ecommerce.GoShop.model.Image;
 import io.ecommerce.GoShop.model.Product;
+import io.ecommerce.GoShop.repository.ImageRepository;
 import io.ecommerce.GoShop.repository.ProductRepository;
+import io.ecommerce.GoShop.service.image.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +19,12 @@ public class ProductServiceImpl implements ProductService{
     @Autowired
     ProductRepository productRepository;
 
+    @Autowired
+    ImageService imageService;
+
+    @Autowired
+    ImageRepository imageRepository;
+
 
     @Override
     public Product getByName(String productName) {
@@ -22,8 +32,8 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public void save(Product product) {
-         productRepository.save(product);
+    public Product save(Product product) {
+         return productRepository.save(product);
     }
 
     @Override
@@ -45,5 +55,40 @@ public class ProductServiceImpl implements ProductService{
     public void deleteById(UUID id) {
         productRepository.deleteById(id);
     }
+
+    @Override
+    public Optional<Product> findByName(String productName) {
+        return Optional.ofNullable(productRepository.findByProductName(productName));
+    }
+
+
+    @Override
+    public void deleteImage(Image deletedImage) {
+        // Delete the image from the image database
+        imageService.deleteImage(deletedImage);
+
+        // Remove the image from the product
+        Product product = deletedImage.getProduct();
+        product.getImages().remove(deletedImage);
+        save(product);
+    }
+
+    public void deleteImageById(UUID imageId) {
+        Optional<Image> image = imageRepository.findById(imageId);
+        if (image.isPresent()) {
+            Optional<Product> product = productRepository.findById(image.get().getProduct().getId());
+            if (product.isPresent()) {
+                product.get().getImages().removeIf(img -> img.getId().equals(imageId));
+                productRepository.save(product.get());
+            }
+            imageRepository.deleteById(imageId);
+        }
+    }
+
+    @Override
+    public List<Product> findAll() {
+        return productRepository.findAll();
+    }
+
 
 }
