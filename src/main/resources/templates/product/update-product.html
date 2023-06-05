@@ -52,27 +52,22 @@
                         <div class="form-group">
                             <label for="categoryId">Category:</label>
                             <select class="form-control" name="category.id" id="categoryId" required>
-                                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.categoryName}" th:selected="${category.id == product.category.id}"></option>
+                                <option th:each="category, categoryIndex : ${categories}"
+                                        th:value="${category.id}"
+                                        th:text="${category.categoryName}"
+                                        th:selected="${category.id == product.category.id}"
+                                        th:unless="${categoryIndex == 0}"></option>
                             </select>
                         </div>
                         <input type="hidden" name="id" th:value="*{id}">
                         <div class="form-group">
                             <label>Product Images:</label>
-                            <div class="row">
-                                <div class="col">
-                                    <div th:each="image, imageIndex : *{images}" id="imageDiv${imageIndex.index}">
-                                        <img th:src="@{/images/product/{imagePath}(imagePath=${image.imagePath})}" class="img-thumbnail" style="width: 200px;" id="image${imageIndex.index}">
-                                        <div>
-                                            <button type="button" class="btn btn-danger delete-button" onclick="deleteImage('${image.id}', ${imageIndex.index})">Delete</button>
-                                            <input type="hidden" name="deletedImages" th:value="${image.id}">
-                                        </div>
-                                    </div>
+                            <div class="row image-grid">
+                                <!-- Loop through each image in the product object -->
+                                <div th:each="image : ${product.images}" class="image-grid-item">
+                                    <img th:src="@{/images/product/{imageName}(imageName=${image.imagePath})}" alt="Product Image">
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="newImages">New Images:</label>
-                            <input type="file" class="form-control-file" id="newImages" name="newImages" multiple>
                         </div>
                         <button type="submit" class="btn btn-primary">Update Product</button>
                     </form>
@@ -82,10 +77,7 @@
     </div>
 </div>
 <script>
-    function deleteImage(imageId, imageIndex) {
-        var imageDiv = document.getElementById('imageDiv' + imageIndex);
-        imageDiv.parentNode.removeChild(imageDiv);
-    }
+
 </script>
 </body>
 </html>
