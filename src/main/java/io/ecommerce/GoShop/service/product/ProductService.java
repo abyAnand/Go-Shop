@@ -31,4 +31,6 @@ public interface ProductService {
     void deleteImage(Image deletedImage);
 
     void deleteImageById(UUID imageId);
+
+    List<Product> findAll();
 }

@@ -21,10 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping("/products")
@@ -44,10 +41,7 @@ public class ProductController {
     @GetMapping
     public String listProducts(Model model){
 
-        List<Product> products = productService.getAll();
-
-
-
+        List<Product> products = productService.findAll(); // Replace this with the logic to fetch the products
         model.addAttribute("products", products);
         return "product/product-management";
     }
@@ -59,8 +53,6 @@ public class ProductController {
 
         model.addAttribute("categories", categoryList);
         model.addAttribute("product", new Product());
-
-
 
         return "product/add-product";
     }
@@ -153,7 +145,7 @@ public class ProductController {
             }
         }
 
-        return "/index";
+        return "redirect:/products";
     }
 
 
@@ -176,7 +168,6 @@ public class ProductController {
         // Save the file to the upload directory
         String filePath = uploadDir + "/" + fileName;
         Path path = Paths.get(filePath);
-        System.out.println(path);
         Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
         System.gc();
 
