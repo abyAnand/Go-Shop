@@ -31,7 +31,11 @@
             position: absolute;
             top: 5px;
             right: 5px;
+
         }
+        #longDescription {
+        height: 150px;
+    }
     </style>
 </head>
 <body>
@@ -56,6 +60,16 @@
                             </select>
                         </div>
                         <input type="hidden" name="id" th:value="*{id}">
+                        <div class="form-group">
+                            <label for="shortDescription">Short Description:</label>
+                            <textarea class="form-control" name="shortDescription" id="shortDescription" required th:text="*{shortDescription}"></textarea>
+                            <span class="text-danger" th:if="${#fields.hasErrors('shortDescription')}" th:errors="*{shortDescription}"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="longDescription">Long Description:</label>
+                            <textarea class="form-control" name="longDescription" id="longDescription" required th:text="*{longDescription}"></textarea>
+                            <span class="text-danger" th:if="${#fields.hasErrors('longDescription')}" th:errors="*{longDescription}"></span>
+                        </div>
                         <div class="form-group">
                             <label>Product Images:</label>
                             <div class="row">
@@ -83,86 +97,86 @@
     </div>
 </div>
 <script>
-function deleteImage(imageId, imageIndex, isNewImage) {
-    if (isNewImage) {
-        // For newly uploaded images, remove the image preview and clear the corresponding file input
-        var newImageDiv = document.getElementById('newImageDiv' + imageIndex);
-        var newImagesInput = document.getElementById('newImages');
+    function deleteImage(imageId, imageIndex, isNewImage) {
+        if (isNewImage) {
+            // For newly uploaded images, remove the image preview and clear the corresponding file input
+            var newImageDiv = document.getElementById('newImageDiv' + imageIndex);
+            var newImagesInput = document.getElementById('newImages');
 
-        if (newImageDiv) {
-            newImageDiv.parentNode.removeChild(newImageDiv);
-        }
-
-        if (newImagesInput) {
-            var files = Array.from(newImagesInput.files);
-            files.splice(imageIndex, 1); // Remove the deleted image from the file list
-            newImagesInput.files = new DataTransfer().files.add(files); // Update the file input with the modified file list
-        }
-    } else {
-        // For existing images, follow the original delete logic
-        var imageDiv = document.getElementById('imageDiv' + imageIndex);
-        if (imageDiv) {
-            imageDiv.parentNode.removeChild(imageDiv);
-        }
-
-        // Add the image ID to the deletedImages input field
-        var deletedImagesInput = document.getElementById('deletedImages');
-        if (deletedImagesInput) {
-            var deletedImages = deletedImagesInput.value;
-            if (deletedImages.length > 0) {
-                deletedImages += ',';
+            if (newImageDiv) {
+                newImageDiv.parentNode.removeChild(newImageDiv);
             }
-            deletedImages += imageId;
-            deletedImagesInput.value = deletedImages;
+
+            if (newImagesInput) {
+                var files = Array.from(newImagesInput.files);
+                files.splice(imageIndex, 1); // Remove the deleted image from the file list
+                newImagesInput.files = new DataTransfer().files.add(files); // Update the file input with the modified file list
+            }
+        } else {
+            // For existing images, follow the original delete logic
+            var imageDiv = document.getElementById('imageDiv' + imageIndex);
+            if (imageDiv) {
+                imageDiv.parentNode.removeChild(imageDiv);
+            }
+
+            // Add the image ID to the deletedImages input field
+            var deletedImagesInput = document.getElementById('deletedImages');
+            if (deletedImagesInput) {
+                var deletedImages = deletedImagesInput.value;
+                if (deletedImages.length > 0) {
+                    deletedImages += ',';
+                }
+                deletedImages += imageId;
+                deletedImagesInput.value = deletedImages;
+            }
         }
     }
-}
 
-document.getElementById('updateProductForm').addEventListener('submit', function(event) {
-    var newImagesInput = document.getElementById('newImages');
-    if (newImagesInput && newImagesInput.files.length === 0) {
-        // No new images selected, remove the newImages field and input element from the form data
-        newImagesInput.parentNode.removeChild(newImagesInput);
-    }
-});
+    document.getElementById('updateProductForm').addEventListener('submit', function(event) {
+        var newImagesInput = document.getElementById('newImages');
+        if (newImagesInput && newImagesInput.files.length === 0) {
+            // No new images selected, remove the newImages field and input element from the form data
+            newImagesInput.parentNode.removeChild(newImagesInput);
+        }
+    });
 
-document.getElementById('newImages').addEventListener('change', function(event) {
-    var newImagesContainer = document.getElementById('newImagesContainer');
-    newImagesContainer.innerHTML = ''; // Clear the container
+    document.getElementById('newImages').addEventListener('change', function(event) {
+        var newImagesContainer = document.getElementById('newImagesContainer');
+        newImagesContainer.innerHTML = ''; // Clear the container
 
-    var files = event.target.files;
-    for (var i = 0; i < files.length; i++) {
-        var file = files[i];
-        var reader = new FileReader();
+        var files = event.target.files;
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            var reader = new FileReader();
 
-        reader.onload = (function(imageFile, imageIndex) {
-            return function(e) {
-                var image = document.createElement('img');
-                image.src = e.target.result;
-                image.className = 'img-thumbnail';
-                image.style.width = '200px';
+            reader.onload = (function(imageFile, imageIndex) {
+                return function(e) {
+                    var image = document.createElement('img');
+                    image.src = e.target.result;
+                    image.className = 'img-thumbnail';
+                    image.style.width = '200px';
 
-                var deleteButton = document.createElement('button');
-                deleteButton.type = 'button';
-                deleteButton.className = 'btn btn-danger delete-button';
-                deleteButton.setAttribute('data-new-image-index', imageIndex);
-                deleteButton.onclick = function() {
-                    deleteImage(null, this.getAttribute('data-new-image-index'), true);
+                    var deleteButton = document.createElement('button');
+                    deleteButton.type = 'button';
+                    deleteButton.className = 'btn btn-danger delete-button';
+                    deleteButton.setAttribute('data-new-image-index', imageIndex);
+                    deleteButton.onclick = function() {
+                        deleteImage(null, this.getAttribute('data-new-image-index'), true);
+                    };
+                    deleteButton.textContent = 'Delete';
+
+                    var imageDiv = document.createElement('div');
+                    imageDiv.id = 'newImageDiv' + imageIndex;
+                    imageDiv.appendChild(image);
+                    imageDiv.appendChild(deleteButton);
+
+                    newImagesContainer.appendChild(imageDiv);
                 };
-                deleteButton.textContent = 'Delete';
+            })(file, i);
 
-                var imageDiv = document.createElement('div');
-                imageDiv.id = 'newImageDiv' + imageIndex;
-                imageDiv.appendChild(image);
-                imageDiv.appendChild(deleteButton);
-
-                newImagesContainer.appendChild(imageDiv);
-            };
-        })(file, i);
-
-        reader.readAsDataURL(file);
-    }
-});
+            reader.readAsDataURL(file);
+        }
+    });
 </script>
 </body>
 </html>

@@ -6,34 +6,34 @@
     <title>Add Product</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <style>
-    .image-grid {
+        .image-grid {
             display: flex;
             flex-wrap: wrap;
             margin-top: 10px;
             margin-bottom: 40px; /* Add margin to the bottom */
         }
 
-    .image-grid-item {
-        position: relative; /* Add this line */
-        width: 100px;
-        height: 100px;
-        margin-right: 10px;
-        margin-bottom: 10px;
-        /* overflow: hidden; Remove this line */
-    }
+        .image-grid-item {
+            position: relative; /* Add this line */
+            width: 100px;
+            height: 100px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            /* overflow: hidden; Remove this line */
+        }
 
-    .image-grid-item img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
+        .image-grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
-    .image-grid-item .delete-button { /* Add this CSS for the delete button */
-        position: absolute;
-        top: 5px;
-        right: 5px;
-    }
-</style>
+        .image-grid-item .delete-button { /* Add this CSS for the delete button */
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
@@ -55,6 +55,14 @@
                             <select class="form-control" name="category" id="categoryId" required>
                                 <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.categoryName}"></option>
                             </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="shortDescription">Short Description:</label>
+                            <textarea class="form-control" name="shortDescription" id="shortDescription" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="longDescription">Long Description:</label>
+                            <textarea class="form-control" name="longDescription" id="longDescription" required></textarea>
                         </div>
                         <div class="form-group">
                             <label for="images">Images:</label>
