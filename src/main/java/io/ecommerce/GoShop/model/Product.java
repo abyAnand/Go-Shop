@@ -18,6 +18,9 @@ public class Product extends BaseEntity{
 
     private String productName;
 
+
+    private float price;
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<Image> images;

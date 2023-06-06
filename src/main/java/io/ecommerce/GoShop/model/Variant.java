@@ -19,6 +19,10 @@ public class Variant extends BaseEntity{
 
     private String variantName;
 
+    private int stock;
+
+    private float price;
+
     private String description;
 
     @ManyToOne

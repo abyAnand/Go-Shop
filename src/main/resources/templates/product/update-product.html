@@ -43,8 +43,9 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card mt-5">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between">
                     <h3>Update Product</h3>
+                    <a href="/admin/users" class="btn btn-primary">Go to Users</a>
                 </div>
                 <div class="card-body">
                     <form id="updateProductForm" th:action="@{/products/update}" th:object="${product}" method="post" enctype="multipart/form-data">
@@ -52,6 +53,10 @@
                             <label for="productName">Product Name:</label>
                             <input type="text" class="form-control" name="productName" id="productName" th:value="*{productName}" required>
                             <span class="text-danger" th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Price:</label>
+                            <input type="number" th:value="*{price}" class="form-control" name="price" id="price" required>
                         </div>
                         <div class="form-group">
                             <label for="categoryId">Category:</label>
@@ -90,7 +95,9 @@
                         </div>
                         <input type="hidden" id="deletedImages" name="deletedImages">
                         <button type="submit" class="btn btn-primary">Update Product</button>
+                        <a th:href="@{/variants/{id}(id=${product.id})}" class="btn btn-primary" style="margin-left: 200px;">Variants</a>
                     </form>
+
                 </div>
             </div>
         </div>

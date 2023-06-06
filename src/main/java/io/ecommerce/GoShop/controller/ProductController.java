@@ -89,13 +89,13 @@ public class ProductController {
         }
 
         // Update the product details
-        Product existingProduct = productService.findById(product.getId()).orElse(null);
-        if (existingProduct == null) {
+        if (product.getId() == null) {
             return "redirect:/products";
         }
 
-        existingProduct.setProductName(product.getProductName());
-        existingProduct.setCategory(product.getCategory());
+//        existingProduct.setProductName(product.getProductName());
+//        existingProduct.setCategory(product.getCategory());
+
 
         // Handle deleted images
         if (deletedImages != null && !deletedImages.isEmpty()) {
@@ -108,13 +108,13 @@ public class ProductController {
         if (newImages != null && !newImages.isEmpty()) {
             for (MultipartFile newImage : newImages) {
                 String fileLocation = handleFileUpload(newImage); // Save the new image and get its file location
-                Image imageEntity = new Image(fileLocation, existingProduct); // Create an Image entity with the file location
+                Image imageEntity = new Image(fileLocation, product); // Create an Image entity with the file location
                 imageEntity = imageService.saveImage(imageEntity);
-                existingProduct.getImages().add(imageEntity); // Add the Image entity to the Product's list of images
+                product.getImages().add(imageEntity); // Add the Image entity to the Product's list of images
             }
         }
 
-        productService.save(existingProduct);
+        productService.save(product);
 
         return "redirect:/products";
     }
