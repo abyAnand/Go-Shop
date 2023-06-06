@@ -28,6 +28,12 @@
 	<link rel="stylesheet" href="/assets/css/nouislider.min.css">
 	<link rel="stylesheet" href="/assets/css/bootstrap.css">
 	<link rel="stylesheet" href="/assets/css/main.css">
+
+	<style>
+.sidebar-categories .main-nav-list.selected a {
+    color: #ff6700;
+}
+	</style>
 </head>
 
 <body id="category">
@@ -122,16 +128,12 @@
 			<div class="col-xl-3 col-lg-4 col-md-5">
 				<div class="sidebar-categories">
 					<div class="head">Browse Categories</div>
-					<ul class="main-categories">
-						<li class="main-nav-list"><a data-toggle="collapse" href="#fruitsVegetable" aria-expanded="false" aria-controls="fruitsVegetable"><span
-								 class="lnr lnr-arrow-right"></span>Fruits and Vegetables<span class="number">(53)</span></a>
-							<ul class="collapse" id="fruitsVegetable" data-toggle="collapse" aria-expanded="false" aria-controls="fruitsVegetable">
-								<li class="main-nav-list child"><a href="#">Frozen Fish<span class="number">(13)</span></a></li>
-								<li class="main-nav-list child"><a href="#">Dried Fish<span class="number">(09)</span></a></li>
-								<li class="main-nav-list child"><a href="#">Fresh Fish<span class="number">(17)</span></a></li>
-								<li class="main-nav-list child"><a href="#">Meat Alternatives<span class="number">(01)</span></a></li>
-								<li class="main-nav-list child"><a href="#">Meat<span class="number">(11)</span></a></li>
-							</ul>
+					<ul th:each="category : ${categories}" class="main-categories">
+						<li th:class="${category.id == selectedCategory} ? 'main-nav-list selected' : 'main-nav-list'">
+							<a th:href="@{/store/category/{id}(id=${category.id})}" aria-expanded="false">
+								<span th:text="${category.categoryName}"></span>
+								<span th:text="${'('+#lists.size(category.product)+')'}" class="number">(53)</span>
+							</a>
 						</li>
 					</ul>
 				</div>
