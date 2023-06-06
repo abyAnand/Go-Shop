@@ -76,9 +76,11 @@
             <table class="table table-striped table-hover">
                 <thead>
                 <tr>
+                    <th>#</th>
                     <th>Product ID</th>
-                    <th>Product Name</th>
-                    <th>Product Category</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Category</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -86,9 +88,12 @@
                 <tr th:if="${products.empty}">
                     <td colspan="4">No Products</td>
                 </tr>
-                <tr th:each="product: ${products}">
+
+                <tr th:each="product, rowIndex: ${products}">
+                    <td th:text="${rowIndex.count}"></td>
                     <td th:text="${product.id}"></td>
                     <td th:text="${product.productName}"></td>
+                    <td th:text="${product.price}"></td>
                     <td th:text="${product.category.categoryName}"></td>
                     <td>
                         <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-primary btn-sm">Edit</a>

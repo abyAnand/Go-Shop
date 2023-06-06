@@ -1,10 +1,6 @@
 package io.ecommerce.GoShop.DTO;
 
 import lombok.*;
-import org.hibernate.validator.constraints.Range;
-import org.springframework.beans.factory.annotation.Value;
-
-import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

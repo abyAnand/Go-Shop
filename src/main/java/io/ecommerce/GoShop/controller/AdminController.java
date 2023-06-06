@@ -50,7 +50,7 @@ public String createUser(Model model){
 }
 
     @GetMapping("/users/update/{id}")
-    public String updateUser(@PathVariable UUID id, RedirectAttributes attributes, Model model){
+    public String updateUser(@PathVariable UUID id, Model model){
 
         User user = userService.findById(id);
         List<Role> role = roleService.getRoles();

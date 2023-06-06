@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Variant</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .form-group label {
+            font-weight: bold;
+            color: #ff6700;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group textarea {
+            border-color: #ff6700;
+        }
+        .form-group input[readonly] {
+            background-color: #f8f9fa;
+        }
+        .btn-update {
+            background-color: #ff6700;
+            border-color: #ff6700;
+            color: #fff;
+        }
+        .btn-update:hover {
+            background-color: #ff5900;
+            border-color: #ff5900;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Update Variant</h2>
+    <form th:action="@{/variants/update}" method="post" th:object="${variant}">
+        <div class="form-group">
+            <label for="productName">Product Name:</label>
+            <span id="productName" class="form-control-plaintext" th:text="${productName}"></span>
+        </div>
+        <div class="form-group">
+            <label for="variantName">Variant Name:</label>
+            <input type="text" id="variantName" name="variantName" th:field="*{variantName}" class="form-control" required>
+            <span class="text-danger" th:if="${#fields.hasErrors('variantName')}" th:errors="*{variantName}"></span>
+        </div>
+        <div class="form-group">
+            <label for="stock">Stock:</label>
+            <input type="number" id="stock" name="stock" th:field="*{stock}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" step="0.01" min="0" th:field="*{price}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" th:field="*{description}" class="form-control" required></textarea>
+        </div>
+        <input type="hidden" id="productId" th:value="${productId}" name="productId">
+        <input type="hidden" id="variantId" th:value="${variantId}" name="id">
+        <div class="form-group">
+            <button type="submit" class="btn btn-update">Update</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

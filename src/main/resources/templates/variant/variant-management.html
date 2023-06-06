@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>User Management </title>
+    <title> Variant Management</title>
     <link rel="stylesheet" th:href="@{/css/admin/admin.css}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
@@ -37,38 +37,39 @@
             }
         }
     </script>
+
 </head>
 <body>
-<div class="container-xl">
+<div class="container-xl mt-4">
     <div class="table-responsive">
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-5">
-                        <h2>User <b>Management</b></h2>
+                        <h2>Variant <b>Management</b></h2>
+                        <h2 th:text="${productName}"></h2>
                     </div>
                     <div class="col-sm-7">
-                        <a th:href="@{/admin/users/create}" class="btn btn-secondary"><i class="material-icons">&#xE147;</i> <span>Add New User</span></a>
-                        <a th:href="@{/category}" class="btn btn-secondary"><i class="material-icons">&#xE24D;</i> <span>Category</span></a>
-                        <a th:href="@{/products/}" class="btn btn-secondary"><i class="material-icons">shopping_cart</i> <span>Product</span></a>
-                        <a th:href="@{/logout}" class="btn btn-danger btn-default"><i class="material-icons">&#xE879;</i> <span>Logout</span></a>
+                        <a th:href="@{/variants/create/{id}(id=${productId})}" class="btn btn-secondary"><i class="material-icons">&#xE147;</i> <span>Add New Variant</span></a>
+                        <a th:href="@{/products/edit/{id}(id=${productId})}" class="btn btn-secondary"><i class="material-icons">shopping_cart</i> <span>Product</span></a>
+
                     </div>
                 </div>
             </div>
 
             <!-- Search Bar -->
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="input-group mb-3">
-                        <input type="text" id="searchInput" class="form-control" placeholder="Search by username" onkeyup="searchUsers()">
-                        <div class="input-group-append">
-                            <button class="btn btn-primary" type="button">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<!--            <div class="row">-->
+<!--                <div class="col-sm-6">-->
+<!--                    <div class="input-group mb-3">-->
+<!--                        <input type="text" id="searchInput" class="form-control" placeholder="Search by variant name" onkeyup="searchUsers()">-->
+<!--                        <div class="input-group-append">-->
+<!--                            <button class="btn btn-primary" type="button">-->
+<!--                                <i class="fa fa-search"></i>-->
+<!--                            </button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
 
             <!-- User Table -->
             <div th:if="${error}">
@@ -80,32 +81,31 @@
             <table id="userTable" class="table table-striped table-hover">
                 <thead>
                 <tr>
-                    <th>id</th>
-                    <th>Name</th>
-                    <th>username</th>
-                    <th>Date Created</th>
-                    <th>Role</th>
-                    <th>Status</th>
+                    <th>#</th>
+                    <th>Variant ID</th>
+                    <th>Variant Name</th>
+                    <th>Stock</th>
+                    <th>Price</th>
+                    <th>Description</th>
                     <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:if="${users.empty}">
-                    <td colspan="2"> No Users </td>
+                <tr th:if="${variants.empty}">
+                    <td colspan="7">No Variants</td>
                 </tr>
-                <tr th:each="user: ${users}">
-                    <td th:text="${user.id}"></td>
-                    <td> <span th:text="${user.firstName + ' ' + user.lastName}"> Name </span></td>
-                    <td> <span th:text="${user.username}"> Username </span></td>
-                    <td><span th:text="${user.email}"> Email </span></td>
-                    <td th:text="${user.role.roleName == 'ROLE_ADMIN' ? 'ADMIN' : (user.role.roleName == 'ROLE_USER' ? 'USER' : 'VENDOR')}"></td>
+                <tr th:each="variant, rowIndex: ${variants}">
+                    <td th:text="${rowIndex.count}"></td>
+                    <td th:text="${variant.id}"></td>
+                    <td th:text="${variant.variantName}"></td>
+                    <td th:text="${variant.stock}"></td>
+                    <td th:text="${variant.price}"></td>
+                    <td th:text="${variant.description}"></td>
                     <td>
-                        <span th:class="${user.enabled} ? 'status text-success' : 'status text-danger'">&bull;</span>
-                        <span th:text="${user.enabled} ? 'Active' : 'Blocked'"></span>
-                    </td>
-                    <td>
-                        <a th:href="@{/admin/users/update/{id}(id=${user.id})}" class="edit" title="edit" data-toggle="tooltip"><i class="material-icons">&#xE8B8;</i></a>
-                        <a th:href="@{/admin/users/delete/{id}(id=${user.id})}" onclick="return confirmDeleteUser()" class="delete" title="Delete" data-toggle="tooltip">
+
+
+                        <a th:href="@{/variants/edit/{id}(id=${variant.id})}" class="edit" title="edit" data-toggle="tooltip"><i class="material-icons">&#xE8B8;</i></a>
+                        <a th:href="@{/variants/delete/{productId}/{id}(productId=${productId}, id=${variant.id})}" onclick="return confirmDeleteUser()" class="delete" title="Delete" data-toggle="tooltip">
                             <i class="material-icons">&#xE5C9;</i>
                         </a>
                     </td>
@@ -117,7 +117,7 @@
 </div>
 <script>
     function confirmDeleteUser() {
-        return confirm("Are you sure you want to delete this user?");
+        return confirm("Are you sure you want to delete this variant?");
     }
 </script>
 </body>
