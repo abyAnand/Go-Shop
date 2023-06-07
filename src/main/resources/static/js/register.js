@@ -54,57 +54,69 @@ function validate() {
   }
 }
 
-function validateEmail() {
-  const email = $("#email").val();
-  const emailResult = $("#emailResult");
+let emailTimer; // Timer for email validation
+let usernameTimer; // Timer for username validation
 
-  if (email !== "") {
-    $.ajax({
-      type: "POST",
-      url: "/user/check-email",
-      data: { email: email },
-      success: function (response) {
-        if (response === "available") {
-          emailResult.html("<span class='tick'>&#10004;</span>");
-        } else {
-          emailResult.html("<span class='cross'>&#10008;</span>");
-        }
-        validate();
-      },
-    });
-  } else {
-    emailResult.html("");
-    validate();
-  }
+function validateEmail() {
+  clearTimeout(emailTimer); // Clear the previous timer
+
+  emailTimer = setTimeout(function () {
+    const email = $("#email").val();
+    const emailResult = $("#emailResult");
+
+    if (email !== "") {
+      $.ajax({
+        type: "POST",
+        url: "/user/check-email",
+        data: { email: email },
+        success: function (response) {
+          if (response === "available") {
+            emailResult.html("<span class='tick'>&#10004;</span>");
+          } else {
+            emailResult.html("<span class='cross'>&#10008;</span>");
+          }
+          validate();
+        },
+      });
+    } else {
+      emailResult.html("");
+      validate();
+    }
+  }, 2000); // Set a delay of 2 seconds (2000 milliseconds)
 }
 
 function validateUsername() {
-  const username = $("#username").val();
-  const usernameResult = $("#usernameResult");
+  clearTimeout(usernameTimer); // Clear the previous timer
 
-  if (username !== "") {
-    $.ajax({
-      type: "POST",
-      url: "/user/check-username",
-      data: { username: username },
-      success: function (response) {
-        if (response === "available") {
-          usernameResult.html("<span class='tick'>&#10004;</span>");
-        } else {
-          usernameResult.html("<span class='cross'>&#10008;</span>");
-        }
-        validate();
-      },
-    });
-  } else {
-    usernameResult.html("");
-    validate();
-  }
+  usernameTimer = setTimeout(function () {
+    const username = $("#username").val();
+    const usernameResult = $("#usernameResult");
+
+    if (username !== "") {
+      $.ajax({
+        type: "POST",
+        url: "/user/check-username",
+        data: { username: username },
+        success: function (response) {
+          if (response === "available") {
+            usernameResult.html("<span class='tick'>&#10004;</span>");
+          } else {
+            usernameResult.html("<span class='cross'>&#10008;</span>");
+          }
+          validate();
+        },
+      });
+    } else {
+      usernameResult.html("");
+      validate();
+    }
+  }, 2000); // Set a delay of 2 seconds (2000 milliseconds)
 }
 
-function validatePhoneNumber() {
+function checkPhoneNumberExists() {
   const phoneNumber = $("#phoneNumber").val();
   const phoneNumberResult = $("#phoneNumberResult");
+  const phoneExistError = $("#phoneExistError");
 
   if (phoneNumber !== "") {
     $.ajax({
@@ -114,20 +126,56 @@ function validatePhoneNumber() {
       success: function (response) {
         if (response === "available") {
           phoneNumberResult.html("<span class='tick'>&#10004;</span>");
-          verifyPhoneNumberButton.prop("disabled", false);
+          phoneExistError.html("");
+          sendOTP(phoneNumber);
         } else {
           phoneNumberResult.html("<span class='cross'>&#10008;</span>");
-          verifyPhoneNumberButton.prop("disabled", true);
+          phoneExistError.html("Phone number already exists").show();
+          disableVerifyOTPButton();
         }
-        validate();
       },
     });
   } else {
     phoneNumberResult.html("");
-    verifyPhoneNumberButton.prop("disabled", false);
-    validate();
+    phoneExistError.html("");
+    disableVerifyOTPButton();
   }
 }
+
+function sendOTP(phoneNumber) {
+  $.ajax({
+    type: "POST",
+    url: "/user/send-otp",
+    data: { phoneNumber: phoneNumber },
+    success: function (response) {
+      enableVerifyOTPButton();
+    },
+  });
+}
+
+function enableVerifyOTPButton() {
+  const verifyOTPButton = $("#verifyOTPButton");
+  verifyOTPButton.prop("disabled", false);
+}
+
+function disableVerifyOTPButton() {
+  const verifyOTPButton = $("#verifyOTPButton");
+  verifyOTPButton.prop("disabled", true);
+}
+
+function verifyOTP() {
+  const otpInput = $("#otp").val();
+  // Add logic to verify the OTP with the server-side API
+
+  // If the OTP is verified, enable the register button
+  enableRegisterButton();
+}
+
+function enableRegisterButton() {
+  const registerButton = $("#registerButton");
+  registerButton.prop("disabled", false);
+}
+
 
 function verifyPhoneNumber() {
   // In a real scenario, you would implement the verification logic here
@@ -155,4 +203,12 @@ $(document).ready(function () {
   $("#verifyPhoneNumberButton").on("click", function () {
     verifyPhoneNumber();
   });
+
+  $("#getOTPButton").on("click", function () {
+      checkPhoneNumberExists();
+    });
+
+    $("#verifyOTPButton").on("click", function () {
+      verifyOTP();
+    });
 });

@@ -253,17 +253,25 @@
       <div class="form-group">
         <div class="input-group">
           <input id="phoneNumber" type="tel" class="form-control" name="phoneNumber" placeholder="Phone" required="required">
-          <button id="verifyPhoneNumberButton" type="button" class="btn btn-primary">Verify</button>
+          <button id="getOTPButton" type="button" class="btn btn-primary">Get OTP</button>
         </div>
         <span id="phoneNumberResult" class="icon icon-right"></span>
+        <p id="phoneExistError" class="error"></p>
       </div>
 
       <div class="form-group">
         <div class="input-group">
           <input id="otp" type="text" class="form-control" name="otp" placeholder="OTP" required="required">
+          <button id="verifyOTPButton" disabled type="button" class="btn btn-primary">Verify OTP</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="input-group">
           <button id="registerButton" disabled type="submit" class="btn btn-primary">Register</button>
         </div>
       </div>
+
     </form>
     <div class="text-center">Already have an account? <a th:href="@{/login}">Sign in</a></div>
   </div>
