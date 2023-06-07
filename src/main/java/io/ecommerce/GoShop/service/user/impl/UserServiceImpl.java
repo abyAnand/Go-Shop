@@ -81,4 +81,14 @@ public class UserServiceImpl implements UserService {
     public void delete(UUID id) {
         userRepository.deleteById(id);
     }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public Optional<User> findByPhoneNumber(long phoneNumber) {
+        return userRepository.findByPhoneNumber(phoneNumber);
+    }
 }

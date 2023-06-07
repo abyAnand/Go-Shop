@@ -27,8 +27,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .antMatchers("/static/**")
                 .permitAll()
-                .antMatchers("/","/register")
+                .antMatchers("/","/register","/user/check-username","/user/check-email","/user/check-phone")
                 .permitAll()
+                .antMatchers("/js/register.js").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -107,7 +108,7 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/static/**","/templates/**");
+        return (web) -> web.ignoring().antMatchers("/static/**","/templates/**","/static/js/**");
     }
 
 //    public class RefererRedirectionAuthenticationSuccessHandler

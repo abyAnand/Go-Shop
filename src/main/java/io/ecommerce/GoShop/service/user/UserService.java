@@ -23,4 +23,8 @@ public interface UserService {
     User findById(UUID uuid);
 
     void delete(UUID id);
+
+    Optional<User> findByEmail(String email);
+
+    Optional<User> findByPhoneNumber(long phoneNumber);
 }

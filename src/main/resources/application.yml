@@ -1,4 +1,6 @@
 spring:
+  resources:
+    static-locations: classpath:/static/
   devtools:
     restart:
       log-condition-evaluation-delta: false
@@ -18,4 +20,5 @@ spring:
     store-type: jdbc
     jdbc:
       initialize-schema: always
+
 
