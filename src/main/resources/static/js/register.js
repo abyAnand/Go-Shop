@@ -113,12 +113,12 @@ function validateUsername() {
   }, 2000); // Set a delay of 2 seconds (2000 milliseconds)
 }
 
-function checkPhoneNumberExists() {
+function validatePhoneNumber() {
   const phoneNumber = $("#phoneNumber").val();
   const phoneNumberResult = $("#phoneNumberResult");
   const phoneExistError = $("#phoneExistError");
 
-  if (phoneNumber !== "") {
+  if (phoneNumber.length === 10) {
     $.ajax({
       type: "POST",
       url: "/user/check-phone",
@@ -127,30 +127,40 @@ function checkPhoneNumberExists() {
         if (response === "available") {
           phoneNumberResult.html("<span class='tick'>&#10004;</span>");
           phoneExistError.html("");
-          sendOTP(phoneNumber);
+          enableGetOTPButton();
         } else {
           phoneNumberResult.html("<span class='cross'>&#10008;</span>");
           phoneExistError.html("Phone number already exists").show();
-          disableVerifyOTPButton();
+          disableGetOTPButton();
         }
       },
     });
   } else {
-    phoneNumberResult.html("");
-    phoneExistError.html("");
-    disableVerifyOTPButton();
+    phoneNumberResult.html("<span class='cross'>&#10008;</span>");
+    phoneExistError.html("Please enter a 10-digit phone number").show();
+    disableGetOTPButton();
   }
 }
 
 function sendOTP(phoneNumber) {
   $.ajax({
     type: "POST",
-    url: "/user/send-otp",
+    url: "/send-otp",
     data: { phoneNumber: phoneNumber },
     success: function (response) {
       enableVerifyOTPButton();
     },
   });
+}
+
+function enableGetOTPButton() {
+  const getOTPButton = $("#getOTPButton");
+  getOTPButton.prop("disabled", false);
+}
+
+function disableGetOTPButton() {
+  const getOTPButton = $("#getOTPButton");
+  getOTPButton.prop("disabled", true);
 }
 
 function enableVerifyOTPButton() {
@@ -161,6 +171,12 @@ function enableVerifyOTPButton() {
 function disableVerifyOTPButton() {
   const verifyOTPButton = $("#verifyOTPButton");
   verifyOTPButton.prop("disabled", true);
+}
+
+function verifyPhoneNumber() {
+  // In a real scenario, you would implement the verification logic here
+  phoneNumberVerified = true;
+  validate();
 }
 
 function verifyOTP() {
@@ -174,13 +190,6 @@ function verifyOTP() {
 function enableRegisterButton() {
   const registerButton = $("#registerButton");
   registerButton.prop("disabled", false);
-}
-
-
-function verifyPhoneNumber() {
-  // In a real scenario, you would implement the verification logic here
-  phoneNumberVerified = true;
-  validate();
 }
 
 $(document).ready(function () {
@@ -205,10 +214,14 @@ $(document).ready(function () {
   });
 
   $("#getOTPButton").on("click", function () {
-      checkPhoneNumberExists();
-    });
+    const phoneNumber = $("#phoneNumber").val();
 
-    $("#verifyOTPButton").on("click", function () {
-      verifyOTP();
-    });
+    if (phoneNumber.length === 10) {
+      sendOTP(phoneNumber);
+    }
+  });
+
+  $("#verifyOTPButton").on("click", function () {
+    verifyOTP();
+  });
 });
