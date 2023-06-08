@@ -22,8 +22,3 @@ spring:
       initialize-schema: always
 
 
-twilio:
-  accountSid: ACafd4d89b5fcf368f857c56cfeb125288
-  authToken: 3bf0d391bd2005df59f3f7599055163d
-  phone:
-    number: +13614540810
