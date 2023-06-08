@@ -4,6 +4,7 @@ import io.ecommerce.GoShop.model.OtpDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -15,5 +16,6 @@ public interface OtpRepository extends JpaRepository<OtpDto, String> {
     void deleteBySessionId(String sessionId);
 
 
-    void deleteByCreatedDateLessThan(LocalDateTime thresholdTime);
+
+    void deleteByCreatedDateBefore(Timestamp timestamp);
 }
