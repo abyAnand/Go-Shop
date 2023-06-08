@@ -143,14 +143,31 @@ function validatePhoneNumber() {
 }
 
 function sendOTP(phoneNumber) {
+  const sessionId = getSessionId(); // Retrieve the session ID from sessionStorage
+
   $.ajax({
     type: "POST",
     url: "/send-otp",
-    data: { phoneNumber: phoneNumber },
+    data: {
+      phoneNumber: phoneNumber,
+      sessionId: sessionId // Include the session ID in the data object
+    },
     success: function (response) {
       enableVerifyOTPButton();
     },
   });
+}
+
+function getSessionId() {
+  let sessionId = sessionStorage.getItem("SessionName");
+  if (!sessionId) {
+    // Session ID not found in sessionStorage, generate a new one.
+    const timestamp = new Date().getTime(); // Get the current timestamp
+    const randomNum = Math.floor(Math.random() * 1000000); // Generate a random number
+    sessionId = timestamp + "-" + randomNum; // Concatenate timestamp and random number
+    sessionStorage.setItem("SessionName", sessionId);
+  }
+  return sessionId;
 }
 
 function enableGetOTPButton() {
@@ -180,11 +197,33 @@ function verifyPhoneNumber() {
 }
 
 function verifyOTP() {
+  const sessionId = getSessionId();
   const otpInput = $("#otp").val();
-  // Add logic to verify the OTP with the server-side API
 
-  // If the OTP is verified, enable the register button
-  enableRegisterButton();
+  $.ajax({
+    type: "POST",
+    url: "/verify-otp",
+    data: {
+      otp: otpInput,
+      sessionId: sessionId
+    },
+    success: function (response) {
+      if (response === "success") {
+        // OTP verification successful
+        // Show success message
+        console.log("OTP verification successful");
+        $("#errorMsg").html("OTP verified").show();
+        enableRegisterButton();
+      } else {
+        // OTP verification failed
+        // You can perform any actions here, such as displaying an error message or resetting the OTP input field
+        console.log("OTP verification failed");
+        // Reset OTP input field
+        $("#otp").val("");
+        $("#errorMsg").html("OTP verification failed").show();
+      }
+    },
+  });
 }
 
 function enableRegisterButton() {

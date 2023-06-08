@@ -27,7 +27,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .antMatchers("/static/**")
                 .permitAll()
-                .antMatchers("/","/register","/user/check-username","/user/check-email","/user/check-phone","/send-otp")
+                .antMatchers("/","/user/**","/send-otp","/verify-otp","/register")
                 .permitAll()
                 .antMatchers("/js/register.js").permitAll()
                 .anyRequest().authenticated()

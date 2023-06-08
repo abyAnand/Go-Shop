@@ -228,7 +228,7 @@
     <h2>Register</h2>
     <p class="hint-text">Create an account</p>
     <p id="errorMsg" th:text="${errorMsg}" th:if="${errorMsg}" class="error-text"></p>
-    <form id="registerForm" th:action="@{/user/register}" th:object="${user}" method="post">
+    <form id="registerForm" th:action="@{/register}" th:object="${user}" method="post">
       <div class="row mb-3">
         <div class="col">
           <input id="firstName" type="text" class="form-control" name="firstName" placeholder="First Name"
@@ -251,6 +251,15 @@
       </div>
 
       <div class="form-group">
+        <input id="password" type="password" class="form-control" name="password" placeholder="Password" required="required">
+      </div>
+
+      <div class="form-group">
+        <input id="confirmPassword" type="password" class="form-control"  placeholder="Confirm Password" required="required">
+        <p id="passwordMatchError" class="error"></p>
+      </div>
+
+      <div class="form-group">
         <div class="input-group">
           <input id="phoneNumber" type="tel" class="form-control" name="phoneNumber" placeholder="Phone" required="required">
           <button id="getOTPButton" type="button" class="btn btn-primary">Get OTP</button>
@@ -258,6 +267,9 @@
         <span id="phoneNumberResult" class="icon icon-right"></span>
         <p id="phoneExistError" class="error"></p>
       </div>
+
+
+
 
       <div class="form-group">
         <div class="input-group">
@@ -276,6 +288,23 @@
     <div class="text-center">Already have an account? <a th:href="@{/login}">Sign in</a></div>
   </div>
 </div>
+
+<script>
+  $(document).ready(function() {
+  $('#confirmPassword').on('keyup', function() {
+    var password = $('#password').val();
+    var confirmPassword = $(this).val();
+
+    if (password === confirmPassword) {
+      $('#registerButton').prop('disabled', false);
+      $('#passwordMatchError').text('');
+    } else {
+      $('#registerButton').prop('disabled', true);
+      $('#passwordMatchError').text('Passwords do not match');
+    }
+  });
+});
+</script>
 
 </body>
 
