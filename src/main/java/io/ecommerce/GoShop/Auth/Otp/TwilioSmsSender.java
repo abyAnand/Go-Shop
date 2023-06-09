@@ -1,4 +1,4 @@
-package io.ecommerce.GoShop.Otp;
+package io.ecommerce.GoShop.Auth.Otp;
 
 import com.twilio.rest.api.v2010.account.Message;
 import com.twilio.type.PhoneNumber;
@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TwilioSmsSender {
-
-    @Autowired
     private final TwilioConfig twilioConfig;
 
     @Autowired

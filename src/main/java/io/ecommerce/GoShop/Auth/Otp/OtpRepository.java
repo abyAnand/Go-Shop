@@ -1,4 +1,4 @@
-package io.ecommerce.GoShop.Otp;
+package io.ecommerce.GoShop.Auth.Otp;
 
 import io.ecommerce.GoShop.model.OtpDto;
 import org.springframework.data.jpa.repository.JpaRepository;

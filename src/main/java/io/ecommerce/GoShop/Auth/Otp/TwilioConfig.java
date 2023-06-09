@@ -1,4 +1,4 @@
-package io.ecommerce.GoShop.Otp;
+package io.ecommerce.GoShop.Auth.Otp;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

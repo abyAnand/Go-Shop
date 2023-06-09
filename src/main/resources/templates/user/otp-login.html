@@ -1,0 +1,32 @@
+<!-- Login form -->
+<form id="loginForm">
+  <input type="text" name="username" placeholder="Username">
+  <button type="button" onclick="loginWithOTP()">Login with OTP</button>
+</form>
+
+<!-- OTP verification form -->
+<form id="otpForm" style="display: none;">
+  <input type="text" name="otp" placeholder="Enter OTP">
+  <button type="button" onclick="verifyOTP()">Verify OTP</button>
+</form>
+
+<!-- JavaScript -->
+<script>
+    function loginWithOTP() {
+        // Get the username from the login form
+        var username = document.getElementById("username").value;
+
+        // Send an AJAX request to the backend to initiate OTP login
+        // Use the returned response to handle success/error scenarios
+        // For example, on success, hide the login form and show the OTP verification form
+    }
+
+    function verifyOTP() {
+        // Get the OTP from the OTP verification form
+        var otp = document.getElementById("otp").value;
+
+        // Send an AJAX request to the backend to verify the OTP
+        // Use the returned response to handle success/error scenarios
+        // For example, on success, redirect the user to the authenticated part of your application
+    }
+</script>

@@ -2,7 +2,6 @@ package io.ecommerce.GoShop.service.user.impl;
 
 import io.ecommerce.GoShop.DTO.UserDTO;
 import io.ecommerce.GoShop.model.Role;
-import io.ecommerce.GoShop.model.RoleEnum;
 import io.ecommerce.GoShop.model.User;
 import io.ecommerce.GoShop.repository.RoleRepository;
 import io.ecommerce.GoShop.repository.UserRepository;
@@ -90,5 +89,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findByPhoneNumber(long phoneNumber) {
         return userRepository.findByPhoneNumber(phoneNumber);
+    }
+
+    @Override
+    public String findPhonenUmberByUsername(String username) {
+
+        Optional<User> user =  userRepository.findPhoneNumberByUsername(username);
+        return String.valueOf(user.get().getPhoneNumber());
     }
 }

@@ -1,7 +1,7 @@
 package io.ecommerce.GoShop.controller;
 
 import io.ecommerce.GoShop.DTO.UserDTO;
-import io.ecommerce.GoShop.Otp.OtpService;
+import io.ecommerce.GoShop.Auth.Otp.OtpService;
 import io.ecommerce.GoShop.model.OtpDto;
 import io.ecommerce.GoShop.model.User;
 import io.ecommerce.GoShop.service.user.UserService;
