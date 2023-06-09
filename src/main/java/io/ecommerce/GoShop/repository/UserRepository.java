@@ -19,5 +19,9 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     <S extends User> S save(S user);
 
 
+    Optional<User> findByEmail(String email);
 
+    Optional<User> findByPhoneNumber(long phoneNumber);
+
+    Optional<User> findPhoneNumberByUsername(String username);
 }

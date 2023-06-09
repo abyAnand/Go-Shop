@@ -1,192 +1,311 @@
-<!doctype html>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Signup</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-        crossorigin="anonymous">
+  <script type="text/javascript" th:src="@{/js/register.js}"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-  <style>
-
-    body {
-      background-color: #f8f9fa;
-      font-family: 'Roboto', sans-serif;
-    }
-
-    .signup-form {
-      max-width: 400px;
-      margin: 0 auto;
-      padding: 30px;
-      background-color: #fff;
-      border-radius: 10px;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .signup-form h2 {
-      color: #343a40;
-      margin-bottom: 30px;
-      text-align: center;
-    }
-
-    .signup-form .hint-text {
-      color: #999;
-      margin-bottom: 30px;
-      text-align: center;
-    }
-
-    .signup-form .error-text {
-      color: #dc3545;
-      margin-bottom: 30px;
-      text-align: center;
-      font-weight: 700;
-    }
-
-    .signup-form form {
-      margin-bottom: 15px;
-    }
-
-    .signup-form .form-group {
-      margin-bottom: 20px;
-    }
-
-    .signup-form input[type="text"],
-    .signup-form input[type="email"],
-    .signup-form input[type="tel"],
-    .signup-form input[type="password"] {
-      height: 40px;
-      box-shadow: none;
-      color: #333;
-    }
-
-    .signup-form input[type="text"]:focus,
-    .signup-form input[type="email"]:focus,
-    .signup-form input[type="tel"]:focus,
-    .signup-form input[type="password"]:focus {
-      border-color: #80bdff;
-    }
-
-    .signup-form .btn {
-      font-size: 16px;
-      font-weight: bold;
-      min-width: 140px;
-      outline: none !important;
-    }
-
-    .signup-form .text-center a {
-      color: #343a40;
-      text-decoration: underline;
-    }
-
-    .signup-form .text-center a:hover {
-      text-decoration: none;
-    }
-  </style>
 
   <style>
-    .error {
-        color: red;
-    }
+  .icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    position: relative;
+  }
+
+  .icon-right::before,
+  .icon-right::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: #ccc;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .icon-right::before {
+    top: 50%;
+    left: 0;
+    transform-origin: left;
+    transform: translateX(-100%) translateY(-50%);
+  }
+
+  .icon-right::after {
+    bottom: 50%;
+    left: 0;
+    transform-origin: left;
+    transform: translateX(-100%) translateY(50%);
+  }
+
+  .icon-valid::before,
+  .icon-invalid::after {
+    content: "";
+    position: absolute;
+    width: 3px;
+    height: 8px;
+  }
+
+  .icon-valid::before {
+    left: 6px;
+    top: 6px;
+    transform: rotate(45deg);
+    background-color: green;
+  }
+
+  .icon-invalid::after {
+    left: 6px;
+    bottom: 6px;
+    transform: rotate(-45deg);
+    background-color: red;
+  }
+
+  .tick {
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+  }
+
+  .cross {
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+  }
+  .tick::before,
+.cross::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  visibility: visible; /* Add this line */
+}
+
+
+  body {
+    background-color: #f8f9fa;
+    font-family: 'Roboto', sans-serif;
+    min-height: 100vh;
+    display: flex;
+  }
+
+  .container {
+    flex: 1;
+  }
+
+  .signup-form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .signup-form h2 {
+    color: #343a40;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .signup-form .hint-text {
+    color: #999;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .signup-form .error-text {
+    color: #dc3545;
+    margin-bottom: 30px;
+    text-align: center;
+    font-weight: 700;
+  }
+
+  .signup-form form {
+    margin-bottom: 15px;
+  }
+
+  .signup-form .form-group {
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .signup-form input[type="text"],
+  .signup-form input[type="email"],
+  .signup-form input[type="tel"],
+  .signup-form input[type="password"] {
+    height: 40px;
+    box-shadow: none;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+  }
+
+  .signup-form input[type="text"]:focus,
+  .signup-form input[type="email"]:focus,
+  .signup-form input[type="tel"]:focus,
+  .signup-form input[type="password"]:focus {
+    border-color: #80bdff;
+  }
+
+  .signup-form .btn {
+    font-size: 16px;
+    font-weight: bold;
+    min-width: 140px;
+    outline: none !important;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    background-color: #FF8800;
+    color: #fff;
+  }
+
+  .signup-form .text-center a {
+    color: #343a40;
+    text-decoration: underline;
+  }
+
+  .signup-form .text-center a:hover {
+    text-decoration: none;
+  }
+
+  .signup-form .btn-primary {
+    background-color: #FF8800;
+    border-color: #FF8800;
+  }
+
+  .signup-form .btn-primary:hover {
+    background-color: #cc7700;
+    border-color: #cc7700;
+  }
+
+  .signup-form .icon-right {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+  }
+
+  .signup-form .email-group {
+    display: flex;
+    align-items: center;
+  }
+
+  .signup-form .email-group input[type="email"] {
+    padding-right: 30px;
+  }
+
+  .signup-form .email-group .icon-right {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
 </style>
+
+
+
+  <style>
+      .error {
+        color: red;
+      }
+    </style>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
 
 <body>
-<div class="signup-form">
-  <h2>Register</h2>
-  <p class="hint-text">Create account.</p>
-  <p id="errorMsg" th:text="${errorMsg}" th:if="${errorMsg}" class="error-text"></p>
-  <form th:action="@{/user/register}" th:object="${user}" method="post">
-    <div class="form-group">
-      <input oninput="validate()" id="firstName" type="text" class="form-control" name="firstName"
-             placeholder="First Name" required="required">
-    </div>
-
-
-    <div class="form-group">
-      <input oninput="validate()" id="lastName" type="text" class="form-control" name="lastName"
-             placeholder="Last Name" required="required">
-    </div>
-
-    <div class="form-group">
-      <input oninput="validate()" type="text" class="form-control" id="username" name="username"
-             placeholder="Username" th:field="*{username}" required="required">
-      <p th:errors="*{username}" class="error"></p>
-      <div th:if="${#fields.hasErrors('username')}" class="error">
-        <p th:each="error : ${#fields.errors('username')}" th:text="${error}"></p>
-        <span class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+<div class="container d-flex justify-content-center align-items-center">
+  <div class="signup-form">
+    <h2>Register</h2>
+    <p class="hint-text">Create an account</p>
+    <p id="errorMsg" th:text="${errorMsg}" th:if="${errorMsg}" class="error-text"></p>
+    <form id="registerForm" th:action="@{/register}" th:object="${user}" method="post">
+      <div class="row mb-3">
+        <div class="col">
+          <input id="firstName" type="text" class="form-control" name="firstName" placeholder="First Name"
+                 required="required">
+        </div>
+        <div class="col">
+          <input id="lastName" type="text" class="form-control" name="lastName" placeholder="Last Name"
+                 required="required">
+        </div>
       </div>
-    </div>
 
-    <div class="form-group">
-      <input oninput="validate()" type="email" class="form-control" name="email" placeholder="Email"
-             required="required">
-    </div>
+      <div class="form-group">
+          <input id="username" type="text" class="form-control" name="username" placeholder="Username"  required="required">
+          <span id="usernameResult" class="icon icon-right"></span>
+      </div>
 
-    <div class="form-group">
-      <input oninput="validate()" type="tel" class="form-control" name="phoneNumber" placeholder="Phone"
-             required="required">
-    </div>
+      <div class="form-group">
+        <input id="email" type="email" class="form-control" name="email" placeholder="Email" required="required">
+        <span id="emailResult" class="icon icon-right"></span>
+      </div>
 
-    <div class="form-group">
-      <input type="password" oninput="validate()" class="form-control" name="password" placeholder="Password"
-             required="required" id="pass1">
-    </div>
+      <div class="form-group">
+        <input id="password" type="password" class="form-control" name="password" placeholder="Password" required="required">
+      </div>
 
-    <div class="form-group">
-      <input type="password" oninput="validate()" class="form-control" name="confirm_password"
-             placeholder="Confirm Password" required="required" id="pass2">
-    </div>
+      <div class="form-group">
+        <input id="confirmPassword" type="password" class="form-control"  placeholder="Confirm Password" required="required">
+        <p id="passwordMatchError" class="error"></p>
+      </div>
 
-    <div class="form-group">
-      <button disabled id="registerButton" type="submit" value="UserInfo"
-              class="btn btn-primary btn-block">Register
-      </button>
-    </div>
-  </form>
-  <div class="text-center">Already have an account? <a th:href="@{/user/login}">Sign in</a></div>
+      <div class="form-group">
+        <div class="input-group">
+          <input id="phoneNumber" type="tel" class="form-control" name="phoneNumber" placeholder="Phone" required="required">
+          <button id="getOTPButton" type="button" class="btn btn-primary">Get OTP</button>
+        </div>
+        <span id="phoneNumberResult" class="icon icon-right"></span>
+        <p id="phoneExistError" class="error"></p>
+      </div>
+
+
+
+
+      <div class="form-group">
+        <div class="input-group">
+          <input id="otp" type="text" class="form-control" name="otp" placeholder="OTP" required="required">
+          <button id="verifyOTPButton" disabled type="button" class="btn btn-primary">Verify OTP</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="input-group">
+          <button id="registerButton" disabled type="submit" class="btn btn-primary">Register</button>
+        </div>
+      </div>
+
+    </form>
+    <div class="text-center">Already have an account? <a th:href="@{/login}">Sign in</a></div>
+  </div>
 </div>
 
 <script>
-  function validateRegrex(text) {
-    // letters, numbers, underscores, and periods.
-    const usernameRegex = /^[a-z0-9_.]+$/;
-    return usernameRegex.test(text);
-  }
+  $(document).ready(function() {
+  $('#confirmPassword').on('keyup', function() {
+    var password = $('#password').val();
+    var confirmPassword = $(this).val();
 
-  function validate() {
-    const pass1 = document.getElementById("pass1").value;
-    const pass2 = document.getElementById("pass2").value;
-    const firstName = document.getElementById("firstName").value;
-    const lastName = document.getElementById("lastName").value;
-    const username = document.getElementById("username").value;
-    const registerBtn = document.getElementById("registerButton");
-    const errorMsg = document.getElementById("errorMsg");
-
-    if (
-      pass1 !== pass2 ||
-      pass1 === "" ||
-      pass2 === "" ||
-      firstName === "" ||
-      lastName === "" ||
-      username === ""
-    ) {
-      console.log("Validation Failed");
-      registerBtn.disabled = true;
-      errorMsg.hidden = false;
-    } else if (!validateRegrex(username) || !validateRegrex(pass1)) {
-      console.log("Validation Failed");
-      registerBtn.disabled = true;
-      errorMsg.hidden = false;
+    if (password === confirmPassword) {
+      $('#registerButton').prop('disabled', false);
+      $('#passwordMatchError').text('');
     } else {
-      console.log("Validation Passed");
-      registerBtn.disabled = false;
-      errorMsg.hidden = true;
+      $('#registerButton').prop('disabled', true);
+      $('#passwordMatchError').text('Passwords do not match');
     }
-  }
+  });
+});
 </script>
+
 </body>
+
 </html>

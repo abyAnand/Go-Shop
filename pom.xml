@@ -79,6 +79,20 @@
 			<optional>true</optional>
 		</dependency>
 
+<!--		twilio-->
+		<dependency>
+			<groupId>com.twilio.sdk</groupId>
+			<artifactId>twilio</artifactId>
+			<version>8.19.0</version>
+		</dependency>
+
+<!--		firebase-->
+
+		<dependency>
+			<groupId>com.google.firebase</groupId>
+			<artifactId>firebase-admin</artifactId>
+			<version>8.0.0</version>
+		</dependency>
 
 
 	</dependencies>
