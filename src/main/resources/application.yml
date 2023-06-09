@@ -1,11 +1,10 @@
 spring:
   resources:
-    static-locations: classpath:/static/
   devtools:
     restart:
       log-condition-evaluation-delta: false
   datasource:
-    url: jdbc:mysql://localhost:3306/goshop
+    url: jdbc:mysql://localhost:3306/goshop2
     username: root
     password: root
   jpa:
@@ -20,5 +19,11 @@ spring:
     store-type: jdbc
     jdbc:
       initialize-schema: always
+
+twilio:
+  accountSid: ACafd4d89b5fcf368f857c56cfeb125288
+  authToken: 3bf0d391bd2005df59f3f7599055163d
+  phone:
+    number: +13614540810
 
 

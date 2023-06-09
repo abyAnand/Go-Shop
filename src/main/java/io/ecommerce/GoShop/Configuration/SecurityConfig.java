@@ -25,18 +25,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests()
-                .antMatchers("/static/**")
-                .permitAll()
                 .antMatchers("/","/user/**","/send-otp","/verify-otp","/register")
                 .permitAll()
-                .antMatchers("/js/register.js").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
                 .permitAll()
                 .defaultSuccessUrl("/", true)
-                .successHandler(new RefererAuthenticationSuccessHandler())
                 .and()
                 .exceptionHandling()
                 .accessDeniedHandler((request, response, accessDeniedException) -> response.sendRedirect("/access-denied"))
@@ -51,35 +47,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        return http.csrf().disable()
-//                .authorizeHttpRequests()
-//                .antMatchers("/static/**")
-//                .permitAll()
-//                .and()
-//                .authorizeHttpRequests()
-//                .antMatchers("/index")
-//                .authenticated().and()
-//                .formLogin()
-//                .loginPage("/login")
-//                .permitAll()
-//                .defaultSuccessUrl("/", true)
-//                .and()
-//                .exceptionHandling()
-//                .accessDeniedPage("/403") // Custom forbidden error page
-//                .and()
-//                .formLogin()
-//                .successHandler((request, response, authentication) -> {
-//                    for (GrantedAuthority auth : authentication.getAuthorities()) {
-//                        if (auth.getAuthority().equals("ROLE_ADMIN")) {
-//                            response.sendRedirect("/dashboard/admin");
-//                        }
-//                    }
-//                })
-//                .and()
-//                .build();
-//    }
 
 
     //password encoder
@@ -108,17 +75,7 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/static/**","/templates/**","/static/js/**");
+        return (web) -> web.ignoring().antMatchers("/static/**","/templates/**");
     }
 
-//    public class RefererRedirectionAuthenticationSuccessHandler
-//            extends SimpleUrlAuthenticationSuccessHandler
-//            implements AuthenticationSuccessHandler {
-//
-//        public RefererRedirectionAuthenticationSuccessHandler() {
-//            super();
-//            setUseReferer(true);
-//        }
-//
-//    }
 }

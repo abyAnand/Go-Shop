@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TwilioSmsSender {
+
+    @Autowired
     private final TwilioConfig twilioConfig;
 
     @Autowired

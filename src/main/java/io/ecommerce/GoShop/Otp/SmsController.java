@@ -7,15 +7,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class SmsController {
-    private final TwilioSmsSender twilioSmsSender;
+
+    @Autowired
+    TwilioSmsSender twilioSmsSender;
 
     @Autowired
     OtpService otpService;
 
-    @Autowired
-    public SmsController(TwilioSmsSender twilioSmsSender) {
-        this.twilioSmsSender = twilioSmsSender;
-    }
+
 
     @PostMapping("/send-otp")
     public void sendSms(@RequestParam("phoneNumber") String toPhoneNumber, @RequestParam("sessionId") String sessionId) {
