@@ -16,11 +16,11 @@ public class DataDeletionService {
         this.repository = repository;
     }
 
-    @Scheduled(cron = "0 0/5 * * * *") // Runs every 5 minutes
-    public void deleteData() {
-        LocalDateTime thresholdTime = LocalDateTime.now().minusMinutes(5);
-        Timestamp timestamp = Timestamp.valueOf(thresholdTime);
-
-        repository.deleteByCreatedDateBefore(timestamp);
-    }
+//    @Scheduled(cron = "0 0/5 * * * *") // Runs every 5 minutes
+//    public void deleteData() {
+//        LocalDateTime thresholdTime = LocalDateTime.now().minusMinutes(5);
+//        Timestamp timestamp = Timestamp.valueOf(thresholdTime);
+//
+//        repository.deleteByCreatedDateBefore(timestamp);
+//    }
 }

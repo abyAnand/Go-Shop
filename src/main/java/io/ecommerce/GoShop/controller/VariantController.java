@@ -103,6 +103,9 @@ public class VariantController {
         Optional<Variant> variant = variantService.findById(id);
         UUID varId = variant.get().getId();
         UUID productId = variant.get().getProduct().getId();
+        String productName = variant.get().getProduct().getProductName();
+
+        model.addAttribute("productName", productName);
         model.addAttribute("variant", variant.get());
         model.addAttribute("variantId", varId);
         model.addAttribute("productId", productId);

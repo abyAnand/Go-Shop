@@ -25,6 +25,11 @@ public class StoreController {
     @Autowired
     CategoryService categoryService;
 
+    @GetMapping(value = {"/","/index"})
+    public String homePage(){
+        return "index";
+    }
+
     @GetMapping("/products")
     public String getAllProducts(Model model){
         List<Category> categories = categoryService.findAll();
@@ -43,6 +48,15 @@ public class StoreController {
         model.addAttribute("categories", categories);
         model.addAttribute("selectedCategory",category.get().getId());
         return "category";
+    }
+
+    @GetMapping("/products/{id}")
+    public String getSingleProduct(@PathVariable UUID id, Model model){
+
+        Optional<Product> product = productService.getProductById(id);
+        product.ifPresent(value -> model.addAttribute("product", value));
+
+        return "single-product";
     }
 
 
