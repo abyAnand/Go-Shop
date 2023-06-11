@@ -33,4 +33,6 @@ public interface ProductService {
     void deleteImageById(UUID imageId);
 
     List<Product> findAll();
+
+    Optional<Product> getProductById(UUID id);
 }

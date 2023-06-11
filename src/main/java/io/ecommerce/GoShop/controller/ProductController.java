@@ -110,6 +110,9 @@ public class ProductController {
                 String fileLocation = handleFileUpload(newImage); // Save the new image and get its file location
                 Image imageEntity = new Image(fileLocation, product); // Create an Image entity with the file location
                 imageEntity = imageService.saveImage(imageEntity);
+                if (product.getImages() == null) {
+                    product.setImages(new ArrayList<>());
+                }
                 product.getImages().add(imageEntity); // Add the Image entity to the Product's list of images
             }
         }
