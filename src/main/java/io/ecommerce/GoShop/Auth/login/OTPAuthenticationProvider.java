@@ -34,16 +34,10 @@ public class OTPAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        String otp = authentication.getCredentials() != null ? authentication.getCredentials().toString() : null;
         String username = authentication.getName();
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
-        if (otp != null && userDetails != null && userDetails.getPassword().equals(otp)) {
-            return new UsernamePasswordAuthenticationToken(userDetails, otp, userDetails.getAuthorities());
-        }
-
-        throw new BadCredentialsException("Invalid OTP");
+        return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
     }
 
     @Override

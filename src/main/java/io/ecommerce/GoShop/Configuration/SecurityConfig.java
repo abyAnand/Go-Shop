@@ -30,6 +30,7 @@ public class SecurityConfig {
     private final OtpService otpService;
     private final UserDetailsService userDetailsService;
     private final UserService userService;
+
     private final PasswordEncoder passwordEncoder;
 
     public SecurityConfig(OtpService otpService, UserDetailsService userDetailsService, UserService userService, PasswordEncoder passwordEncoder) {

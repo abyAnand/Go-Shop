@@ -7,6 +7,7 @@ import io.ecommerce.GoShop.service.user.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
@@ -24,6 +25,7 @@ public class ServiceConfig {
     }
 
     @Bean
+    @Primary
     public UserService userService() {
         return new UserServiceImpl(userRepository, passwordEncoder, roleRepository);
     }
