@@ -6,7 +6,10 @@ import io.ecommerce.GoShop.model.User;
 import io.ecommerce.GoShop.repository.RoleRepository;
 import io.ecommerce.GoShop.repository.UserRepository;
 import io.ecommerce.GoShop.service.user.UserService;
+import io.ecommerce.GoShop.service.user.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsPasswordService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,16 +18,21 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserServiceInterface, UserDetailsPasswordService {
+
+
+
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
+
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    UserRepository userRepository;
-
-    @Autowired
-    RoleRepository roleRepository;
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
+    }
 
 
     public void save(UserDTO userdto){
@@ -48,17 +56,6 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    @Override
-    public void save(User user) {
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setEnabled(user.isEnabled());
-
-        Role userRole = roleRepository.findByRoleName(user.getRole().getRoleName());
-        user.setRole(userRole);
-
-        userRepository.save(user);
-    }
 
     @Override
     public Optional<User> findByUsername(String username) {
@@ -92,9 +89,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String findPhonenUmberByUsername(String username) {
+    public String findPhoneNumberByUsername(String username) {
 
         Optional<User> user =  userRepository.findPhoneNumberByUsername(username);
         return String.valueOf(user.get().getPhoneNumber());
+    }
+
+    @Override
+    public void saveUserWithEncodedPassword(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setEnabled(user.isEnabled());
+
+        Role userRole = roleRepository.findByRoleName(user.getRole().getRoleName());
+        user.setRole(userRole);
+
+        userRepository.save(user);
+    }
+
+    @Override
+    public UserDetails updatePassword(UserDetails user, String newPassword) {
+        return null;
     }
 }

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background: #f9f9f9;
+            font-family: "Roboto", sans-serif;
+        }
+
+        .main-content {
+            padding-top: 100px;
+            padding-bottom: 100px;
+        }
+
+        .shadow {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .login-card {
+            max-width: 500px;
+            box-shadow: 0 2px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .login-card .login-body .login-body-wrapper {
+            max-width: 400px;
+        }
+
+        .or-divider {
+            height: 40px;
+            width: 40px;
+        }
+
+        .btn-primary {
+            background-color: #FF6600 !important;
+            border-color: #FF6600 !important;
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus {
+            background-color: #FF4500 !important;
+            border-color: #FF4500 !important;
+        }
+
+        .btn-success {
+            background-color: #4CAF50 !important;
+            border-color: #4CAF50 !important;
+        }
+
+        .btn-success:hover,
+        .btn-success:focus {
+            background-color: #45a049 !important;
+            border-color: #45a049 !important;
+        }
+
+        .btn-facebook {
+            background: #4267b2;
+            border-color: #4267b2;
+            color: #fff;
+        }
+
+        .btn-facebook:hover,
+        .btn-facebook:focus {
+            color: #fff;
+        }
+
+        .btn-google {
+            background: #db3236;
+            border-color: #db3236;
+            color: #fff;
+        }
+
+        .btn-google:hover,
+        .btn-google:focus {
+            color: #fff;
+        }
+
+        .tick {
+            color: green;
+        }
+
+        .cross {
+            color: red;
+        }
+
+        .verified {
+            color: green;
+            font-weight: bold;
+        }
+
+        .verification-failed {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<section class="main-content">
+    <div class="container">
+        <div class="login-card rounded-lg overflow-hidden bg-white mx-auto">
+            <div class="login-head bg-dark text-light p-4">
+                <h3 class="text-center text-uppercase m-0">OTP Login</h3>
+            </div>
+            <div class="login-body p-4 p-md-5">
+                <div class="login-body-wrapper mx-auto">
+                    <form action="#" method="post">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-lg" id="username" name="username" placeholder="Enter your username" required oninput="validateUsername()">
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-primary btn-lg" id="getOTPButton" disabled>Get OTP</button>
+                                </div>
+                            </div>
+                            <div id="usernameResult"></div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control form-control-lg" id="otp" name="otp" placeholder="Enter the OTP" required>
+                            <div id="errorMsg" style="display: none;"></div>
+                        </div>
+                        <button type="button" class="btn btn-primary btn-block btn-lg" id="loginButton">Login</button>
+                    </form>
+                    <p class="text-muted text-center">New to our platform? <a href="#!">Signup</a></p>
+                    <div class="or-divider rounded-circle bg-white shadow d-flex justify-content-center align-items-center mx-auto mb-3">
+                        Or
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script>
+let usernameTimer;
+
+function validateUsername() {
+  clearTimeout(usernameTimer); // Clear the previous timer
+
+  usernameTimer = setTimeout(function () {
+    const username = $("#username").val();
+    const usernameResult = $("#usernameResult");
+    const getOTPButton = $("#getOTPButton");
+
+    if (username !== "") {
+      // Send an AJAX request to check the availability of the username
+      $.ajax({
+        type: "POST",
+        url: "/user/check-username", // Replace with the actual API URL
+        data: {
+          username: username
+        },
+        success: function (response) {
+          if (response === "taken") {
+            usernameResult.html("<span class='tick'>&#10004;</span>");
+            getOTPButton.prop("disabled", false);
+            getOTPButton.removeClass("btn-primary").addClass("btn-success");
+          } else {
+            usernameResult.html("<span class='cross'>&#10008;</span>");
+            getOTPButton.prop("disabled", true);
+            getOTPButton.removeClass("btn-success").addClass("btn-primary");
+          }
+          validate();
+        },
+        error: function () {
+          // Handle the error case when the AJAX request fails
+          console.log("Error occurred while checking username availability");
+        }
+      });
+    } else {
+      usernameResult.html("");
+      getOTPButton.prop("disabled", true);
+      getOTPButton.removeClass("btn-success").addClass("btn-primary");
+      validate();
+    }
+  }, 1000); // Set a delay of 1 second (1000 milliseconds)
+}
+
+function sendOTP(username) {
+    $.ajax({
+        type: "POST",
+        url: "/login-otp",
+        data: {
+            username: username
+        },
+        success: function (response) {
+            enableVerifyOTPButton();
+        },
+        error: function () {
+            // Handle the error case when the AJAX request fails
+            console.log("Error occurred while sending OTP");
+        }
+    });
+}
+
+$("#getOTPButton").click(function () {
+  const username = $("#username").val();
+  sendOTP(username);
+});
+
+function validate() {
+  const username = $("#username").val();
+  const getOTPButton = $("#getOTPButton");
+
+  if (username !== "" && $("#usernameResult").find("span").hasClass("tick")) {
+    getOTPButton.prop("disabled", false);
+    getOTPButton.removeClass("btn-primary").addClass("btn-success");
+  } else {
+    getOTPButton.prop("disabled", true);
+    getOTPButton.removeClass("btn-success").addClass("btn-primary");
+  }
+}
+
+function verifyOTP() {
+  const otpInput = $("#otp").val();
+  const username = $("#username").val();
+
+  $.ajax({
+    type: "POST",
+    url: "/user/verify-login-otp",
+    data: {
+      username: username,
+      otp: otpInput,
+    },
+    success: function (response) {
+      if (response === "success") {
+        // OTP verification successful
+        // Redirect the user to the authenticated page
+        window.location.href = "/index";
+      } else if (response === "failure") {
+        // OTP verification failed
+        // You can perform any actions here, such as displaying an error message or resetting the OTP input field
+        console.log("OTP verification failed");
+        // Reset OTP input field
+        $("#otp").val("");
+        $("#errorMsg")
+          .html("OTP verification failed")
+          .addClass("verification-failed")
+          .show();
+      }
+    },
+    error: function () {
+      // Handle the error case when the AJAX request fails
+      console.log("Error occurred while verifying OTP");
+    }
+  });
+}
+
+// Bind the verifyOTP function to the login form submission
+$("#loginButton").click(function () {
+  verifyOTP();
+});
+</script>
+</body>
+</html>

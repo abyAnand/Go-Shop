@@ -12,6 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,60 +22,32 @@ import java.util.stream.Collectors;
 
 public class OTPAuthenticationProvider implements AuthenticationProvider {
 
+    private final UserDetailsService userDetailsService;
+    private final OtpService otpService;
     private final UserService userService;
 
-    public OTPAuthenticationProvider(UserService userService) {
+    public OTPAuthenticationProvider(UserDetailsService userDetailsService, UserService userService, OtpService otpService) {
+        this.userDetailsService = userDetailsService;
         this.userService = userService;
+        this.otpService = otpService;
     }
-
-    @Autowired
-    OtpService otpService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        String username = (String) authentication.getPrincipal();
-        String otp = authentication.getCredentials().toString();
-        List<GrantedAuthority> authorities;
+        String otp = authentication.getCredentials() != null ? authentication.getCredentials().toString() : null;
+        String username = authentication.getName();
 
-        // Fetch the user's phone number from the database based on the user ID
-        String phoneNumber = String.valueOf(userService.findPhonenUmberByUsername(username));
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        // Verify the OTP
-        boolean isOTPValid = verifyOTP(username, otp);
-
-        if (!isOTPValid) {
-            throw new BadCredentialsException("Invalid OTP");
+        if (otp != null && userDetails != null && userDetails.getPassword().equals(otp)) {
+            return new UsernamePasswordAuthenticationToken(userDetails, otp, userDetails.getAuthorities());
         }
 
-        // Fetch the user details from the database based on the user ID
-        Optional<User> user = userService.findByUsername(username);
-
-        authorities = Arrays.stream(user.get().getRole().getRoleName().split(","))
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-
-        // Create a fully authenticated authentication token
-        return new UsernamePasswordAuthenticationToken(user, otp,authorities);
+        throw new BadCredentialsException("Invalid OTP");
     }
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return authentication.equals(UsernamePasswordAuthenticationToken.class);
-    }
-
-    private boolean verifyOTP(String username, String otp) {
-        if (username == null || otp == null) {
-            return false;
-        }
-
-        // Fetch the user's phone number from the database based on the user ID
-        Optional<OtpDto> user = otpService.findBySessionId(username);
-
-
-        // Verify the OTP
-        if (user.get().getOtp().equals(otp)) {
-            return true;
-        }
-        return false;
+        return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
     }
 }

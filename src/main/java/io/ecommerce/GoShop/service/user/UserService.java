@@ -10,25 +10,12 @@ import java.util.UUID;
 
 
 public interface UserService {
-
-    public void save(UserDTO userdto);
-
-    public void save(User user);
-
-
+    void save(UserDTO userdto);
     Optional<User> findByUsername(String username);
-
     List<User> findAll();
-
     User findById(UUID uuid);
-
     void delete(UUID id);
-
     Optional<User> findByEmail(String email);
-
     Optional<User> findByPhoneNumber(long phoneNumber);
-
-
-    String findPhonenUmberByUsername(String username);
-
+    void saveUserWithEncodedPassword(User user);
 }
