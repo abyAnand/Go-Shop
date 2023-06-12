@@ -100,7 +100,7 @@ public String createUser(Model model){
             return "/admin/update-user";
         }
 
-        userService.save(user);
+        userService.saveUserWithEncodedPassword(user);
 
         return "redirect:/admin/users";
     }
@@ -125,7 +125,7 @@ public String createUser(Model model){
             return "/admin/create-user";
         }
 
-        userService.save(user);
+        userService.saveUserWithEncodedPassword(user);
 
         return "redirect:/admin/users";
     }

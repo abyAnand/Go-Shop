@@ -24,7 +24,7 @@ spring:
 
 twilio:
   accountSid: ACafd4d89b5fcf368f857c56cfeb125288
-  authToken: 3bf0d391bd2005df59f3f7599055163d
+  authToken: 911ee2c2c5925c7e1d3e07005a55abcf
   phone:
     number: +13614540810
 
