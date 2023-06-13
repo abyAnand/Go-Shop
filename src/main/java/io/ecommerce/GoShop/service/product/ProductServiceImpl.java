@@ -6,6 +6,8 @@ import io.ecommerce.GoShop.repository.ImageRepository;
 import io.ecommerce.GoShop.repository.ProductRepository;
 import io.ecommerce.GoShop.service.image.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,7 +29,7 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public Product getByName(String productName) {
-        return productRepository.findByProductName(productName);
+        return productRepository.findByProductNameLike("%"+productName+"%");
     }
 
     @Override
@@ -92,6 +94,21 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public Optional<Product> getProductById(UUID id) {
         return productRepository.findById(id);
+    }
+
+    @Override
+    public Page<Product> findAll(Pageable pageable) {
+        return productRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Product> findByName(Pageable pageable, String keyword) {
+        return productRepository.findByProductName(pageable, keyword);
+    }
+
+    @Override
+    public Page<Product> getByNamePaged(String keyword, Pageable pageable) {
+        return productRepository.findByProductNameLike("%"+keyword+"%", pageable);
     }
 
 

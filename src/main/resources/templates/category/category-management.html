@@ -76,6 +76,21 @@
                 </tr>
                 </tbody>
             </table>
+            <div th:unless="${empty}" class="pagination d-flex justify-content-end mt-3">
+                <ul class="pagination">
+                    <li class="page-item prev" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{/category(page=0, sort=${sort}, field=${field}, filter=${filter}, size=${pageSize}, keyword=${keyword})}"><i class="tf-icon bx bx-chevrons-left"></i></a>
+                    </li>
+
+                    <li class="page-item" th:each="pageNum : ${#numbers.sequence(startPage, endPage)}" th:classappend="${pageNum == currentPage ? 'active' : ''}">
+                        <a class="page-link" th:href="@{/category(page=${pageNum}, sort=${sort}, field=${field}, size=${pageSize}, filter=${filter}, keyword=${keyword})}" th:text="${pageNum + 1}"></a>
+                    </li>
+
+                    <li class="page-item next" th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{/category(page=${totalPages - 1}, sort=${sort}, field=${field}, size=${pageSize}, filter=${filter}, keyword=${keyword})}"><i class="tf-icon bx bx-chevrons-right"></i></a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

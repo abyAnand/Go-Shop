@@ -2,6 +2,8 @@ package io.ecommerce.GoShop.service.product;
 
 import io.ecommerce.GoShop.model.Image;
 import io.ecommerce.GoShop.model.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,4 +37,10 @@ public interface ProductService {
     List<Product> findAll();
 
     Optional<Product> getProductById(UUID id);
+
+    Page<Product> findAll(Pageable pageable);
+
+    Page<Product> findByName(Pageable pageable, String keyword);
+
+    Page<Product> getByNamePaged(String keyword, Pageable pageable);
 }

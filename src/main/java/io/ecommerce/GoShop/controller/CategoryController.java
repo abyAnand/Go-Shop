@@ -1,8 +1,13 @@
 package io.ecommerce.GoShop.controller;
 
 import io.ecommerce.GoShop.model.Category;
+import io.ecommerce.GoShop.model.User;
 import io.ecommerce.GoShop.service.category.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,10 +26,37 @@ public class CategoryController {
     CategoryService categoryService;
 
     @GetMapping
-    public String getAllCategory(Model model){
+    public String getAllCategory(Model model,
+                                 @RequestParam(name = "field", required = false, defaultValue = "categoryName") String field,
+                                 @RequestParam(name = "sort", required = false, defaultValue = "DESC") String sort,
+                                 @RequestParam(name ="page",required = false, defaultValue = "0") int page,
+                                 @RequestParam(name ="size",required = false, defaultValue = "5") int size,
+                                 @RequestParam(name ="keyword",required = false) String keyword,
+                                 @RequestParam(name ="filter",required = false, defaultValue = "") String filter){
 
+        Pageable pageable = PageRequest.of(page,size, Sort.by(Sort.Direction.fromString(sort),field));
 
-        List<Category> categoryList = categoryService.findAll();
+        Page<Category> categoryList = Page.empty();
+
+        if(keyword == null || keyword.equals("")){
+            categoryList = categoryService.findAll(pageable);
+        }else{
+            categoryList = categoryService.findByCategoryName(pageable, keyword);
+        }
+
+        //        model.addAttribute("filter", filter);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", categoryList.getTotalPages());
+        model.addAttribute("field", field);
+        model.addAttribute("sort", sort);
+        model.addAttribute("pageSize", size);
+        int startPage = Math.max(0, page - 1);
+        int endPage = Math.min(page + 1, categoryList.getTotalPages() - 1);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
+        model.addAttribute("empty", categoryList.getTotalElements() == 0);
         model.addAttribute("categories",categoryList);
 
         return "/category/category-management";

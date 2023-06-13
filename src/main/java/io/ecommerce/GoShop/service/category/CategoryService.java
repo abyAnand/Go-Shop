@@ -1,6 +1,8 @@
 package io.ecommerce.GoShop.service.category;
 
 import io.ecommerce.GoShop.model.Category;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,4 +20,8 @@ public interface CategoryService {
     Optional<Category> getById(UUID id);
 
     void deleteById(UUID id);
+
+    Page<Category> findAll(Pageable pageable);
+
+    Page<Category> findByCategoryName(Pageable pageable, String keyword);
 }

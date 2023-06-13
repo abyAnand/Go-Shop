@@ -3,6 +3,8 @@ package io.ecommerce.GoShop.service.category;
 import io.ecommerce.GoShop.model.Category;
 import io.ecommerce.GoShop.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,5 +39,15 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     public void deleteById(UUID id) {
          categoryRepository.deleteById(id);
+    }
+
+    @Override
+    public Page<Category> findAll(Pageable pageable) {
+        return categoryRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Category> findByCategoryName(Pageable pageable, String keyword) {
+        return categoryRepository.findByCategoryName(pageable, keyword);
     }
 }

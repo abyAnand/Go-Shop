@@ -93,14 +93,29 @@
 		</div>
 		<div class="search_input" id="search_input_box">
 			<div class="container">
-				<form class="d-flex justify-content-between">
-					<input type="text" class="form-control" id="search_input" placeholder="Search Here">
-					<button type="submit" class="btn"></button>
-					<span class="lnr lnr-cross" id="close_search" title="Close Search"></span>
-				</form>
+				<div class="d-flex justify-content-between">
+					<input type="text" class="form-control" id="search_input" placeholder="Search Here" name="productName" onkeydown="handleKeyDown(event)">
+					<a href="#">
+						<button type="button" onclick="search()" class="btn">Search</button>
+					</a>
+				</div>
 			</div>
 		</div>
 	</header>
+
+	<script>
+	function handleKeyDown(event) {
+		if (event.keyCode === 13) {
+			event.preventDefault();
+			search();
+		}
+	}
+
+	function search() {
+		var input = document.getElementById("search_input").value;
+		window.location.href = "/store/product?keyword=" + input;
+	}
+</script>
 	<!-- End Header Area -->
 
 	<!-- start banner Area -->

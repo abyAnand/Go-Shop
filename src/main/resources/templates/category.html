@@ -178,22 +178,21 @@
 				<!-- End Best Seller -->
 				<!-- Start Filter Bar -->
 				<div class="filter-bar d-flex flex-wrap align-items-center">
-					<div class="sorting mr-auto">
-						<select>
-							<option value="1">Show 12</option>
-							<option value="1">Show 12</option>
-							<option value="1">Show 12</option>
-						</select>
+					<ul class="pagination">
+					<div th:unless="${empty}" class="pagination">
+						<li th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+						<a  th:href="@{/store/products(page=0, sort=${sort}, field=${field}, filter=${filter}, size=${pageSize}, keyword=${keyword})}" class="prev-arrow"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></a>
+						</li>
+
+						<li  th:each="pageNum : ${#numbers.sequence(startPage, endPage)}" th:classappend="${pageNum == currentPage ? 'active' : ''}">
+							<a class="page-link" th:href="@{/store/products(page=${pageNum}, sort=${sort}, field=${field}, size=${pageSize}, filter=${filter}, keyword=${keyword})}" th:text="${pageNum + 1}"></a>
+						</li>
+
+						<li th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}">
+						<a th:href="@{/store/products(page=${totalPages - 1}, sort=${sort}, field=${field}, size=${pageSize}, filter=${filter}, keyword=${keyword})}" class="next-arrow"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
+						</li>
 					</div>
-					<div class="pagination">
-						<a href="#" class="prev-arrow"><i class="fa fa-long-arrow-left" aria-hidden="true"></i></a>
-						<a href="#" class="active">1</a>
-						<a href="#">2</a>
-						<a href="#">3</a>
-						<a href="#" class="dot-dot"><i class="fa fa-ellipsis-h" aria-hidden="true"></i></a>
-						<a href="#">6</a>
-						<a href="#" class="next-arrow"><i class="fa fa-long-arrow-right" aria-hidden="true"></i></a>
-					</div>
+					</ul>
 				</div>
 				<!-- End Filter Bar -->
 			</div>
