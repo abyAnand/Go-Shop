@@ -5,6 +5,10 @@ import io.ecommerce.GoShop.model.User;
 import io.ecommerce.GoShop.service.role.RoleService;
 import io.ecommerce.GoShop.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,11 +33,39 @@ public class AdminController {
     RoleService roleService;
 
     @GetMapping("/users")
-    public String userList(Model model) {
+    public String userList(Model model,
+                           @RequestParam(name = "field", required = false, defaultValue = "username") String field,
+                           @RequestParam(name = "sort", required = false, defaultValue = "DESC") String sort,
+                           @RequestParam(name ="page",required = false, defaultValue = "0") int page,
+                           @RequestParam(name ="size",required = false, defaultValue = "5") int size,
+                           @RequestParam(name ="keyword",required = false) String keyword,
+                           @RequestParam(name ="filter",required = false, defaultValue = "") String filter) {
 
+        Pageable pageable = PageRequest.of(page,size, Sort.by(Sort.Direction.fromString(sort),field));
 
-        List<User> userList = userService.findAll();
+        Page<User> userList = Page.empty();
+
+        if(keyword == null || keyword.equals("")){
+             userList = userService.findAll(pageable);
+        }else{
+             userList = userService.findByUsername(pageable, keyword);
+        }
+
         model.addAttribute("users", userList);
+
+//        model.addAttribute("filter", filter);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", userList.getTotalPages());
+        model.addAttribute("field", field);
+        model.addAttribute("sort", sort);
+        model.addAttribute("pageSize", size);
+        int startPage = Math.max(0, page - 1);
+        int endPage = Math.min(page + 1, userList.getTotalPages() - 1);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
+        model.addAttribute("empty", userList.getTotalElements() == 0);
 
         return "/admin/user-management";
     }

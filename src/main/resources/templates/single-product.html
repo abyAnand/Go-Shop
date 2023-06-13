@@ -200,7 +200,7 @@
 				<div class="col-lg-6">
 					<div class="s_Product_carousel">
 						<th:block th:each="image : ${product.images}">
-							<div class="single-prd-item">
+							<div th:id="'img-container-'+image.id" class="single-prd-item">
 								<img class="img-fluid" th:src="@{/images/product/{imagePath}(imagePath=${image.imagePath})}" alt="">
 							</div>
 						</th:block>
@@ -408,7 +408,7 @@ window.onload = function () {
 								</div>
 								<div class="review_item reply">
 									<div class="media">
-										<div class="d-flex">
+										<div  class="d-flex">
 											<img src="/assets/img/product/review-2.png" alt="">
 										</div>
 										<div class="media-body">
@@ -680,6 +680,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 </p>
 			</div>
 		</div>
+
 	</footer>
 	<!-- End footer Area -->
 
@@ -697,7 +698,29 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
 	<script src="/assets/js/gmaps.min.js"></script>
 	<script src="/assets/js/main.js"></script>
+	<script src="/js/js-image-zoom.js"></script>
+	</div>
 
+	<script>
+		var options = {
+<!--		width: 400,-->
+<!--    	zoomWidth: 500,-->
+			fillContainer: true,
+			offset: {vertical: 0, horizontal: 10},
+			zoomPosition: 'original'
+		};
+
+		var elements = document.querySelectorAll('[id^="img-container"]');
+
+		for (var i = 0; i < elements.length; i++) {
+  			var element = elements[i];
+ 		 	new ImageZoom(element, options);
+		}
+
+		//new ImageZoom(document.getElementById("img-container"), options2);
+
+
+</script>
 </body>
 
 </html>

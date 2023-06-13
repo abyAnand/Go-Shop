@@ -8,6 +8,8 @@ import io.ecommerce.GoShop.repository.UserRepository;
 import io.ecommerce.GoShop.service.user.UserService;
 import io.ecommerce.GoShop.service.user.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsPasswordService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -66,6 +68,16 @@ public class UserServiceImpl implements UserService, UserServiceInterface, UserD
     @Override
     public List<User> findAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public Page<User> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<User> findByUsername(Pageable pageable, String username) {
+        return userRepository.findByUsername(username, pageable);
     }
 
     @Override
