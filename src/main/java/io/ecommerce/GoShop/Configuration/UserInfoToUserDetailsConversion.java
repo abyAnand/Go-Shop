@@ -17,12 +17,16 @@ public class UserInfoToUserDetailsConversion implements UserDetails {
     private  String password;
     private  List<GrantedAuthority> authorities;
 
+    private boolean isEnabled;
+
     public UserInfoToUserDetailsConversion(User user) {
         username = user.getUsername();
         password = user.getPassword();
         authorities = Arrays.stream(user.getRole().getRoleName().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
+
+        isEnabled = user.isEnabled();
 
 
     }
@@ -59,6 +63,6 @@ public class UserInfoToUserDetailsConversion implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isEnabled;
     }
 }

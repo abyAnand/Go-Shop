@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,13 +20,16 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Controller
+@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 @RequestMapping("/category")
+
 public class CategoryController {
 
     @Autowired
     CategoryService categoryService;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String getAllCategory(Model model,
                                  @RequestParam(name = "field", required = false, defaultValue = "categoryName") String field,
                                  @RequestParam(name = "sort", required = false, defaultValue = "DESC") String sort,
@@ -62,6 +66,7 @@ public class CategoryController {
         return "/category/category-management";
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/create")
     public String addCategory(Model model){
 
@@ -69,6 +74,7 @@ public class CategoryController {
         return "/category/add-category";
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/update/{id}")
     public String updateCategory(@PathVariable UUID id, RedirectAttributes attributes, Model model) {
         Optional<Category> category = categoryService.getById(id);
@@ -79,6 +85,7 @@ public class CategoryController {
         return "redirect:/category";
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/update")
     public String updateCategory(@ModelAttribute Category category,
                                  Model model,
@@ -98,6 +105,7 @@ public class CategoryController {
         return "redirect:/category";
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/delete/{id}")
     public String deleteUser(@PathVariable UUID id,
                              RedirectAttributes attributes,
@@ -113,6 +121,7 @@ public class CategoryController {
         return "null";
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/save")
     public String saveCategory(@ModelAttribute Category category,
                                Model model,

@@ -32,6 +32,7 @@ public class AdminController {
     @Autowired
     RoleService roleService;
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/users")
     public String userList(Model model,
                            @RequestParam(name = "field", required = false, defaultValue = "username") String field,
@@ -70,6 +71,7 @@ public class AdminController {
         return "/admin/user-management";
     }
 
+@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 @GetMapping("/users/create")
 public String createUser(Model model){
 
@@ -94,6 +96,7 @@ public String createUser(Model model){
         return "/admin/update-user";
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/users/delete/{id}")
     public String deleteUser(@PathVariable UUID id,
                              RedirectAttributes attributes,
@@ -111,6 +114,7 @@ public String createUser(Model model){
     }
 
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/save")
     public String saveUser(@ModelAttribute User user,
                            BindingResult result,
@@ -137,6 +141,7 @@ public String createUser(Model model){
         return "redirect:/admin/users";
     }
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/saveNewUser")
     public String saveNewUser(@ModelAttribute("user") @Valid User user,
                               BindingResult result,
