@@ -3,7 +3,9 @@ package io.ecommerce.GoShop.model;
 
 import lombok.*;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 
 @Entity
@@ -41,6 +43,16 @@ public class User extends BaseEntity{
     @ToString.Exclude
     private Role role;
 
+
+
+    @OneToOne
+    @JoinColumn(name = "cart_id")
+    @ToString.Exclude
+    private Cart cart;
+
+    @OneToMany(mappedBy ="user")
+    @ToString.Exclude
+    private List<Address> addresses = new ArrayList<Address>();
 
 
 }
