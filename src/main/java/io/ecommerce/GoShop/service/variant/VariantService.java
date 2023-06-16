@@ -21,4 +21,5 @@ public interface VariantService {
     Optional<Variant> findByProductIdAndVariantName(UUID productId, String variantName);
 
     Optional<Variant> findById(UUID id);
+
 }

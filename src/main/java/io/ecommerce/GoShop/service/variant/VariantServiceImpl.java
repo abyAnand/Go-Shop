@@ -48,4 +48,5 @@ public class VariantServiceImpl implements VariantService{
     public Optional<Variant> findById(UUID id) {
         return variantRepository.findById(id);
     }
+
 }

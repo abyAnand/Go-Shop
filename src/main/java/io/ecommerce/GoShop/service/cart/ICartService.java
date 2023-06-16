@@ -5,6 +5,7 @@ import io.ecommerce.GoShop.model.CartItem;
 import io.ecommerce.GoShop.model.User;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public interface ICartService {
 
@@ -17,4 +18,8 @@ public interface ICartService {
     void updateCartItem(CartItem item, int quantity);
 
     void removeFromCartList(CartItem item);
+
+    void increaseQuantity(UUID itemId);
+
+    void decreaseQuantity(UUID itemId);
 }

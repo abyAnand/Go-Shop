@@ -20,6 +20,7 @@
     <!--
             CSS
             ============================================= -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="/assets/css/linearicons.css">
     <link rel="stylesheet" href="/assets/css/owl.carousel.css">
     <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
@@ -28,6 +29,28 @@
     <link rel="stylesheet" href="/assets/css/nouislider.min.css">
     <link rel="stylesheet" href="/assets/css/bootstrap.css">
     <link rel="stylesheet" href="/assets/css/main.css">
+    <script type="text/javascript" th:src="@{/js/cart.js}"></script>
+
+
+    <style>
+    .cart-item-image {
+        width: 75px; /* Adjust the width as needed */
+        height: auto; /* Maintain aspect ratio */
+    }
+    .delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: #000;
+    font-size: 16px;
+}
+
+.delete-btn:hover {
+    color: #ff0000; /* Change the color to your desired hover color */
+}
+
+    </style>
 </head>
 
 <body>
@@ -55,16 +78,7 @@
 								<ul class="dropdown-menu">
 									<li class="nav-item"><a class="nav-link" th:href="@{/store/products/}">Shop Category</a></li>
 									<li class="nav-item"><a class="nav-link" href="checkout.html">Product Checkout</a></li>
-									<li class="nav-item active"><a class="nav-link" href="cart.html">Shopping Cart</a></li>
 									<li class="nav-item"><a class="nav-link" href="confirmation.html">Confirmation</a></li>
-								</ul>
-							</li>
-							<li class="nav-item submenu dropdown">
-								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-								 aria-expanded="false">Pages</a>
-								<ul class="dropdown-menu">
-									<li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
-									<li class="nav-item"><a class="nav-link" href="tracking.html">Tracking</a></li>
 								</ul>
 							</li>
 						<ul class="nav navbar-nav navbar-right">
@@ -113,44 +127,57 @@
     <section class="cart_area">
         <div class="container">
             <div class="cart_inner">
+                <div id="successMessage"></div>
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
                             <tr>
                                 <th scope="col">Product</th>
+                                <th scope="col">Variant</th>
                                 <th scope="col">Price</th>
                                 <th scope="col">Quantity</th>
                                 <th scope="col">Total</th>
+                                <th scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr th:each="cartItem : ${cart}">
+
                                 <td>
                                     <div class="media">
                                         <div class="d-flex">
-                                            <img src="/assets/img/cart.jpg" alt="">
+                                            <img th:src="@{/images/product/{imagePath}(imagePath=${cartItem.variant.product.images[0].imagePath})}"
+                                                 alt="/assets/img/cart.jpg" class="cart-item-image">
                                         </div>
                                         <div class="media-body">
-                                            <p>Minimalistic shop for multipurpose use</p>
+                                            <p th:text="${cartItem.variant.product.productName}">Minimalistic shop for multipurpose use</p>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <h5>$360.00</h5>
+                                    <h5 th:text="${cartItem.variant.variantName}">Variant</h5>
+                                </td>
+                                <td>
+                                    <h5 th:text="${'$' + cartItem.variant.price}">$360.00</h5>
                                 </td>
                                 <td>
                                     <div class="product_count">
-                                        <input type="text" name="qty" id="sst" maxlength="12" value="1" title="Quantity:"
-                                            class="input-text qty">
-                                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
-                                            class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
-                                        <button onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
-                                            class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
+                                        <input type="text" name="qty" id="sst" maxlength="12" th:value="${cartItem.quantity}" title="Quantity:" class="input-text qty" readonly>
+                                        <button onclick="sendCartItem(this.getAttribute('data-variant-id'))" th:data-variant-id="${cartItem.variant.id}"
+                                                class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
+                                        <button onclick="sendCartItemDecr(this.getAttribute('data-variant-id'))" th:data-variant-id="${cartItem.variant.id}"
+                                                class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
                                     </div>
+
                                 </td>
                                 <td>
-                                    <h5>$720.00</h5>
+                                    <h5 th:text="${'$' + (cartItem.variant.price * cartItem.quantity)}">$720.00</h5>
                                 </td>
+                                <td>
+                                    <button onclick="deleteCartItem(this.getAttribute('data-variant-id'))" th:data-variant-id="${cartItem.variant.id}" class="delete-btn" type="button"><i class="lnr lnr-trash"></i></button>
+
+                                </td>
+
                             </tr>
 
                             <tr class="bottom_button">
@@ -341,6 +368,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
 	<script src="/assets/js/gmaps.min.js"></script>
 	<script src="/assets/js/main.js"></script>
+<script></script>
 </body>
 
 </html>

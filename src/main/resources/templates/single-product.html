@@ -136,7 +136,6 @@
 								 aria-expanded="false">Shop</a>
 								<ul class="dropdown-menu">
 									<li class="nav-item"><a class="nav-link" th:href="@{/store/products/}">Shop Category</a></li>
-									<li class="nav-item active"><a class="nav-link" href="single-product.html">Product Details</a></li>
 									<li class="nav-item"><a class="nav-link" href="checkout.html">Product Checkout</a></li>
 									<li class="nav-item"><a class="nav-link" th:href="@{/cart}">Shopping Cart</a></li>
 									<li class="nav-item"><a class="nav-link" href="confirmation.html">Confirmation</a></li>
@@ -239,6 +238,9 @@
 						<div class="card_area d-flex align-items-center">
 							<a class="primary-btn" href="#" id="addToCartButton" th:if="${product.variant.size() > 0}" onclick="addToCart()">Add to Cart</a>
 							<a class="icon_btn" href="#"><i class="lnr lnr lnr-heart"></i></a>
+							<a class="icon_btn" th:href="@{/cart}">
+								<i class="lnr lnr-cart"></i>
+							</a>
 
 						</div>
 

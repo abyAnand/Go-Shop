@@ -1,7 +1,6 @@
 package io.ecommerce.GoShop.repository;
 
 import io.ecommerce.GoShop.model.Cart;
-import io.ecommerce.GoShop.model.CartItem;
 import io.ecommerce.GoShop.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
