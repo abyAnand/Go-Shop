@@ -23,12 +23,6 @@ public class BaseEntity {
     @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID id;
 
-//    @GeneratedValue(generator = "UUID")
-//    @GenericGenerator(name = "UUID", strategy = "guid")
-//    @Id
-//    @Column(name = "id", updatable = false, nullable = false, unique = true)
-//    private UUID uuid;
-
     @CreationTimestamp
     @Column(updatable = false)
     private Timestamp createdDate;

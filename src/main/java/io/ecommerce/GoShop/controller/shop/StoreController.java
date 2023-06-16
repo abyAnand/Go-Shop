@@ -1,4 +1,4 @@
-package io.ecommerce.GoShop.store.controller;
+package io.ecommerce.GoShop.controller.shop;
 
 import io.ecommerce.GoShop.model.Category;
 import io.ecommerce.GoShop.model.Product;
@@ -112,12 +112,37 @@ public class StoreController {
     }
 
     @GetMapping("/category/{id}")
-    public String getByCategory(@PathVariable UUID id, Model model){
+    public String getByCategory(@PathVariable UUID id, Model model,
+                                @RequestParam(name = "field", required = false, defaultValue = "categoryName") String field,
+                                @RequestParam(name = "sort", required = false, defaultValue = "DESC") String sort,
+                                @RequestParam(name ="page",required = false, defaultValue = "0") int page,
+                                @RequestParam(name ="size",required = false, defaultValue = "5") int size,
+                                @RequestParam(name ="keyword",required = false) String keyword,
+                                @RequestParam(name ="filter",required = false, defaultValue = "") String filter){
+
+
+        Pageable pageable = PageRequest.of(page,size, Sort.by(Sort.Direction.fromString(sort),field));
+
         Optional<Category> category = categoryService.getById(id);
-        List<Category> categories = categoryService.findAll();
+
+        Page<Category> categories = categoryService.findAll(pageable);
         model.addAttribute("products", category.get().getProduct());
         model.addAttribute("categories", categories);
         model.addAttribute("selectedCategory",category.get().getId());
+
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", categories.getTotalPages());
+        model.addAttribute("field", field);
+        model.addAttribute("sort", sort);
+        model.addAttribute("pageSize", size);
+        int startPage = Math.max(0, page - 1);
+        int endPage = Math.min(page + 1, categories.getTotalPages() - 1);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
+        model.addAttribute("empty", categories.getTotalElements() == 0);
+
         return "category";
     }
 

@@ -54,8 +54,6 @@ public class LoginController {
 
 
 
-
-
     @GetMapping("/login")
     public String login() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
