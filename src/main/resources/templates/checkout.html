@@ -15,41 +15,24 @@
     <!-- meta character set -->
     <meta charset="UTF-8">
     <!-- Site Title -->
-    <title>Go-Shop</title>
+    <title>Karma Shop</title>
 
     <!--
             CSS
             ============================================= -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="/assets/css/linearicons.css">
     <link rel="stylesheet" href="/assets/css/owl.carousel.css">
-    <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/css/themify-icons.css">
+    <link rel="stylesheet" href="/assets/css/font-awesome.min.css">
     <link rel="stylesheet" href="/assets/css/nice-select.css">
     <link rel="stylesheet" href="/assets/css/nouislider.min.css">
     <link rel="stylesheet" href="/assets/css/bootstrap.css">
     <link rel="stylesheet" href="/assets/css/main.css">
-    <script type="text/javascript" th:src="@{/js/cart.js}"></script>
-
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <style>
-    .cart-item-image {
-        width: 75px; /* Adjust the width as needed */
-        height: auto; /* Maintain aspect ratio */
-    }
-    .delete-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    color: #000;
-    font-size: 16px;
-}
-
-.delete-btn:hover {
-    color: #ff0000; /* Change the color to your desired hover color */
-}
-
+          .custom-card {
+    margin-bottom: 20px;
+  }
     </style>
 </head>
 
@@ -61,7 +44,7 @@
 			<nav class="navbar navbar-expand-lg navbar-light main_box">
 				<div class="container">
 					<!-- Brand and toggle get grouped for better mobile display -->
-					<a class="navbar-brand logo_h" th:href="@{/}"><img src="/images/system/logo.png" alt=""></a>
+					<a class="navbar-brand logo_h" href="index.html"><img src="/assets/img/logo.png" alt=""></a>
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
 					 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="icon-bar"></span>
@@ -71,22 +54,39 @@
 					<!-- Collect the nav links, forms, and other content for toggling -->
 					<div class="collapse navbar-collapse offset" id="navbarSupportedContent">
 						<ul class="nav navbar-nav menu_nav ml-auto">
-							<li class="nav-item"><a class="nav-link" th:href="@{/}">Home</a></li>
+							<li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
 							<li class="nav-item submenu dropdown active">
 								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
 								 aria-expanded="false">Shop</a>
 								<ul class="dropdown-menu">
-									<li class="nav-item"><a class="nav-link" th:href="@{/store/products/}">Shop Category</a></li>
-									<li class="nav-item"><a class="nav-link" th:href="@{/cart/checkout/}">Product Checkout</a></li>
+									<li class="nav-item"><a class="nav-link" href="category.html">Shop Category</a></li>
+									<li class="nav-item"><a class="nav-link" href="single-product.html">Product Details</a></li>
+									<li class="nav-item active"><a class="nav-link" href="checkout.html">Product Checkout</a></li>
+									<li class="nav-item"><a class="nav-link" href="cart.html">Shopping Cart</a></li>
 									<li class="nav-item"><a class="nav-link" href="confirmation.html">Confirmation</a></li>
 								</ul>
 							</li>
+							<li class="nav-item submenu dropdown">
+								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+								 aria-expanded="false">Blog</a>
+								<ul class="dropdown-menu">
+									<li class="nav-item"><a class="nav-link" href="blog.html">Blog</a></li>
+									<li class="nav-item"><a class="nav-link" href="single-blog.html">Blog Details</a></li>
+								</ul>
+							</li>
+							<li class="nav-item submenu dropdown">
+								<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+								 aria-expanded="false">Pages</a>
+								<ul class="dropdown-menu">
+									<li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+									<li class="nav-item"><a class="nav-link" href="tracking.html">Tracking</a></li>
+									<li class="nav-item"><a class="nav-link" href="elements.html">Elements</a></li>
+								</ul>
+							</li>
+							<li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+						</ul>
 						<ul class="nav navbar-nav navbar-right">
-                            <div class="nav-link" th:if="${auth != null and auth.isAuthenticated()}">
-                                <li class="nav-item"><a href="#" class="cart"><span class="fa fa-user">
-								Hello: <span th:text="${auth.principal?.username} ?: 'Default Username'"></span>
-							</span></a></li>
-                            </div>
+							<li class="nav-item"><a href="#" class="cart"><span class="ti-bag"></span></a></li>
 							<li class="nav-item">
 								<button class="search"><span class="lnr lnr-magnifier" id="search"></span></button>
 							</li>
@@ -112,10 +112,10 @@
         <div class="container">
             <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
                 <div class="col-first">
-                    <h1>Shopping Cart</h1>
+                    <h1>Checkout</h1>
                     <nav class="d-flex align-items-center">
                         <a th:href="@{/}">Home<span class="lnr lnr-arrow-right"></span></a>
-                        <a href="category.html">Cart</a>
+                        <a href="#">Checkout</a>
                     </nav>
                 </div>
             </div>
@@ -123,136 +123,124 @@
     </section>
     <!-- End Banner Area -->
 
-    <!--================Cart Area =================-->
-    <section class="cart_area">
+    <!--================Checkout Area =================-->
+    <section class="checkout_area section_gap">
         <div class="container">
-            <div class="cart_inner">
-                <div id="successMessage"></div>
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
+            <div class="row">
+                <div class="col-lg-12">
+
+
+                    <div class="order_box">
+
+
+                        <h2>Your Order</h2>
+
+                        <table style="
+    width: 100%;
+">
+                            <thead>
                             <tr>
-                                <th scope="col">Product</th>
-                                <th scope="col">Variant</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Total</th>
-                                <th scope="col">Actions</th>
+                                <th>Product</th>
+                                <th>Variant</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="cartItem : ${cart}">
-
+                            </thead>
+                            <tbody>
+                            <tr th:each="cartItem : ${cartItems}">
+                                <td th:text="${cartItem.variant.product.productName}"></td>
                                 <td>
-                                    <div class="media">
-                                        <div class="d-flex">
-                                            <img th:src="@{/images/product/{imagePath}(imagePath=${cartItem.variant.product.images[0].imagePath})}"
-                                                 alt="/assets/img/cart.jpg" class="cart-item-image">
-                                        </div>
-                                        <div class="media-body">
-                                            <p th:text="${cartItem.variant.product.productName}">Minimalistic shop for multipurpose use</p>
-                                        </div>
-                                    </div>
+                                    <span th:text="${cartItem.variant.variantName}"></span>
                                 </td>
                                 <td>
-                                    <h5 th:text="${cartItem.variant.variantName}">Variant</h5>
+                                    x<span th:text="${cartItem.quantity}"></span>
                                 </td>
-                                <td>
-                                    <h5 th:text="${'$' + cartItem.variant.price}">$360.00</h5>
-                                </td>
-                                <td>
-                                    <div class="product_count">
-                                        <input type="text" name="qty" id="sst" maxlength="12" th:value="${cartItem.quantity}" title="Quantity:" class="input-text qty" readonly>
-                                        <button onclick="sendCartItem(this.getAttribute('data-variant-id'))" th:data-variant-id="${cartItem.variant.id}"
-                                                class="increase items-count" type="button"><i class="lnr lnr-chevron-up"></i></button>
-                                        <button onclick="sendCartItemDecr(this.getAttribute('data-variant-id'))" th:data-variant-id="${cartItem.variant.id}"
-                                                class="reduced items-count" type="button"><i class="lnr lnr-chevron-down"></i></button>
-                                    </div>
-
-                                </td>
-                                <td>
-                                    <h5 th:text="${'$' + (cartItem.variant.price * cartItem.quantity)}">$720.00</h5>
-                                </td>
-                                <td>
-                                    <button onclick="deleteCartItem(this.getAttribute('data-variant-id'))" th:data-variant-id="${cartItem.variant.id}" class="delete-btn" type="button"><i class="lnr lnr-trash"></i></button>
-
-                                </td>
-
+                                <td th:text="${cartItem.variant.price * cartItem.quantity}"></td>
                             </tr>
-
-                            <tr class="bottom_button">
-<!--                               -->
-                                <td>
-
-                                </td>
-                                <td>
-
-                                </td>
-                                <td>
-                                    <div class="cupon_text d-flex align-items-center">
-                                        <input type="text" placeholder="Coupon Code">
-                                        <a class="primary-btn" href="#">Apply</a>
-                                        <a class="gray_btn" href="#">Close Coupon</a>
-                                    </div>
-                                </td>
+                            </tbody>
+                        </table>
+                        <hr>
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td><a href="#">Subtotal</a></td>
+                                <td colspan="2" th:text="${subtotal}"></td>
                             </tr>
                             <tr>
-                                <td>
-
-                                </td>
-                                <td>
-
-                                </td>
-                                <td>
-                                    <h5>Subtotal</h5>
-                                </td>
-                                <td>
-                                    <h5>$2160.00</h5>
-                                </td>
+                                <td><a href="#">Shipping</a></td>
+                                <td colspan="2" th:text="${shipping}"></td>
                             </tr>
-                            <tr class="shipping_area">
-                                <td>
+                            <tr>
+                                <td><a href="#">Total</a></td>
+                                <td colspan="2" th:text="${subtotal + shipping}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
 
-                                </td>
-                                <td>
+                    </div>
 
-                                </td>
-                                <td>
-                                    <h5>Shipping</h5>
-                                </td>
-                                <td>
-                                    <div class="shipping_box">
-                                        <select id="paymentMethodSelect" onchange="paymentOption(this.value)">
-                                            <option value="cod">COD</option>
-                                            <option value="online_pay">Online Pay</option>
-                                        </select>
+
+                </div>
+                <div class="col-lg-12">
+
+
+
+                    <div class="d-flex flex-column justify-content-between">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h2 class="title">Addresses</h2>
+                                    <div class="row">
+                                        <div class="col-md-4" th:each="address, addressIndex : ${addresses}">
+                                            <div class="card custom-card" style="border: 1px solid orange; margin-bottom: 10px;">
+                                                <div class="card-header">Address <span th:text="${addressIndex.index + 1}"></span></div>
+                                                <div class="card-body text-primary">
+                                                    <h5 class="card-title">Address</h5>
+                                                    <p class="card-text">
+                                                        <strong>Flat:</strong> <span th:text="${address.flat != null ? address.flat : '-'}"></span><br>
+                                                        <strong>Area:</strong> <span th:text="${address.area != null ? address.area : '-'}"></span><br>
+                                                        <strong>Town:</strong> <span th:text="${address.town != null ? address.town : '-'}"></span><br>
+                                                        <strong>City:</strong> <span th:text="${address.city != null ? address.city : '-'}"></span><br>
+                                                        <strong>State:</strong> <span th:text="${address.state != null ? address.state : '-'}"></span><br>
+                                                        <strong>Landmark:</strong> <span th:text="${address.landmark != null ? address.landmark : '-'}"></span><br>
+                                                        <strong>Pin:</strong> <span th:text="${address.pin != null ? address.pin : '-'}"></span>
+                                                    </p>
+                                                </div>
+                                                <div class="card-footer">
+                                                    <button class="btn btn-primary" th:attr="data-address-id=${address.id}" onclick="selectAddress(this)">Select</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4" th:if="${addresses.isEmpty()}">
+                                            <div class="card custom-card" style="border: 1px solid orange; margin-bottom: 10px;">
+                                                <div class="card-header">No Address Found</div>
+                                                <div class="card-body text-primary">
+                                                    <p class="card-text">Please add an address.</p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </td>
-                            </tr>
-                            <tr class="out_button_area">
-                                <td>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                                </td>
-                                <td>
 
-                                </td>
-                                <td>
+                </div>
 
-                                </td>
-                                <td>
-                                    <div class="checkout_btn_inner d-flex align-items-center">
-                                        <a class="gray_btn" href="#">Continue Shopping</a>
-                                        <a class="primary-btn" onclick="proceedToCheckout()">Proceed to checkout</a>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+
+            </div>
+
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <a class="primary-btn" onclick="proceedToBuy()">Proceed to Checkout</a>
                 </div>
             </div>
         </div>
+
     </section>
-    <!--================End Cart Area =================-->
+    <!--================End Checkout Area =================-->
 
     <!-- start footer Area -->
     <footer class="footer-area section_gap">
@@ -337,21 +325,22 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     </footer>
     <!-- End footer Area -->
 
+
     <script src="/assets/js/vendor/jquery-2.2.4.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
-	 crossorigin="anonymous"></script>
-	<script src="/assets/js/vendor/bootstrap.min.js"></script>
-	<script src="/assets/js/jquery.ajaxchimp.min.js"></script>
-	<script src="/assets/js/jquery.nice-select.min.js"></script>
-	<script src="/assets/js/jquery.sticky.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
+        crossorigin="anonymous"></script>
+    <script src="/assets/js/vendor/bootstrap.min.js"></script>
+    <script src="/assets/js/jquery.ajaxchimp.min.js"></script>
+    <script src="/assets/js/jquery.nice-select.min.js"></script>
+    <script src="/assets/js/jquery.sticky.js"></script>
     <script src="/assets/js/nouislider.min.js"></script>
-	<script src="/assets/js/jquery.magnific-popup.min.js"></script>
-	<script src="/assets/js/owl.carousel.min.js"></script>
-	<!--gmaps Js-->
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
-	<script src="/assets/js/gmaps.min.js"></script>
-	<script src="/assets/js/main.js"></script>
-<script></script>
+    <script src="/assets/js/jquery.magnific-popup.min.js"></script>
+    <script src="/assets/js/owl.carousel.min.js"></script>
+    <!--gmaps Js-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
+    <script src="/assets/js/gmaps.min.js"></script>
+    <script src="/assets/js/main.js"></script>
+    <script src="/js/cart.js"></script>
 </body>
 
 </html>

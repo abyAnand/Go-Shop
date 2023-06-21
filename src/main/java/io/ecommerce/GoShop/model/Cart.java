@@ -22,8 +22,10 @@ public class Cart extends BaseEntity{
     private User user;
 
 
-    @OneToMany(mappedBy = "cart")
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
-    List<CartItem> cartItems = new ArrayList<CartItem>();
+    private List<CartItem> cartItems = new ArrayList<CartItem>();
+
+    Payment payment;
 
 }

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="/css/user/user-dashboard.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+        integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <script type="text/javascript" th:src="@{/js/user-address.js}"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+  <style>
+    .card {
+      border: 2px solid #0089ffb5;
+      border-radius: 10px;
+      padding: 10px 20px;
+      margin: 15px 0;
+      cursor: pointer;
+    }
+
+    .radio-button {
+      display: none; /* Hide the radio button */
+    }
+
+    .card.selected {
+      background: #ffaa7e;
+      box-shadow: 1px 5px 3px #5555554d;
+      border-color: #dff0d8;
+    }
+
+    .actions button:nth-child(1){
+      border: none;
+      background: #000000;
+      padding: 5px 10px;
+      border-radius: 5px;
+      color: #f1f1f1;
+      transition: 0.3s;
+    }
+
+    .actions button:nth-child(1):hover{
+      background: #000000c7;
+    }
+
+    .actions button:nth-child(2){
+      border: none;
+      background: #af1010d5;
+      padding: 5px 10px;
+      border-radius: 5px;
+      color: #f1f1f1;
+      transition: 0.3s;
+    }
+
+    .actions button:nth-child(2):hover{
+      background: #af10109e;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="view-account">
+    <section class="module">
+      <div class="module-inner">
+        <div class="side-bar">
+          <div class="user-info">
+            <img class="img-profile img-circle img-responsive center-block" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+            <ul class="meta list list-unstyled">
+              <li th:text="${user.firstName + ' ' + user.lastName}" class="name"></li>
+              <li class="email"><a href="#" th:text="${user.email}"></a></li>
+            </ul>
+          </div>
+          <nav class="side-menu">
+            <ul class="nav">
+              <li><a th:href="@{/user/dashboard}"><span class="fa fa-user"></span> Profile</a></li>
+              <li class="active"><a href="#"><span class="fa fa-map-marker"></span> Address</a></li>
+              <li><a href="#"><span class="fa fa-shopping-cart"></span> Orders</a></li>
+              <li><a href="#"><span class="fa fa-credit-card"></span> Wallet</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="content-panel">
+          <h2 class="title">Address</h2>
+
+          <div class="row vertical-cards">
+            <th:block th:each="address, addressIndex : ${address}">
+              <!-- Show address cards -->
+              <div class="col-md-4" th:each="address, addressIndex : ${address}">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Address <span th:text="${addressIndex.index+1}"></span></h5>
+                    <p class="card-text">
+                      <strong>Flat:</strong> <span th:text="${address.flat != null ? address.flat : '-'}"></span><br>
+                      <strong>Area:</strong> <span th:text="${address.area != null ? address.area : '-'}"></span><br>
+                      <strong>Town:</strong> <span th:text="${address.town != null ? address.town : '-'}"></span><br>
+                      <strong>City:</strong> <span th:text="${address.city != null ? address.city : '-'}"></span><br>
+                      <strong>State:</strong> <span th:text="${address.state != null ? address.state : '-'}"></span><br>
+                      <strong>Landmark:</strong> <span th:text="${address.landmark != null ? address.landmark : '-'}"></span><br>
+                      <strong>Pin:</strong> <span th:text="${address.pin != null ? address.pin : '-'}"></span>
+                    </p>
+                  </div>
+                  <div >
+                    <a th:href="@{/user/address/update/{id}(id=${address.id})}"><i class="fas fa-pen-to-square"></i></a>
+                    <button><i class="fas fa-trash"></i></button>
+                  </div>
+                </div>
+                <input type="hidden" th:if="${address.id != null}" th:value="${address.id}" name="id">
+              </div>
+            </th:block>
+            <div class="col-md-4" th:if="${address.isEmpty()}">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">No Address Found</h5>
+                  <p class="card-text">Please add an address.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Add Address button -->
+          <div class="row" th:if="${#lists.size(address) < 3}">
+            <div class="col-md-12">
+              <a href="/user/address/add" class="btn btn-primary">Add Address</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+</body>
+</html>

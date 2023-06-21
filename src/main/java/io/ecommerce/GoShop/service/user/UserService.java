@@ -1,6 +1,7 @@
 package io.ecommerce.GoShop.service.user;
 
 import io.ecommerce.GoShop.DTO.UserDTO;
+import io.ecommerce.GoShop.model.Cart;
 import io.ecommerce.GoShop.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,4 +25,6 @@ public interface UserService {
     Optional<User> findByEmail(String email);
     Optional<User> findByPhoneNumber(long phoneNumber);
     void saveUserWithEncodedPassword(User user);
+
+    void deleteCart(Cart cart);
 }

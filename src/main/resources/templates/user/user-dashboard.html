@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/css/user/user-dashboard.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script type="text/javascript" th:src="@{/js/user-form.js}"></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="view-account">
+        <section class="module">
+            <div class="module-inner">
+                <div class="side-bar">
+                    <div class="user-info">
+                        <img class="img-profile img-circle img-responsive center-block" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                        <ul class="meta list list-unstyled">
+                            <li th:text="${user.firstName + ' ' + user.lastName}" class="name"></li>
+                            </li>
+                            <li class="email"><a href="#" th:text="${user.email}"></a></li>
+                        </ul>
+                    </div>
+                    <nav class="side-menu">
+                        <ul class="nav">
+                            <li class="active"><a href="#"><span class="fa fa-user"></span> Profile</a></li>
+                            <li><a th:href="@{/user/address}"><span class="fa fa-map-marker"></span> Address</a></li>
+                            <li><a href="#"><span class="fa fa-shopping-cart"></span> Orders</a></li>
+                            <li><a href="#"><span class="fa fa-credit-card"></span> Wallet</a></li>
+
+                        </ul>
+                    </nav>
+                </div>
+                <div class="content-panel">
+                    <h2 class="title">Profile</h2>
+                    <form role="form" th:action="@{/user/save}" method="post" th:object="${user}" class="form-horizontal">
+                        <input type="hidden" th:value="${user.id}" name="id">
+                        <fieldset class="fieldset">
+                            <h3 class="fieldset-title">Personal Info</h3>
+                            <div class="form-group avatar">
+                                <figure class="figure col-md-2 col-sm-3 col-xs-12">
+                                    <img class="img-rounded img-responsive" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                                </figure>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-sm-3 col-xs-12 control-label">User Name</label>
+                                <div class="col-md-10 col-sm-9 col-xs-12">
+                                    <input th:value="${user.username}" name="username"  type="text" id="username" class="form-control">
+                                    <span class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-sm-3 col-xs-12 control-label">First Name</label>
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <input th:value="${user.firstName}" name="firstName"  id="firstName" type="text" class="form-control" value="Rebecca">
+                                </div>
+                                <label class="col-md-2 col-sm-3 col-xs-12 control-label">Last Name</label>
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <input th:value="${user.lastName}" name="lastName" id="lastName" type="text" class="form-control" >
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-sm-3 col-xs-12 control-label">Password</label>
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <input id="passwordInput" name="password" type="text" class="form-control" readonly>
+                                </div>
+                                <label class="col-md-2 col-sm-3 col-xs-12 control-label">Confirm</label>
+                                <div class="col-md-4 col-sm-6 col-xs-12">
+                                    <input id="confirmInput" type="text" class="form-control" readonly>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-8 col-sm-9 col-xs-12"></div> <!-- Empty column for spacing -->
+                                <div class="col-md-2 col-sm-3 col-xs-12 text-right">
+                                    <button id="editPasswordBtn" class="btn btn-primary" type="button">Edit Password</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                        <fieldset class="fieldset">
+                            <h3 class="fieldset-title">Contact Info</h3>
+                            <div class="form-group">
+                                <label class="col-md-2  col-sm-3 col-xs-12 control-label">Email</label>
+                                <div class="col-md-10 col-sm-9 col-xs-12">
+                                    <input th:value="${user.email}"  name="email" id="email" type="email" class="form-control" value="Rebecca@website.com">
+                                    <p class="help-block">This is the email </p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2  col-sm-3 col-xs-12 control-label">Phone </label>
+                                <div class="col-md-10 col-sm-9 col-xs-12">
+                                    <input th:value="${user.phoneNumber}" name="phoneNumber" id="phonenumber" placeholder="Phonenumber" type="text" class="form-control">
+                                    <span class="text-danger" id="phoneNumberError"></span>
+                                    <span id="phoneNumberCount"></span>
+                                    <p class="help-block">Your phone number</p>
+                                </div>
+                            </div>
+
+                        </fieldset>
+                        <hr>
+                        <div class="form-group">
+                            <div class="col-md-10 col-sm-9 col-xs-12 col-md-push-2 col-sm-push-3 col-xs-push-0">
+                                <input class="btn btn-primary" type="submit" value="Update Profile">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+</body>
+</html>

@@ -236,7 +236,7 @@
 							<span class="dropdown-item disabled" th:unless="${product.variant.size() > 0}" style="color: red;">No variants available</span>
 						</div>
 						<div class="card_area d-flex align-items-center">
-							<a class="primary-btn" href="#" id="addToCartButton" th:if="${product.variant.size() > 0}" onclick="addToCart()">Add to Cart</a>
+							<a class="primary-btn"  id="addToCartButton" th:if="${product.variant.size() > 0}" onclick="addToCart()">Add to Cart</a>
 							<a class="icon_btn" href="#"><i class="lnr lnr lnr-heart"></i></a>
 							<a class="icon_btn" th:href="@{/cart}">
 								<i class="lnr lnr-cart"></i>

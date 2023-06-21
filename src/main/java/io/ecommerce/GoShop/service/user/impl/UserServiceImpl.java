@@ -1,6 +1,7 @@
 package io.ecommerce.GoShop.service.user.impl;
 
 import io.ecommerce.GoShop.DTO.UserDTO;
+import io.ecommerce.GoShop.model.Cart;
 import io.ecommerce.GoShop.model.Role;
 import io.ecommerce.GoShop.model.User;
 import io.ecommerce.GoShop.repository.RoleRepository;
@@ -34,6 +35,10 @@ public class UserServiceImpl implements UserService, UserServiceInterface, UserD
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
+    }
+
+    public void save(User user){
+        userRepository.save(user);
     }
 
 
@@ -116,6 +121,13 @@ public class UserServiceImpl implements UserService, UserServiceInterface, UserD
         user.setRole(userRole);
 
         userRepository.save(user);
+    }
+
+    @Override
+    public void deleteCart(Cart cart) {
+        User user = userRepository.findById(cart.getUser().getId()).orElse(null);
+        user.setCart(null);
+        this.save(user);
     }
 
     @Override

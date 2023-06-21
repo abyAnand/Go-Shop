@@ -7,6 +7,8 @@ import lombok.*;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @Entity
 @Builder
@@ -36,4 +38,7 @@ public class Address extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "address")
+    private List<Order> orders;
 }
