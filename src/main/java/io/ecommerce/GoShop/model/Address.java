@@ -40,5 +40,6 @@ public class Address extends BaseEntity {
     private User user;
 
     @OneToMany(mappedBy = "address")
+    @ToString.Exclude
     private List<Order> orders;
 }
