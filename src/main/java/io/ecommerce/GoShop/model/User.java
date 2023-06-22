@@ -4,7 +4,6 @@ package io.ecommerce.GoShop.model;
 import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 
@@ -49,6 +48,10 @@ public class User extends BaseEntity{
     @JoinColumn(name = "cart_id")
     @ToString.Exclude
     private Cart cart;
+
+    @OneToMany(mappedBy = "user")
+    @ToString.Exclude
+    private List<Order> orders = new ArrayList<>();
 
     @OneToMany(mappedBy ="user")
     @ToString.Exclude

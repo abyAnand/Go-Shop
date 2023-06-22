@@ -1,17 +1,15 @@
 package io.ecommerce.GoShop.repository;
 
-import io.ecommerce.GoShop.model.Cart;
+import io.ecommerce.GoShop.model.Address;
 import io.ecommerce.GoShop.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface CartRepository extends JpaRepository<Cart, UUID> {
-    Optional<Cart> getCartByUser(User user);
+public interface AddressRepository extends JpaRepository<Address, UUID> {
 
-
-    Cart findByUser(User user);
+    List<Address> findByUser(User user);
 }

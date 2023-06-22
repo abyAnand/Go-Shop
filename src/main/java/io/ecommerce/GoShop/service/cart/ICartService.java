@@ -22,4 +22,11 @@ public interface ICartService {
     void increaseQuantity(UUID itemId);
 
     void decreaseQuantity(UUID itemId);
+
+    Cart findByUser(User user);
+
+    void deleteCart(Cart cart);
+
+    void deleteCartItems(Cart cart);
+    Cart removeUser(Cart cart);
 }

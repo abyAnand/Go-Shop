@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -133,6 +134,32 @@ public class CartServiceImpl implements ICartService{
         }
 
     }
+
+    @Override
+    public Cart findByUser(User user) {
+        return cartRepository.findByUser(user);
+    }
+
+    @Override
+  //  @Transactional
+    public void deleteCart(Cart cart) {
+        cartRepository.delete(cart);
+    }
+
+    @Override
+    public void deleteCartItems(Cart cart) {
+        for(CartItem item : cart.getCartItems()){
+            userService.deleteCart(cart);
+            cartItemRepository.deleteById(item.getId());
+        }
+    }
+
+    @Override
+    public Cart removeUser(Cart cart) {
+        cart.setUser(null);
+        return cartRepository.save(cart);
+    }
+
 
     public void decreaseQuantity(CartItem item) {
         int newQuantity = item.getQuantity() - 1;

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order Details</title>
+    <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+<h1>Order Details</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Product Name</th>
+        <th>Variant Name</th>
+        <th>Quantity</th>
+        <th>Price</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="orderItem : ${orderItems}">
+        <td th:text="${orderItem.variant.product.productName}"></td>
+        <td th:text="${orderItem.variant.variantName}"></td>
+        <td th:text="${orderItem.quantity}"></td>
+        <td th:text="${orderItem.price}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

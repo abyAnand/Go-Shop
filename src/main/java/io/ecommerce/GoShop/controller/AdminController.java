@@ -1,7 +1,10 @@
 package io.ecommerce.GoShop.controller;
 
+import io.ecommerce.GoShop.model.Order;
 import io.ecommerce.GoShop.model.Role;
 import io.ecommerce.GoShop.model.User;
+import io.ecommerce.GoShop.service.order.OrderService;
+import io.ecommerce.GoShop.service.order.OrderServiceImpl;
 import io.ecommerce.GoShop.service.role.RoleService;
 import io.ecommerce.GoShop.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 @RequestMapping("/admin")
@@ -31,6 +32,9 @@ public class AdminController {
 
     @Autowired
     RoleService roleService;
+
+    @Autowired
+    OrderService orderService;
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/users")
@@ -165,5 +169,18 @@ public String createUser(Model model){
         userService.saveUserWithEncodedPassword(user);
 
         return "redirect:/admin/users";
+    }
+
+
+    @GetMapping("/orders")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public String getAllOrders(Model model){
+
+        List<Order> allOrders = orderService.getAllOrders();
+        Collections.sort(allOrders, Comparator.comparing(Order::getCreatedDate).reversed());
+
+        model.addAttribute("orderList", allOrders);
+
+        return "/user/order-history";
     }
 }
