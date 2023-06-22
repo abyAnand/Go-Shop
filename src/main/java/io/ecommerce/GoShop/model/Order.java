@@ -24,7 +24,7 @@ public class Order extends BaseEntity{
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     @ToString.Exclude
-    List<OrderItem> orderItems = new ArrayList<OrderItem>();
+    List<OrderItem> orderItems = new ArrayList<>();
 
     @ManyToOne
     @ToString.Exclude
