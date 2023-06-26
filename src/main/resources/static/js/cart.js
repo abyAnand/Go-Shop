@@ -1,23 +1,36 @@
 function sendCartItem(variantId) {
   console.log(variantId);
 
-$.ajax({
-  type: "POST",
-  url: "/cart/increase",
-  data: variantId,
-  success: function (response) {
-    console.log(response);
-    // Update relevant elements in the Thymeleaf template
-    $('#successMessage').text(response);
-    location.reload();
-  },
-  error: function (xhr, status, error) {
-    console.log(error);
-    // Handle error case if needed
-  },
-  contentType: "text/plain"
-});
+  $.ajax({
+    type: "POST",
+    url: "/cart/increase",
+    data: variantId,
+    success: function (response) {
+      console.log(response);
+      // Update relevant elements in the Thymeleaf template
+      $('#successMessage').text(response);
+      location.reload();
+    },
+    error: function (xhr, status, error) {
+      console.log(error);
+      // Handle error case if needed
+      var errorMessage = "Failed to increase cart item.";
+      sessionStorage.setItem('errorMessage', errorMessage); // Store the error message
+      setTimeout(function() {
+        location.reload();
+      }, 2000); // Delay the page reload by 1 second
+    },
+    contentType: "text/plain"
+  });
 }
+
+$(document).ready(function () {
+  var errorMessage = sessionStorage.getItem('errorMessage');
+  if (errorMessage) {
+    $('#errorMessage').text(errorMessage).show(); // Display the stored error message
+    sessionStorage.removeItem('errorMessage'); // Remove the error message from storage
+  }
+});
 
 function sendCartItemDecr(variantId) {
   console.log(variantId);
@@ -54,25 +67,31 @@ function sendCartItemDecr(variantId) {
   });
 }
 
-function deleteCartItem(variantId) {
+function deleteCartItem(variantId, quantity) {
   console.log(variantId);
+  console.log(quantity);
 
-$.ajax({
-  type: "POST",
-  url: "/cart/delete",
-  data: variantId,
-  success: function (response) {
-    console.log(response);
-    // Update relevant elements in the Thymeleaf template
-    $('#successMessage').text(response);
-    location.reload();
-  },
-  error: function (xhr, status, error) {
-    console.log(error);
-    // Handle error case if needed
-  },
-  contentType: "text/plain"
-});
+  var requestData = {
+    variantId: variantId,
+    quantity: quantity
+  };
+
+  $.ajax({
+    type: "POST",
+    url: "/cart/delete",
+    data: JSON.stringify(requestData),
+    success: function (response) {
+      console.log(response);
+      // Update relevant elements in the Thymeleaf template
+      $('#successMessage').text(response);
+      location.reload();
+    },
+    error: function (xhr, status, error) {
+      console.log(error);
+      // Handle error case if needed
+    },
+    contentType: "application/json"
+  });
 }
 
 function proceedToCheckout() {
