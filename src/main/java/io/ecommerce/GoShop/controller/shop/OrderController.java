@@ -50,10 +50,12 @@ public class OrderController {
         List<Order> orders = currentUser.getOrders();
         Collections.sort(orders, Comparator.comparing(Order::getCreatedDate).reversed());
 
+        model.addAttribute("user",currentUser);
+
 
         model.addAttribute("orderList", orders);
 
-        return "/user/order-history";
+        return "/user/order-dashboard";
     }
 
     @GetMapping("/{id}")
@@ -82,5 +84,7 @@ public class OrderController {
 
         return "redirect:/orders";
     }
+
+
 
 }

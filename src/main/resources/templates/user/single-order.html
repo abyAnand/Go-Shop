@@ -2,37 +2,68 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Order Details</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    th, td {
-      padding: 8px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
-  </style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .view-account {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 4px;
+            padding: 20px;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
 </head>
 <body>
-<h1>Order Details</h1>
-<table>
-    <thead>
-    <tr>
-        <th>Product Name</th>
-        <th>Variant Name</th>
-        <th>Quantity</th>
-        <th>Price</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="orderItem : ${orderItems}">
-        <td th:text="${orderItem.variant.product.productName}"></td>
-        <td th:text="${orderItem.variant.variantName}"></td>
-        <td th:text="${orderItem.quantity}"></td>
-        <td th:text="${orderItem.price}"></td>
-    </tr>
-    </tbody>
-</table>
+<div class="container">
+    <div class="view-account">
+        <h1 class="title"><i class="fas fa-clipboard-list"></i> Order Details</h1>
+        <table class="table table-striped">
+            <thead class="thead-light">
+            <tr>
+                <th><i class="fas fa-box"></i> Product Name</th>
+                <th><i class="fas fa-tag"></i> Variant Name</th>
+                <th><i class="fas fa-sort-amount-up"></i> Quantity</th>
+                <th><i class="fas fa-dollar-sign"></i> Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="orderItem : ${orderItems}">
+                <td th:text="${orderItem.variant.product.productName}"></td>
+                <td th:text="${orderItem.variant.variantName}"></td>
+                <td th:text="${orderItem.quantity}"></td>
+                <td th:text="${orderItem.price}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

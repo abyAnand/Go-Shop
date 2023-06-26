@@ -77,8 +77,8 @@
             <ul class="nav">
               <li><a th:href="@{/user/dashboard}"><span class="fa fa-user"></span> Profile</a></li>
               <li class="active"><a href="#"><span class="fa fa-map-marker"></span> Address</a></li>
-              <li><a href="#"><span class="fa fa-shopping-cart"></span> Orders</a></li>
-              <li><a href="#"><span class="fa fa-credit-card"></span> Wallet</a></li>
+              <li><a th:href="@{/orders}"><span class="fa fa-shopping-cart"></span> Orders</a></li>
+              <li><a th:href=@{/wallet/{id}(id=${user.id})}><span class="fa fa-credit-card"></span> Wallet</a>
             </ul>
           </nav>
         </div>
@@ -104,7 +104,7 @@
                   </div>
                   <div >
                     <a th:href="@{/user/address/update/{id}(id=${address.id})}"><i class="fas fa-pen-to-square"></i></a>
-                    <button><i class="fas fa-trash"></i></button>
+                    <a th:href="@{/user/address/delete/{id}(id=${address.id})}"><i class="fas fa-trash"></i></a>
                   </div>
                 </div>
                 <input type="hidden" th:if="${address.id != null}" th:value="${address.id}" name="id">

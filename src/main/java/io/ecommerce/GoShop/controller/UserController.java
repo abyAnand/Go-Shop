@@ -104,11 +104,7 @@ public class UserController {
     public String addressDashboard(Model model){
 
         User user = userService.findByUsername(getCurrentUsername()).orElse(null);
-        UserDTO userDto = new UserDTO();
-        userDto.setFirstName(user.getFirstName());
-        userDto.setLastName(user.getLastName());
-        userDto.setEmail(user.getEmail());
-        model.addAttribute("user", userDto);
+        model.addAttribute("user", user);
         model.addAttribute("address", user.getAddresses());
         return "user/address-dashboard";
     }
@@ -135,6 +131,7 @@ public class UserController {
     }
 
     @PostMapping("/address/update")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
     public String updateAddress(@ModelAttribute Address address,
                                 Model model){
 
@@ -153,6 +150,7 @@ public class UserController {
 
 
     @GetMapping("/address/update/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
     public String updateAddress(@PathVariable UUID id,
                                 Model model){
 
@@ -161,6 +159,25 @@ public class UserController {
         model.addAttribute("address",address);
 
         return "user/update-address";
+
+    }
+
+    @GetMapping("/address/delete/{id}")
+    public String deleteAddress(@PathVariable UUID id,
+                                Model model){
+
+        Address address = addressService.findById(id).orElse(null);
+
+        addressService.deleteAddress(address);
+
+        User user = userService.findByUsername(getCurrentUsername()).orElse(null);
+        UserDTO userDto = new UserDTO();
+        userDto.setFirstName(user.getFirstName());
+        userDto.setLastName(user.getLastName());
+        userDto.setEmail(user.getEmail());
+        model.addAttribute("user", userDto);
+        model.addAttribute("address", user.getAddresses());
+        return "user/address-dashboard";
 
     }
 

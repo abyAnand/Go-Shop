@@ -52,8 +52,16 @@
             <input type="number" id="stock" name="stock" th:field="*{stock}" class="form-control" required>
         </div>
         <div class="form-group">
+            <label for="price">Wholesale Price:</label>
+            <input type="number" id="wholesalePrice" name="wholesalePrice" step="0.01" min="0" th:field="*{wholesalePrice}" class="form-control" required>
+        </div>
+        <div class="form-group">
             <label for="price">Price:</label>
             <input type="number" id="price" name="price" step="0.01" min="0" th:field="*{price}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="price">Offer Price:</label>
+            <input type="number" id="offerPrice" name="offerPrice" step="0.01" min="0" th:field="*{offerPrice}" class="form-control" required>
         </div>
         <div class="form-group">
             <label for="description">Description:</label>

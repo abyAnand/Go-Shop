@@ -1,8 +1,6 @@
 package io.ecommerce.GoShop.controller;
 
-import io.ecommerce.GoShop.model.Order;
-import io.ecommerce.GoShop.model.Role;
-import io.ecommerce.GoShop.model.User;
+import io.ecommerce.GoShop.model.*;
 import io.ecommerce.GoShop.service.order.OrderService;
 import io.ecommerce.GoShop.service.order.OrderServiceImpl;
 import io.ecommerce.GoShop.service.role.RoleService;
@@ -88,6 +86,7 @@ public String createUser(Model model){
 }
 
     @GetMapping("/users/update/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String updateUser(@PathVariable UUID id, Model model){
 
         User user = userService.findById(id);
@@ -124,11 +123,11 @@ public String createUser(Model model){
                            BindingResult result,
                            Model model) {
 
-        List<Role> role = roleService.getRoles();
+        List<Role> roles = roleService.getRoles();
 
         if (result.hasErrors()) {
             model.addAttribute("user", user);
-            model.addAttribute("roles", role);
+            model.addAttribute("roles", roles);
             return "/admin/update-user";
         }
 
@@ -136,15 +135,55 @@ public String createUser(Model model){
 
         if (existingUser.isPresent() && !existingUser.get().getId().equals(user.getId())) {
             result.rejectValue("username", "error.username", "Username already exists");
-            model.addAttribute("roles", role);
+            model.addAttribute("roles", roles);
             return "/admin/update-user";
         }
 
-        userService.saveUserWithEncodedPassword(user);
+        Wallet wallet = user.getWallet();
+        double newBalance = wallet != null ? wallet.getBalance() : 0.0;
+
+        if (existingUser.isPresent() && existingUser.get().getWallet() != null) {
+            Wallet existingWallet = existingUser.get().getWallet();
+            double oldBalance = existingWallet.getBalance();
+            double updatedBalance = oldBalance + newBalance;
+            existingWallet.setBalance(updatedBalance);
+
+            Transaction transaction = newBalance > oldBalance ? Transaction.CREDITED :
+                    newBalance < oldBalance ? Transaction.DEBITED : null;
+
+            double amount = Math.abs(newBalance - oldBalance);
+
+            if (transaction != null) {
+                WalletHistory walletHistory = WalletHistory.builder()
+                        .wallet(existingWallet)
+                        .amount(String.valueOf(amount))
+                        .transaction(transaction)
+                        .build();
+                if (existingWallet.getHistory() != null) {
+                    existingWallet.getHistory().add(walletHistory);
+                }
+            }
+
+            existingWallet.setBalance(newBalance);
+            user.setWallet(existingWallet);
+        } else {
+            if (wallet != null) {
+                wallet.setUser(user);
+                user.setWallet(wallet);
+            }
+        }
+
+// Save the user
+        if (user.getPassword().equals("")) {
+            user.setPassword(existingUser.get().getPassword());
+             userService.save(user);
+        } else {
+            userService.saveUserWithEncodedPassword(user);
+        }
+
 
         return "redirect:/admin/users";
     }
-
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping("/saveNewUser")
     public String saveNewUser(@ModelAttribute("user") @Valid User user,

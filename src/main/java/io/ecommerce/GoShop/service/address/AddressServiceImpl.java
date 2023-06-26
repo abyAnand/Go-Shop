@@ -29,4 +29,9 @@ public class AddressServiceImpl implements AddressService{
     public List<Address> findByUser(User user) {
         return addressRepository.findByUser(user);
     }
+
+    @Override
+    public void deleteAddress(Address address) {
+        addressRepository.delete(address);
+    }
 }

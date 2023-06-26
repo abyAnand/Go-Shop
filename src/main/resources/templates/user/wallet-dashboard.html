@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" href="/css/user/user-dashboard.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+        integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <style>
+    .table-responsive {
+      margin-bottom: 20px;
+    }
+
+    .table thead th {
+      background-color: #f5f5f5;
+      border-color: #ddd;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+      background-color: #f9f9f9;
+    }
+
+    .balance-container {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .balance-label {
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .balance-value {
+      font-size: 24px;
+      color: #337ab7;
+    }
+  </style>
+  <script type="text/javascript" th:src="@{/js/user-form.js}"></script>
+</head>
+<body>
+
+<div class="container">
+  <div class="view-account">
+    <section class="module">
+      <div class="module-inner">
+        <div class="side-bar">
+          <div class="user-info">
+            <img class="img-profile img-circle img-responsive center-block" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+            <ul class="meta list list-unstyled">
+              <li th:text="${user.firstName + ' ' + user.lastName}" class="name"></li>
+              <li class="email"><a href="#" th:text="${user.email}"></a></li>
+            </ul>
+          </div>
+          <nav class="side-menu">
+            <ul class="nav">
+              <li><a th:href="@{/user/dashboard}"><span class="fa fa-user"></span> Profile</a></li>
+              <li><a th:href="@{/user/address}"><span class="fa fa-map-marker"></span> Address</a></li>
+              <li><a th:href="@{/orders}"><span class="fa fa-shopping-cart"></span> Orders</a></li>
+              <li class="active"><a href="#"><span class="fa fa-credit-card"></span> Wallet</a></li>
+            </ul>
+          </nav>
+        </div>
+
+        <div class="content-panel">
+          <div class="balance-container">
+            <h2 class="title">Wallet Balance</h2>
+            <div class="balance-label">Current Balance:</div>
+            <div class="balance-value" th:text="${balance}">$500.00</div> <!-- Replace this with the actual wallet balance value -->
+          </div>
+
+          <h2 class="title">Wallet History</h2>
+          <div class="table-responsive">
+            <table id="walletHistoryTable" class="table table-striped table-hover">
+              <thead>
+              <tr>
+                <th><i class="fa fa-exchange"></i> Transaction ID</th>
+                <th><i class="fa fa-credit-card"></i> Wallet ID</th>
+                <th><i class="fa fa-money"></i> Amount</th>
+                <th><i class="fa fa-exchange"></i> Transaction Type</th>
+                <th><i class="fa fa-calendar"></i> Date</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:if="${walletHistories.empty}">
+                <td colspan="5">No Wallet History Available</td>
+              </tr>
+              <tr th:each="walletHistory : ${walletHistories}">
+                <td th:text="${walletHistory.id}"></td>
+                <td th:text="${walletHistory.wallet.id}"></td>
+                <td th:text="${walletHistory.amount}"></td>
+                <td th:text="${walletHistory.transaction}"></td>
+                <td th:text="${walletHistory.createdDate}"></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+</body>
+</html>

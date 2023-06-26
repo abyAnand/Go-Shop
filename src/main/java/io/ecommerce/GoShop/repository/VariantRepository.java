@@ -1,5 +1,6 @@
 package io.ecommerce.GoShop.repository;
 
+import io.ecommerce.GoShop.model.Product;
 import io.ecommerce.GoShop.model.Variant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -16,4 +17,6 @@ public interface VariantRepository extends JpaRepository<Variant, UUID> {
     Optional<Variant> findByVariantName(String variantName);
 
     Optional<Variant> findByProductIdAndVariantName(UUID productId, String variantName);
+
+    Optional<Variant> findByVariantNameAndProduct(String variantName, Product product);
 }

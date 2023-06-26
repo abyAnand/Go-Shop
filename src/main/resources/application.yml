@@ -35,6 +35,6 @@ firebase:
   project:
     id: go-shop-java
 
-#logging:
-#  level:
-#    web: debug
+logging:
+  level:
+    web: debug
