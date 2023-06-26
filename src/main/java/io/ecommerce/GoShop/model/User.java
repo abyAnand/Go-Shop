@@ -57,5 +57,9 @@ public class User extends BaseEntity{
     @ToString.Exclude
     private List<Address> addresses = new ArrayList<Address>();
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private Wallet wallet;
+
 
 }

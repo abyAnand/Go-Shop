@@ -14,6 +14,8 @@ import java.util.UUID;
 
 public interface UserService {
     void save(UserDTO userdto);
+
+    void save(User user);
     Optional<User> findByUsername(String username);
     List<User> findAll();
 

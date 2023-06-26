@@ -158,7 +158,7 @@
                                     <h5 th:text="${cartItem.variant.variantName}">Variant</h5>
                                 </td>
                                 <td>
-                                    <h5 th:text="${'$' + cartItem.variant.price}">$360.00</h5>
+                                    <h5 th:text="${'$' + cartItem.variant.offerPrice}">$360.00</h5>
                                 </td>
                                 <td>
                                     <div class="product_count">
@@ -171,7 +171,7 @@
 
                                 </td>
                                 <td>
-                                    <h5 th:text="${'$' + (cartItem.variant.price * cartItem.quantity)}">$720.00</h5>
+                                    <h5 th:text="${'$' + (cartItem.variant.offerPrice * cartItem.quantity)}">$720.00</h5>
                                 </td>
                                 <td>
                                     <button onclick="deleteCartItem(this.getAttribute('data-variant-id'))" th:data-variant-id="${cartItem.variant.id}" class="delete-btn" type="button"><i class="lnr lnr-trash"></i></button>

@@ -21,6 +21,10 @@ public class Variant extends BaseEntity{
 
     private int stock;
 
+    private float wholesalePrice;
+
+    private float offerPrice;
+
     private float price;
 
     private String description;

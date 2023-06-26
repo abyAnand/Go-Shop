@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Product Management</title>
+    <title>Wallet History</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
@@ -91,19 +90,18 @@
         }
 
         .btn-custom {
-            background-color: #fd7e14 !important;
-            border-color: #fd7e14 !important;
-            color: #fff;
-        }
+    background-color: #your-color !important;
+    border-color: #your-color !important;
+    color: #fff;
+}
 
-        .btn-custom:hover {
-            background-color: #e6630a !important;
-            border-color: #e6630a !important;
-            color: #fff;
-        }
+.btn-custom:hover {
+    background-color: #your-hover-color !important;
+    border-color: #your-hover-color !important;
+    color: #fff;
+}
     </style>
 </head>
-
 <body>
 <div class="container-xl">
     <div class="table-responsive">
@@ -111,42 +109,38 @@
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-5">
-                        <h2>Product <b>Management</b></h2>
+                        <h2>Wallet <b>History</b></h2>
                     </div>
                     <div class="col-sm-7">
-                        <a th:href="@{/admin/users}" class="btn btn-custom"><i class="fas fa-users"></i> <span>User Management</span></a>
-                        <a th:href="@{/category}" class="btn btn-custom"><i class="fas fa-tags"></i> <span>Category</span></a>
-                        <a th:href="@{/products/}" class="btn btn-custom"><i class="fas fa-shopping-cart"></i> <span>Product</span></a>
+                        <a th:href="@{/admin/users}" class="btn btn-custom" style="background-color: #fd7e14; border-color: #your-color;"><i class="fas fa-users"></i> <span>User Management</span></a>
+                        <a th:href="@{/category}" class="btn btn-custom" style="background-color: #ffc107; border-color: #your-color;"><i class="fas fa-tags"></i> <span>Category</span></a>
+                        <a th:href="@{/products/}" class="btn btn-custom" style="background-color: #28a745; border-color: #your-color;"><i class="fas fa-shopping-cart"></i> <span>Product</span></a>
                         <a th:href="@{/logout}" class="btn btn-danger"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
                     </div>
                 </div>
             </div>
-            <table class="table table-striped table-hover">
+
+            <!-- Wallet History Table -->
+            <table id="walletHistoryTable" class="table table-striped table-hover">
                 <thead>
                 <tr>
-                    <th>#</th>
-                    <th>Product ID</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Category</th>
-                    <th>Action</th>
+                    <th>Transaction ID</th>
+                    <th>Wallet ID</th>
+                    <th>Amount</th>
+                    <th>Transaction Type</th>
+                    <th>Date</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:if="${products.empty}">
-                    <td colspan="4">No Products</td>
+                <tr th:if="${walletHistories.empty}">
+                    <td colspan="5"> No Wallet History Available </td>
                 </tr>
-
-                <tr th:each="product, rowIndex: ${products}">
-                    <td th:text="${rowIndex.count}"></td>
-                    <td th:text="${product.id}"></td>
-                    <td th:text="${product.productName}"></td>
-                    <td th:text="${product.price}"></td>
-                    <td th:text="${product.category.categoryName}"></td>
-                    <td>
-                        <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-primary btn-sm">Edit</a>
-                        <a th:href="@{/products/delete/{id}(id=${product.id})}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this product?')">Delete</a>
-                    </td>
+                <tr th:each="walletHistory : ${walletHistories}">
+                    <td th:text="${walletHistory.id}"></td>
+                    <td th:text="${walletHistory.wallet.id}"></td>
+                    <td th:text="${walletHistory.amount}"></td>
+                    <td th:text="${walletHistory.transaction}"></td>
+                    <td th:text="${walletHistory.createdDate}"></td>
                 </tr>
                 </tbody>
             </table>
@@ -154,5 +148,4 @@
     </div>
 </div>
 </body>
-
 </html>

@@ -20,7 +20,7 @@
                         <img class="img-profile img-circle img-responsive center-block" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
                         <ul class="meta list list-unstyled">
                             <li th:text="${user.firstName + ' ' + user.lastName}" class="name"></li>
-                            </li>
+
                             <li class="email"><a href="#" th:text="${user.email}"></a></li>
                         </ul>
                     </div>
@@ -29,7 +29,7 @@
                             <li class="active"><a href="#"><span class="fa fa-user"></span> Profile</a></li>
                             <li><a th:href="@{/user/address}"><span class="fa fa-map-marker"></span> Address</a></li>
                             <li><a th:href="@{/orders}"><span class="fa fa-shopping-cart"></span> Orders</a></li>
-                            <li><a href="#"><span class="fa fa-credit-card"></span> Wallet</a></li>
+                            <li><a th:href=@{/wallet/{id}(id=${user.id})}><span class="fa fa-credit-card"></span> Wallet</a></li>
 
                         </ul>
                     </nav>

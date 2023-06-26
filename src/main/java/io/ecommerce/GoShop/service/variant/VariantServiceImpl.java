@@ -1,5 +1,6 @@
 package io.ecommerce.GoShop.service.variant;
 
+import io.ecommerce.GoShop.model.Product;
 import io.ecommerce.GoShop.model.Variant;
 import io.ecommerce.GoShop.repository.VariantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,11 @@ public class VariantServiceImpl implements VariantService{
     @Override
     public Optional<Variant> findById(UUID id) {
         return variantRepository.findById(id);
+    }
+
+    @Override
+    public Optional<Variant> findByNameAndProduct(String variantName, Product product) {
+        return variantRepository.findByVariantNameAndProduct(variantName, product);
     }
 
 }

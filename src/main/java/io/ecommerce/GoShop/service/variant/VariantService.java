@@ -1,5 +1,6 @@
 package io.ecommerce.GoShop.service.variant;
 
+import io.ecommerce.GoShop.model.Product;
 import io.ecommerce.GoShop.model.Variant;
 
 import java.util.List;
@@ -22,4 +23,5 @@ public interface VariantService {
 
     Optional<Variant> findById(UUID id);
 
+    Optional<Variant> findByNameAndProduct(String variantName, Product product);
 }

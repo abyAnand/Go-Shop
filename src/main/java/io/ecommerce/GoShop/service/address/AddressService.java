@@ -14,4 +14,6 @@ public interface AddressService {
     Optional<Address> findById(UUID id);
 
     List<Address> findByUser(User user);
+
+    void deleteAddress(Address address);
 }

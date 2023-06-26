@@ -63,13 +63,14 @@ public class VariantController {
                               Model model,
                               BindingResult result){
 
-        Optional<Variant> existingVariant = variantService.findByName(variant.getVariantName());
+        Optional<Product> product = productService.findById(productId);
+        String productName = product.get().getProductName();
+
+        Optional<Variant> existingVariant = variantService.findByNameAndProduct(variant.getVariantName(), product.get());
 
         if (existingVariant.isPresent()) {
             result.rejectValue("variantName", "error.variantName", "Variant already exists");
 
-            Optional<Product> product = productService.findById(productId);
-            String productName = product.get().getProductName();
 
             model.addAttribute("productName", productName);
             model.addAttribute("variant", variant);
@@ -77,7 +78,6 @@ public class VariantController {
             return "variant/create-variant";
         }
 
-        Optional<Product> product = productService.findById(productId);
         variant.setProduct(product.get());
         variant = variantService.save(variant);
 

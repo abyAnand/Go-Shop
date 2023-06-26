@@ -224,7 +224,7 @@ public class CartController {
         order.setStatus(Status.CONFIRMED);
 
         double total = cart.getCartItems().stream()
-                .mapToDouble(cartItem -> cartItem.getVariant().getPrice() * cartItem.getQuantity())
+                .mapToDouble(cartItem -> cartItem.getVariant().getOfferPrice() * cartItem.getQuantity())
                 .sum();
 
         if(cart.getPayment().equals(Payment.COD)){
