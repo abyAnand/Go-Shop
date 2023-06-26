@@ -1,5 +1,6 @@
 package io.ecommerce.GoShop.controller.shop;
 
+import io.ecommerce.GoShop.DTO.DeleteCartItemRequest;
 import io.ecommerce.GoShop.model.*;
 import io.ecommerce.GoShop.repository.CartItemRepository;
 import io.ecommerce.GoShop.repository.VariantRepository;
@@ -9,6 +10,7 @@ import io.ecommerce.GoShop.service.order.OrderService;
 import io.ecommerce.GoShop.service.user.UserService;
 import io.ecommerce.GoShop.service.variant.VariantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -19,14 +21,11 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -66,7 +65,12 @@ public class CartController {
         Optional<User> user = userService.findByUsername(name);
         Optional<Cart> userCart = user.flatMap(cartService::getCart);
 
-        model.addAttribute("cart", userCart.map(Cart::getCartItems).orElse(null));
+        List<CartItem> cart = userCart.map(Cart::getCartItems).orElse(Collections.emptyList());
+        List<CartItem> filteredCart = cart.stream()
+                .filter(cartItem -> cartItem.getQuantity() != 0)
+                .collect(Collectors.toList());
+
+        model.addAttribute("cart", filteredCart);
         model.addAttribute("name", name);
 
         return "cart";
@@ -76,27 +80,39 @@ public class CartController {
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
     public ResponseEntity<String> addToCart(@RequestParam("variant") Variant variant) {
-
-
         Optional<User> user = userService.findByUsername(getCurrentUsername());
         Optional<Cart> userCart = user.map(cartService::getCart).orElse(null);
 
-        CartItem cartItem = new CartItem(variant, 1, userCart.get());
-        cartService.addToCartList(cartItem);
-
-        String message = "added";
-        return ResponseEntity.ok(message);
+        if (variant.getStock() > 0) {
+            CartItem cartItem = new CartItem(variant, 1, userCart.get());
+            variantService.decreaseQuantity(variant);
+            cartService.addToCartList(cartItem);
+            String message = "Item added to cart.";
+            return ResponseEntity.ok(message);
+        } else {
+            String errorMessage = "Item is not in stock.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+        }
     }
 
 
     @PostMapping("/delete")
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
-    public ResponseEntity<String> deleteFromCart(@RequestBody String variantId) {
+    public ResponseEntity<String> deleteFromCart(@RequestBody DeleteCartItemRequest request) {
+
+        String variantId = request.getVariantId();
+        int quantity = request.getQuantity();
 
         Optional<User> user = userService.findByUsername(getCurrentUsername());
         Cart userCart = user.flatMap(cartService::getCart).orElse(null);
 
         UUID variantUUID = UUID.fromString(variantId);
+
+        Variant variant = variantService.findById(variantUUID).orElse(null);
+
+        if (variant != null) {
+            variantService.addQuantity(variant, quantity);
+        }
 
         assert userCart != null;
         userCart.getCartItems()
@@ -118,17 +134,35 @@ public class CartController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
     public ResponseEntity<String> increaseCartItem(@RequestBody String variantId) {
 
-        cartService.increaseQuantity(UUID.fromString(variantId));
-
-        // Return a success response
-        String successMessage = "Cart item increased successfully";
-        return ResponseEntity.ok(successMessage);
+        Optional<Variant> variant = variantService.findById(UUID.fromString(variantId));
+        if (variant.isPresent()) {
+            Variant selectedVariant = variant.get();
+            if (selectedVariant.getStock() > 0) {
+                cartService.increaseQuantity(UUID.fromString(variantId));
+                variantService.decreaseQuantity(selectedVariant);
+                // Return a success response
+                String successMessage = "Cart item increased successfully";
+                return ResponseEntity.ok(successMessage);
+            } else {
+                // Return an error response
+                String errorMessage = "Item is out of stock.";
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+            }
+        } else {
+            // Return an error response if variant not found
+            String errorMessage = "Variant not found.";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
+        }
     }
 
     @PostMapping("/decrease")
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
     public ResponseEntity<String> decreaseCartItem(@RequestBody String variantId) {
         cartService.decreaseQuantity(UUID.fromString(variantId));
+
+        Variant variant = variantService.findById(UUID.fromString(variantId)).orElse(null);
+
+        variantService.addQuantity(variant);
         // Return a success response
         String successMessage = "Cart item decreased successfully";
         return ResponseEntity.ok(successMessage);

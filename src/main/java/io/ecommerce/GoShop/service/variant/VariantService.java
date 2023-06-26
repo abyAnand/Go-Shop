@@ -24,4 +24,10 @@ public interface VariantService {
     Optional<Variant> findById(UUID id);
 
     Optional<Variant> findByNameAndProduct(String variantName, Product product);
+
+    void decreaseQuantity(Variant variant);
+
+    void addQuantity(Variant variant);
+
+    void addQuantity(Variant variant, int quantity);
 }

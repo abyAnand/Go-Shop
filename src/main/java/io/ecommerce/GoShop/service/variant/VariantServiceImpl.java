@@ -55,4 +55,23 @@ public class VariantServiceImpl implements VariantService{
         return variantRepository.findByVariantNameAndProduct(variantName, product);
     }
 
+    @Override
+    public void decreaseQuantity(Variant variant) {
+
+        variant.setStock(variant.getStock() - 1);
+        variantRepository.save(variant);
+    }
+
+    @Override
+    public void addQuantity(Variant variant) {
+        variant.setStock(variant.getStock() + 1);
+        variantRepository.save(variant);
+    }
+
+    @Override
+    public void addQuantity(Variant variant, int quantity) {
+        variant.setStock(variant.getStock() + quantity);
+        variantRepository.save(variant);
+    }
+
 }
