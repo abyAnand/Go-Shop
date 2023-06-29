@@ -13,11 +13,12 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table
-public class Image extends BaseEntity {
+public class BannerImage extends BaseEntity {
 
     private String imagePath;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+
+    @OneToOne
+    @JoinColumn(name = "banner_id")
+    private Banner banner;
 }

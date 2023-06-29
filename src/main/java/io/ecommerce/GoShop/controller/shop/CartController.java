@@ -185,10 +185,6 @@ public class CartController {
 
             response.setApplicable(isApplicable);
 
-//            if(coupon.get().getProduct() != null || coupon.get().getCategory() != null){
-//                return ResponseEntity.ok(response);
-//            }
-
         }
 
         if (coupon.isPresent()) {
