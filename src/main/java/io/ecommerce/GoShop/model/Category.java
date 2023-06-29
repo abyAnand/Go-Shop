@@ -20,4 +20,9 @@ public class Category extends BaseEntity{
     @OneToMany(mappedBy = "category")
     @ToString.Exclude
     private List<Product> product;
+
+    @OneToMany
+    @JoinColumn(name = "coupon_id")
+    @ToString.Exclude
+    private List<Coupon> coupon;
 }

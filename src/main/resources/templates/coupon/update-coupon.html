@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Coupon</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+<h1>Update Coupon</h1>
+
+<form th:action="@{/coupon/update}" th:object="${coupon}" method="post" class="container mt-4">
+    <input type="hidden" id="id" name="id" th:value="${coupon.id}" />
+
+    <div class="mb-3">
+        <label for="coupon"><i class="fas fa-ticket-alt"></i> Coupon Code:</label>
+        <input type="text" id="coupon" name="coupon" class="form-control" th:value="${coupon.code}" readonly>
+    </div>
+
+    <div class="mb-3">
+        <label for="associatedItem"><i class="fas fa-link"></i> Associated Item:</label>
+        <input type="text" id="associatedItem" name="associatedItem" class="form-control" th:value="${coupon.type.toString()}" readonly>
+    </div>
+
+    <div id="productSection" th:if="${coupon.type == 'PRODUCT'}">
+        <label for="product"><i class="fas fa-box-open"></i> Product:</label>
+        <input type="text" id="product" name="product" class="form-control" th:value="${coupon.product != null ? coupon.product.productName : ''}" readonly>
+    </div>
+
+    <div id="categorySection" th:if="${coupon.type == 'CATEGORY'}">
+        <label for="category"><i class="fas fa-folder-open"></i> Category:</label>
+        <input type="text" id="category" name="category" class="form-control" th:value="${coupon.category != null ? coupon.category.categoryName : ''}" readonly>
+    </div>
+
+    <div class="mb-3">
+        <label for="discount"><i class="fas fa-percent"></i> Discount:</label>
+        <input type="number" id="discount" name="discount" class="form-control" th:value="${coupon.discount}" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="expirationPeriod"><i class="fas fa-calendar"></i> Expiration Period (days):</label>
+        <input type="date" id="expirationPeriod" name="expirationPeriod" class="form-control" th:value="${coupon.expirationPeriod}" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="couponStock"><i class="fas fa-boxes"></i> Coupon Stock:</label>
+        <input type="number" id="couponStock" name="couponStock" class="form-control" th:value="${coupon.couponStock}" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="maximumDiscountAmount"><i class="fas fa-money-bill"></i> Maximum Discount Amount:</label>
+        <input type="number" id="maximumDiscountAmount" name="maximumDiscountAmount" class="form-control" th:value="${coupon.maximumDiscountAmount}" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update</button>
+</form>
+
+</body>
+</html>

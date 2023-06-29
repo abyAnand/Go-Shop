@@ -28,4 +28,8 @@ public class Cart extends BaseEntity{
 
     Payment payment;
 
+    @OneToOne
+    @JoinColumn(name = "coupon_id")
+    Coupon coupon;
+
 }

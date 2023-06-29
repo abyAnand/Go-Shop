@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Product Management</title>
+    <title>Coupon Management</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
@@ -65,7 +65,8 @@
             border-color: #bd2130;
         }
 
-        th, td {
+        th,
+        td {
             border: none;
             padding: 10px;
             color: #666;
@@ -105,18 +106,17 @@
 </head>
 
 <body>
-<div class="container-xl">
+<div class="">
     <div class="table-responsive">
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-5">
-                        <h2>Product <b>Management</b></h2>
+                        <h2>Coupon <b>Management</b></h2>
                     </div>
                     <div class="col-sm-7">
                         <a th:href="@{/admin/users}" class="btn btn-custom"><i class="fas fa-users"></i> <span>User Management</span></a>
-                        <a th:href="@{/category}" class="btn btn-custom"><i class="fas fa-tags"></i> <span>Category</span></a>
-                        <a th:href="@{/products/}" class="btn btn-custom"><i class="fas fa-shopping-cart"></i> <span>Product</span></a>
+                        <a th:href="@{/coupon/create}" class="btn btn-custom"><i class="fas fa-tags"></i> <span>Coupon</span></a>
                         <a th:href="@{/logout}" class="btn btn-danger"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
                     </div>
                 </div>
@@ -125,49 +125,43 @@
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>Product ID</th>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Category</th>
+                    <th>Coupon Code</th>
+                    <th>Type</th>
+                    <th>Discount</th>
+                    <th>Expiration Period (days)</th>
+                    <th>Coupon Stock</th>
+                    <th>Maximum Discount</th>
                     <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:if="${products.empty}">
-                    <td colspan="4">No Products</td>
+                <tr th:if="${couponList.empty}">
+                    <td colspan="8">No Coupons</td>
                 </tr>
 
-                <tr th:each="product, rowIndex: ${products}">
+                <tr th:each="coupon, rowIndex: ${couponList}">
                     <td th:text="${rowIndex.count}"></td>
-                    <td th:text="${product.id}"></td>
-                    <td th:text="${product.productName}"></td>
-                    <td th:text="${product.price}"></td>
-                    <td th:text="${product.category.categoryName}"></td>
+                    <td th:text="${coupon.code}"></td>
                     <td>
-                        <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-primary btn-sm">Edit</a>
-                        <a th:href="@{/products/delete/{id}(id=${product.id})}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this product?')">Delete</a>
+                        <span th:if="${coupon.type.name == 'GENERAL'}"><i class="fas fa-cog"></i> General</span>
+                        <span th:if="${coupon.type.name == 'PRODUCT'}"><i class="fas fa-box"></i> <span th:text="${coupon.product.productName}"></span></span>
+                        <span th:if="${coupon.type.name == 'CATEGORY'}"><i class="fas fa-tags"></i> <span th:text="${coupon.category.categoryName}"></span></span>
+                        <span th:if="${coupon.type.name == 'USER'}"><i class="fas fa-user"></i> User</span>
+                    </td>
+                    <td th:text="${coupon.discount}"></td>
+                    <td th:text="${coupon.expirationPeriod}"></td>
+                    <td th:text="${coupon.couponStock}"></td>
+                    <td th:text="${coupon.maximumDiscountAmount}"></td>
+                    <td>
+                        <a th:href="@{/coupon/edit/{id}(id=${coupon.id})}" class="btn btn-primary btn-sm">Edit</a>
+                        <a th:href="@{/coupon/delete/{id}(id=${coupon.id})}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this coupon?')">Delete</a>
                     </td>
                 </tr>
                 </tbody>
             </table>
-            <div th:unless="${empty}" class="pagination d-flex justify-content-end mt-3">
-                <ul class="pagination">
-                    <li class="page-item prev" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
-                        <a class="page-link" th:href="@{/products(page=0, sort=${sort}, field=${field}, filter=${filter}, size=${pageSize}, keyword=${keyword})}"><i class="tf-icon bx bx-chevrons-left"></i></a>
-                    </li>
-
-                    <li class="page-item" th:each="pageNum : ${#numbers.sequence(startPage, endPage)}" th:classappend="${pageNum == currentPage ? 'active' : ''}">
-                        <a class="page-link" th:href="@{/products(page=${pageNum}, sort=${sort}, field=${field}, size=${pageSize}, filter=${filter}, keyword=${keyword})}" th:text="${pageNum + 1}"></a>
-                    </li>
-
-                    <li class="page-item next" th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}">
-                        <a class="page-link" th:href="@{/products(page=${totalPages - 1}, sort=${sort}, field=${field}, size=${pageSize}, filter=${filter}, keyword=${keyword})}"><i class="tf-icon bx bx-chevrons-right"></i></a>
-                    </li>
-                </ul>
-            </div>
         </div>
     </div>
-</div>>
+</div>
 </body>
 
 </html>
