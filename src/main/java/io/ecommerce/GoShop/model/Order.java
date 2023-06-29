@@ -1,7 +1,6 @@
 package io.ecommerce.GoShop.model;
 
 import lombok.*;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -36,6 +35,10 @@ public class Order extends BaseEntity{
     Status status;
 
     float total;
+
+    @OneToOne
+    @JoinColumn(name = "coupon_id")
+    Coupon coupon;
 
     public int getSize(){
         return orderItems.size();

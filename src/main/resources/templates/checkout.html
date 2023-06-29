@@ -164,6 +164,10 @@
                                 <td><a href="#">Subtotal</a></td>
                                 <td colspan="2" th:text="${subtotal}"></td>
                             </tr>
+                            <tr th:if="${couponApplied}">
+                                <td><a href="#">Coupon Discount</a></td>
+                                <td colspan="2" th:text="${discount}"></td>
+                            </tr>
                             <tr th:if="${shipping != null}">
                                 <td><a href="#">Shipping</a></td>
                                 <td colspan="2" th:text="${shipping}"></td>
@@ -174,6 +178,11 @@
                             </tr>
                             </tbody>
                         </table>
+
+                        <p th:if="${couponApplied}" th:text="'Coupon Type: ' + ${couponType}"></p>
+                        <p th:if="${couponApplied && couponType == 'Category'}" th:text="'Applied to Category: ' + ${couponCategory}"></p>
+                        <p th:if="${couponApplied && couponType == 'Product'}" th:text="'Applied to Product: ' + ${couponProduct.productName}"></p>
+                        <p th:if="${couponApplied && couponType == 'General'}">Applied to General</p>
 
                     </div>
 

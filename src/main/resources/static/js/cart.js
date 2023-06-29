@@ -56,7 +56,6 @@ function sendCartItemDecr(variantId) {
       // Update relevant elements in the Thymeleaf template
       $('#successMessage').text(response);
 
-      // Reload the page
       location.reload();
     },
     error: function(xhr, status, error) {
@@ -154,28 +153,53 @@ function proceedToBuy() {
   });
 }
 
-//function proceedToBuy() {
-//  // Check if an address is selected
-//  console.log("Selected Address ID in proceedToBuy:", selectedAddressId);
-//  if (selectedAddressId) {
-//    // Send the selected address ID to the backend
-//    $.ajax({
-//      type: "POST",
-//      url: "/cart/buy",
-//      data:selectedAddressId, // Send address ID as JSON payload
-//      success: function (response) {
-//        console.log(response);
-//        // Redirect to the checkout page or perform any other actions
-//        window.location.href = "/cart/checkout";
-//      },
-//      error: function (xhr, status, error) {
-//        console.log(error);
-//        // Handle error case if needed
-//      },
-//      contentType: "text/plain"
-//    });
-//  } else {
-//    // Handle the case when no address is selected
-//    console.log("Please select an address");
-//  }
-//}
+function applyCoupon() {
+
+    var couponCode = document.getElementById("couponCodeInput").value;
+    $.ajax({
+        type: "POST",
+        url: "/cart/apply-coupon",
+        data: couponCode,
+        success: function (response) {
+            // Display the coupon availed message and discount percentage if the coupon is valid
+            if (response.valid) {
+                var successMessage = document.getElementById("successMessage");
+                var discountPercentage = response.discountPercentage;
+                var message = "Coupon availed! You got " + discountPercentage + "% off.";
+
+                // Check if the coupon is product-specific or category-specific
+                if (response.productSpecific) {
+                    message = "Coupon availed! You got " + discountPercentage + "% off on this product.";
+                } else if (response.categorySpecific) {
+                    message = "Coupon availed! You got " + discountPercentage + "% off on this category.";
+                }
+
+                successMessage.innerText = message;
+            } else {
+                var errorMessage = document.getElementById("errorMessage");
+                var message = "No coupon available.";
+
+                // Check if the coupon code is not applicable
+                if (!response.applicable) {
+                    message = "Coupon not applicable.";
+                }
+
+                errorMessage.innerText = message;
+            }
+        },
+        error: function (xhr, status, error) {
+            console.log(error);
+            // Handle error case if needed
+        },
+        contentType: "text/plain"
+    });
+}
+function closeCoupon() {
+    // Clear the coupon code input field
+    document.getElementById("couponCodeInput").value = "";
+
+    // Clear any success or error messages
+    document.getElementById("successMessage").innerText = "";
+    document.getElementById("errorMessage").innerText = "";
+}
+

@@ -1,11 +1,13 @@
 package io.ecommerce.GoShop.controller.shop;
 
+import io.ecommerce.GoShop.DTO.CouponResponse;
 import io.ecommerce.GoShop.DTO.DeleteCartItemRequest;
 import io.ecommerce.GoShop.model.*;
 import io.ecommerce.GoShop.repository.CartItemRepository;
 import io.ecommerce.GoShop.repository.VariantRepository;
 import io.ecommerce.GoShop.service.address.AddressService;
 import io.ecommerce.GoShop.service.cart.ICartService;
+import io.ecommerce.GoShop.service.coupon.CouponService;
 import io.ecommerce.GoShop.service.order.OrderService;
 import io.ecommerce.GoShop.service.user.UserService;
 import io.ecommerce.GoShop.service.variant.VariantService;
@@ -50,6 +52,9 @@ public class CartController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private CouponService couponService;
 
 
     public String getCurrentUsername() {
@@ -107,23 +112,17 @@ public class CartController {
         Cart userCart = user.flatMap(cartService::getCart).orElse(null);
 
         UUID variantUUID = UUID.fromString(variantId);
-
         Variant variant = variantService.findById(variantUUID).orElse(null);
 
         if (variant != null) {
             variantService.addQuantity(variant, quantity);
         }
-
         assert userCart != null;
         userCart.getCartItems()
                 .stream()
                 .filter(item -> item.getVariant().getId().equals(variantUUID))
                 .findFirst()
                 .ifPresent(cartService::removeFromCartList);
-
-
-
-
         String successMessage = "Cart item deleted successfully";
         return ResponseEntity.ok(successMessage);
     }
@@ -168,12 +167,48 @@ public class CartController {
         return ResponseEntity.ok(successMessage);
     }
 
+    @PostMapping("/apply-coupon")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
+    public ResponseEntity<?> applyCoupon(@RequestBody String couponCode) {
+
+        User user = userService.findByUsername(getCurrentUsername()).orElse(null);
+        Optional<Cart> cart = Optional.ofNullable(cartService.findByUser(user));
+        Optional<Coupon> coupon = couponService.findByCode(couponCode);
+        CouponResponse response = new CouponResponse();
+
+        System.out.println(couponCode);
+
+        if (cart.isPresent()) {
+            boolean isApplicable = cart.get().getCartItems().stream()
+                    .anyMatch(item -> item.getVariant().getProduct().equals(coupon.get().getProduct())
+                            || item.getVariant().getProduct().getCategory().equals(coupon.get().getCategory()));
+
+            response.setApplicable(isApplicable);
+
+//            if(coupon.get().getProduct() != null || coupon.get().getCategory() != null){
+//                return ResponseEntity.ok(response);
+//            }
+
+        }
+
+        if (coupon.isPresent()) {
+            response.setValid(true);
+            response.setProductSpecific(coupon.get().getProduct() != null);
+            response.setCategorySpecific(coupon.get().getCategory() != null);
+            response.setDiscountPercentage(coupon.get().getDiscount());
+            cart.get().setCoupon(coupon.get());
+        } else {
+            response.setValid(false);
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/checkout")
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
     public String checkOut(Model model){
 
         User user = userService.findByUsername(getCurrentUsername()).orElse(null);
-
         List<Address> addresses = addressService.findByUser(user);
 
         model.addAttribute("addresses", addresses);
@@ -189,6 +224,58 @@ public class CartController {
                 .mapToDouble(cartItem -> cartItem.getVariant().getPrice() * cartItem.getQuantity())
                 .sum();
 
+        double discount = 0.0;
+
+        if (cart.getCoupon() != null) {
+            Coupon coupon = cart.getCoupon();
+            coupon.setCouponStock(coupon.getCouponStock()-1);
+            couponService.save(coupon);
+
+            if (coupon.getType() == CouponType.GENERAL) {
+                double maxDiscount = coupon.getMaximumDiscountAmount();
+                discount = total * ((double) coupon.getDiscount() / 100);
+                if (discount > maxDiscount) {
+                    discount = maxDiscount;
+                }
+                model.addAttribute("couponType", "General");
+            } else if (coupon.getType() == CouponType.CATEGORY) {
+                double categoryTotal = cartItems.stream()
+                        .filter(cartItem -> cartItem.getVariant().getProduct().getCategory().equals(coupon.getCategory()))
+                        .mapToDouble(cartItem -> cartItem.getVariant().getPrice() * cartItem.getQuantity())
+                        .sum();
+
+                double maxDiscount = coupon.getMaximumDiscountAmount();
+                discount = categoryTotal * ((double) coupon.getDiscount() / 100);
+                if (discount > maxDiscount) {
+                    discount = maxDiscount;
+                }
+                model.addAttribute("couponType", "Category");
+                model.addAttribute("couponCategory", coupon.getCategory());
+            } else if (coupon.getType() == CouponType.PRODUCT) {
+                double productTotal = cartItems.stream()
+                        .filter(cartItem -> cartItem.getVariant().getProduct().equals(coupon.getProduct()))
+                        .mapToDouble(cartItem -> cartItem.getVariant().getPrice() * cartItem.getQuantity())
+                        .sum();
+
+                double maxDiscount = coupon.getMaximumDiscountAmount();
+                discount = productTotal * ((double) coupon.getDiscount() / 100);
+                if (discount > maxDiscount) {
+                    discount = maxDiscount;
+                }
+                model.addAttribute("couponType", "Product");
+                model.addAttribute("couponProduct", coupon.getProduct());
+            }
+
+            String formattedDiscount = String.format("%.2f", discount);
+            model.addAttribute("discount", formattedDiscount);
+            model.addAttribute("couponApplied", true);
+        } else {
+            model.addAttribute("couponApplied", false);
+        }
+
+        System.out.println("Original Total: $" + total);
+        System.out.println("Total After Coupon Discount: $" + (total > 0 ? total : 0));
+
         int payment = cart.getPayment().ordinal();
 
         if(payment == 0){
@@ -197,6 +284,7 @@ public class CartController {
 
         model.addAttribute("cartItems",cartItems);
         model.addAttribute("subtotal",total);
+
 
         return "checkout";
     }
@@ -207,11 +295,9 @@ public class CartController {
     public String payment(@RequestBody String paymentOption) {
 
         User user = userService.findByUsername(getCurrentUsername()).orElse(null);
-
         Cart cart = cartService.getCart(user).orElse(null);
 
-        System.out.println(paymentOption);
-
+        assert cart != null;
         if(paymentOption.equals("cod")){
             cart.setPayment(Payment.COD);
         }else if(paymentOption.equals("online_pay")){
@@ -229,10 +315,12 @@ public class CartController {
         User user = userService.findByUsername(getCurrentUsername()).orElse(null);
         Cart cart = cartService.getCart(user).orElse(null);
 
+        assert cart != null;
         if(cart.getCartItems().isEmpty()){
             return "index";
         }
 
+        assert user != null;
         Address address = user.getAddresses()
                 .stream()
                 .filter(addr -> addr.getId().equals(addressUUID))
@@ -257,27 +345,52 @@ public class CartController {
         order.setPayment(cart.getPayment());
         order.setStatus(Status.CONFIRMED);
 
+
         double total = cart.getCartItems().stream()
                 .mapToDouble(cartItem -> cartItem.getVariant().getOfferPrice() * cartItem.getQuantity())
                 .sum();
+
+        double discount = 0.0;
+        List<CartItem> cartItems = cart.getCartItems();
+
+        if (cart.getCoupon() != null) {
+            Coupon coupon = cart.getCoupon();
+            order.setCoupon(coupon);
+
+            if (coupon.getType() == CouponType.GENERAL) {
+                discount = total * ((double) coupon.getDiscount() / 100);
+                System.out.println(discount);
+            } else if (coupon.getType() == CouponType.CATEGORY) {
+                double categoryTotal = cartItems.stream()
+                        .filter(cartItem -> cartItem.getVariant().getProduct().getCategory().equals(coupon.getCategory()))
+                        .mapToDouble(cartItem -> cartItem.getVariant().getPrice() * cartItem.getQuantity())
+                        .sum();
+
+                discount = categoryTotal * ((double) coupon.getDiscount() / 100);
+            } else if (coupon.getType() == CouponType.PRODUCT) {
+                double productTotal = cartItems.stream()
+                        .filter(cartItem -> cartItem.getVariant().getProduct().equals(coupon.getProduct()))
+                        .mapToDouble(cartItem -> cartItem.getVariant().getPrice() * cartItem.getQuantity())
+                        .sum();
+
+                discount = productTotal * ((double) coupon.getDiscount() / 100);
+
+            }
+
+            double discountedAmount = total - discount;
+
+        }
 
         if(cart.getPayment().equals(Payment.COD)){
             total += 40;
         }
 
-        order.setTotal((float) total);
-
+        order.setTotal((float) (total-discount));
         orderService.saveOrder(order);
-
-
         userService.deleteCart(cart);
-      //  cart = cartService.removeUser(cart);
         cartService.deleteCart(cart);
         HttpSession session = request.getSession();
         session.setAttribute("order", order.getId());
-
-      //  cartService.deleteCartItems(cart);
-
 
         return "index";
     }
@@ -298,6 +411,9 @@ public class CartController {
             model.addAttribute("shipping", 40);
         }
 
+
+        //TODO: show the coupon info and how much availed in the page
+
         model.addAttribute("total", order.getTotal());
         model.addAttribute("address", order.getAddress());
         model.addAttribute("order", order);
@@ -306,8 +422,6 @@ public class CartController {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String formattedDate = dateFormat.format(date);
         model.addAttribute("createdDate", formattedDate);
-
-
         return "confirmation";
     }
 

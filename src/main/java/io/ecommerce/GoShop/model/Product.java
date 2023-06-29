@@ -39,4 +39,9 @@ public class Product extends BaseEntity{
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @OneToMany
+    @JoinColumn(name = "coupon_id")
+    @ToString.Exclude
+    private List<Coupon> coupon;
+
 }
