@@ -27,7 +27,7 @@
                 </div>
                 <div class="card-body">
                     <form id="updateBannerForm" th:action="@{/banner/update}" th:object="${banner}" method="post" enctype="multipart/form-data">
-                        <input type="hidden" th:value="${banner.id}">
+                        <input type="hidden" id="id" name="id" th:value="${banner.id}" />
                         <div class="form-group">
                             <label for="title">Title:</label>
                             <input type="text" class="form-control" name="title" id="title" th:value="${banner.title}" required>
@@ -38,11 +38,12 @@
                         </div>
                         <div class="form-group">
                             <label for="product">Product:</label>
-                            <input type="text" class="form-control" name="product" id="product" th:value="${banner.product.productName}" readonly>
+                            <input type="hidden" name="product" th:value="${banner.product.id}">
+                            <input type="text" class="form-control" readonly th:value="${banner.product.productName}">
                         </div>
                         <div class="form-group">
                             <label for="image">Current Image:</label>
-                            <img th:src="@{'/images/product/' + ${banner.image.imagePath}}" class="img-thumbnail banner-image" alt="Banner Image">
+                            <img th:if="${banner.image != null}" th:src="@{'/images/product/' + ${banner.image.imagePath}}" class="img-thumbnail banner-image" alt="Banner Image">
                             <button type="button" class="btn btn-danger delete-button" id="deleteImageButton">Delete Image</button>
                         </div>
                         <div class="form-group">
@@ -65,15 +66,78 @@
         }
     });
 
-<!--    document.getElementById('updateBannerForm').addEventListener('submit', function(event) {-->
-<!--        var imageFile = document.getElementById('imageFile');-->
-<!--        var imageFileHelp = document.getElementById('imageFileHelp');-->
-<!--        if (!imageFile.value && !confirm('No new image selected. Do you want to update the banner without changing the image?')) {-->
-<!--            event.preventDefault();-->
-<!--            imageFileHelp.textContent = 'Please select a new image or confirm updating the banner without changing the image.';-->
-<!--            imageFileHelp.style.color = 'red';-->
-<!--        }-->
-<!--    });-->
+document.getElementById('imageFile').addEventListener('change', function(event) {
+    var imagePreview = document.getElementById('imagePreview');
+    var files = event.target.files;
+
+    // Check if the number of selected files exceeds the limit
+    if (files.length > 1) {
+        event.target.value = ''; // Clear the selected files
+        alert("You can only upload one image.");
+        return;
+    }
+
+    imagePreview.innerHTML = ''; // Clear previous previews
+
+    var file = files[0];
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+        var imageContainer = document.createElement('div');
+        imageContainer.className = 'image-grid-item';
+
+        var imageElement = document.createElement('img');
+        imageElement.src = e.target.result;
+        imageContainer.appendChild(imageElement);
+
+        var deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.className = 'btn btn-sm btn-danger delete-button';
+        deleteButton.addEventListener('click', function() {
+            imagePreview.removeChild(imageContainer);
+        });
+        imageContainer.appendChild(deleteButton);
+
+        imagePreview.appendChild(imageContainer);
+    };
+
+    reader.readAsDataURL(file);
+});
+
+document.getElementById('updateBannerForm').addEventListener('submit', function(event) {
+    var imagePreview = document.getElementById('imagePreview');
+    var previewImages = imagePreview.getElementsByClassName('image-grid-item');
+
+    // Remove deleted images from the FormData object
+    var formData = new FormData(this);
+    formData.delete('imageFile'); // Remove the original image file input
+
+    if (previewImages.length > 0) {
+        var imageContainer = previewImages[0];
+        if (!imagePreview.contains(imageContainer)) {
+            var imageElement = imageContainer.querySelector('img');
+            var imageName = imageElement.src;
+            var file = dataURLToFile(imageName, 'image.png');
+            formData.append('imageFile', file);
+        }
+    }
+
+    // Update the form's FormData object with the modified data
+    event.formData = formData;
+});
+
+// Function to convert data URL to File object
+function dataURLToFile(dataURL, filename) {
+    var arr = dataURL.split(',');
+    var mime = arr[0].match(/:(.*?);/)[1];
+    var bstr = atob(arr[1]);
+    var n = bstr.length;
+    var u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
+}
 </script>
 </body>
 </html>

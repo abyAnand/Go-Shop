@@ -79,14 +79,21 @@ public class BannerController {
                                BindingResult result,
                                @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
         if (result.hasErrors()) {
-            return "banner/edit-banner";
+            return "banner/update-banner";
         }
 
         if (imageFile != null && !imageFile.isEmpty()) {
             String fileName = handleFileUpload(imageFile);
             BannerImage image = new BannerImage(fileName, banner);
             banner.setImage(image);
+        } else if (imageFile == null) {
+            Optional<Banner> existingBanner = bannerService.findById(banner.getId());
+            if (existingBanner.isPresent()) {
+                banner.setImage(existingBanner.get().getImage());
+                banner.setProduct(existingBanner.get().getProduct());
+            }
         }
+
 
         bannerService.save(banner);
 
@@ -94,11 +101,10 @@ public class BannerController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteBanner(@PathVariable("id") Long id) {
+    public String deleteBanner(@PathVariable("id") UUID id) {
 
-        UUID uuid = UUID.fromString(String.valueOf(id));
-        Optional<Banner> banner = bannerService.findById(uuid);
-        bannerService.deletebyId(uuid);
+        Optional<Banner> banner = bannerService.findById(id);
+        bannerService.deletebyId(id);
         return "redirect:/banner";
     }
 

@@ -4,9 +4,11 @@ import io.ecommerce.GoShop.Auth.Otp.ILoginService;
 import io.ecommerce.GoShop.Auth.login.OTPAuthenticationProvider;
 import io.ecommerce.GoShop.DTO.UserDTO;
 import io.ecommerce.GoShop.Auth.Otp.OtpService;
+import io.ecommerce.GoShop.model.Banner;
 import io.ecommerce.GoShop.model.LoginOtp;
 import io.ecommerce.GoShop.model.OtpDto;
 import io.ecommerce.GoShop.model.User;
+import io.ecommerce.GoShop.service.banner.BannerService;
 import io.ecommerce.GoShop.service.user.UserInfoDetailsService;
 import io.ecommerce.GoShop.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +53,9 @@ public class LoginController {
     @Autowired
     UserDetailsService userDetailsService;
 
+    @Autowired
+    BannerService bannerService;
+
 
 
 
@@ -84,7 +89,11 @@ public class LoginController {
     }
 
     @GetMapping(value = {"/", "/index"})
-    public String homePage() {
+    public String homePage(Model model) {
+
+        List<Banner> banners = bannerService.findAll();
+        model.addAttribute("banners", banners);
+
         return "index";
     }
 
