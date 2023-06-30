@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Add Banner</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <style>
+        .image-grid {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            margin-bottom: 40px;
+        }
+
+        .image-grid-item {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .image-grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-grid-item .delete-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card mt-5">
+        <div class="card-header">
+          <h3>Add New Banner</h3>
+        </div>
+        <div class="card-body">
+          <form id="addBannerForm" th:action="@{/banner/save}" th:object="${banner}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+              <label for="title">Title:</label>
+              <input type="text" class="form-control" name="title" id="title" required>
+            </div>
+            <div class="form-group">
+              <label for="description">Description:</label>
+              <textarea class="form-control" name="description" id="description" required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="product">Product:</label>
+              <select class="form-control" name="product" id="product" required>
+                <option th:each="product : ${productList}" th:value="${product.id}" th:text="${product.productName}"></option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="imageFile">Image:</label>
+              <input type="file" class="form-control-file" name="imageFile" id="imageFile" accept="image/*" required>
+            </div>
+            <div class="image-grid" id="imagePreview">
+              <!-- Image previews will be added dynamically here -->
+            </div>
+            <button type="submit" class="btn btn-primary">Add Banner</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    document.getElementById('imageFile').addEventListener('change', function(event) {
+        var imagePreview = document.getElementById('imagePreview');
+        var files = event.target.files;
+
+        // Check if the number of selected files exceeds the limit
+        if (files.length > 5) {
+            event.target.value = ''; // Clear the selected files
+            alert("You can only upload a maximum of 5 images.");
+            return;
+        }
+
+        imagePreview.innerHTML = ''; // Clear previous previews
+
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                var imageContainer = document.createElement('div');
+                imageContainer.className = 'image-grid-item';
+
+                var imageElement = document.createElement('img');
+                imageElement.src = e.target.result;
+                imageContainer.appendChild(imageElement);
+
+                var deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.className = 'btn btn-sm btn-danger delete-button';
+                deleteButton.addEventListener('click', function() {
+                    imagePreview.removeChild(imageContainer);
+                });
+                imageContainer.appendChild(deleteButton);
+
+                imagePreview.appendChild(imageContainer);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+
+    document.getElementById('addBannerForm').addEventListener('submit', function(event) {
+        var imagePreview = document.getElementById('imagePreview');
+        var previewImages = imagePreview.getElementsByClassName('image-grid-item');
+
+        // Remove deleted images from the FormData object
+        var formData = new FormData(this);
+        formData.delete('imageFile'); // Remove the original image file input
+
+        for (var i = 0; i < previewImages.length; i++) {
+            var imageContainer = previewImages[i];
+            if (!imagePreview.contains(imageContainer)) {
+                var imageElement = imageContainer.querySelector('img');
+                var imageName = imageElement.src;
+                var file = dataURLToFile(imageName, 'image_' + i + '.png');
+                formData.append('imageFiles', file);
+            }
+        }
+
+        // Update the form's FormData object with the modified data
+        event.formData = formData;
+    });
+
+    // Function to convert data URL to File object
+    function dataURLToFile(dataURL, filename) {
+        var arr = dataURL.split(',');
+        var mime = arr[0].match(/:(.*?);/)[1];
+        var bstr = atob(arr[1]);
+        var n = bstr.length;
+        var u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, { type: mime });
+    }
+</script>
+</body>
+</html>

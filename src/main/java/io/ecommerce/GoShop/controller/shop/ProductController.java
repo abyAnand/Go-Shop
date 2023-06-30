@@ -1,4 +1,4 @@
-package io.ecommerce.GoShop.controller;
+package io.ecommerce.GoShop.controller.shop;
 
 import io.ecommerce.GoShop.model.Category;
 import io.ecommerce.GoShop.model.Image;

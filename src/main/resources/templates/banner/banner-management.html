@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Banner Management</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container-xl {
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            height: 100vh;
+            overflow: auto;
+        }
+
+        .table-title {
+            background-color: #007bff;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .table-title h2 {
+            margin: 0;
+        }
+
+        .btn {
+            margin-right: 5px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .btn i {
+            margin-right: 5px;
+        }
+
+        .btn:hover {
+            color: #000;
+        }
+
+        .btn-danger {
+            color: #fff;
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+
+        th,
+        td {
+            border: none;
+            padding: 10px;
+            color: #666;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            color: #333;
+            font-weight: 500;
+            text-align: left;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(0, 0, 0, 0.075);
+        }
+
+        .empty-row td {
+            text-align: center;
+        }
+
+        .btn-custom {
+            background-color: #fd7e14 !important;
+            border-color: #fd7e14 !important;
+            color: #fff;
+        }
+
+        .btn-custom:hover {
+            background-color: #e6630a !important;
+            border-color: #e6630a !important;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+<div class="">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <h2>Banner <b>Management</b></h2>
+                    </div>
+                    <div class="col-sm-7">
+                        <a th:href="@{/admin/users}" class="btn btn-custom"><i class="fas fa-users"></i> <span>User Management</span></a>
+                        <a th:href="@{/banner/create}" class="btn btn-custom"><i class="fas fa-tags"></i> <span>Create Banner</span></a>
+                        <a th:href="@{/logout}" class="btn btn-danger"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Banner Title</th>
+                    <th>Product Name</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${bannerList.empty}">
+                    <td colspan="4">No Banners</td>
+                </tr>
+
+                <tr th:each="banner, rowIndex: ${bannerList}">
+                    <td th:text="${rowIndex.count}"></td>
+                    <td th:text="${banner.title}"></td>
+                    <td th:text="${banner.product.productName}"></td>
+                    <td>
+                        <a th:href="@{/banner/edit/{id}(id=${banner.id})}" class="btn btn-primary btn-sm">Edit</a>
+                        <a th:href="@{/banner/delete/{id}(id=${banner.id})}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this banner?')">Delete</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
