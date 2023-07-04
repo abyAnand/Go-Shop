@@ -38,6 +38,10 @@ public class UserServiceImpl implements UserService, UserServiceInterface, UserD
     }
 
     public void save(User user){
+
+        Role userRole = roleRepository.findByRoleName(user.getRole().getRoleName());
+        user.setRole(userRole);
+
         userRepository.save(user);
     }
 
