@@ -44,4 +44,8 @@ public class Product extends BaseEntity{
     @ToString.Exclude
     private List<Coupon> coupon;
 
+    @OneToMany(mappedBy = "product")
+    @ToString.Exclude
+    private List<Review> reviews;
+
 }

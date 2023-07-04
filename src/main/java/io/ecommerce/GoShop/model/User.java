@@ -61,5 +61,9 @@ public class User extends BaseEntity{
     @ToString.Exclude
     private Wallet wallet;
 
+    @OneToMany(mappedBy ="user")
+    @ToString.Exclude
+    private List<Review> reviews;
+
 
 }

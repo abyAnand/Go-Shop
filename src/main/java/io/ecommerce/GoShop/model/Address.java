@@ -33,7 +33,7 @@ public class Address extends BaseEntity {
 
     private String landmark;
 
-    private boolean defaultAddress;
+    private boolean isDeleted;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

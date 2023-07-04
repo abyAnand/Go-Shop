@@ -1,0 +1,48 @@
+
+
+p {
+	margin-bottom: 1.5rem;
+	color: #00e572;
+}
+
+.rating {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border: 2px dashed #4b51725e;
+	border-radius: 10px;
+	padding:10px 15px;
+  direction: rtl;
+	width: 10rem;
+
+	transition: border 1s ease;
+	overflow:hidden;
+}
+.rating:hover {
+	border: 2px dashed #00e572;
+}
+
+.rating input {
+  display: none;
+}
+
+.rating label {
+  display: inline-block;
+  cursor: pointer;
+	color: #838dc6;
+	position: relative;
+}
+
+.rating input:checked ~ label i {
+  color: #f6ff00;
+  transition: color 0.5s ease;
+}
+
+.rating input:not(:checked) ~ label {
+  color: #888888;
+  transition: color 0.5s ease;
+}
+
+.rating input:not(:checked) ~ label:hover {
+  opacity: 1;
+}

@@ -32,6 +32,8 @@ public class AddressServiceImpl implements AddressService{
 
     @Override
     public void deleteAddress(Address address) {
-        addressRepository.delete(address);
+
+        address.setDeleted(true);
+        addressRepository.save(address);
     }
 }

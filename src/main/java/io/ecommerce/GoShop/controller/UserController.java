@@ -104,8 +104,13 @@ public class UserController {
     public String addressDashboard(Model model){
 
         User user = userService.findByUsername(getCurrentUsername()).orElse(null);
+
+        List<Address> userAddress =  user.getAddresses().stream().filter(address -> !address.isDeleted())
+                        .toList();
+
+
         model.addAttribute("user", user);
-        model.addAttribute("address", user.getAddresses());
+        model.addAttribute("address",userAddress);
         return "user/address-dashboard";
     }
 
@@ -135,17 +140,8 @@ public class UserController {
     public String updateAddress(@ModelAttribute Address address,
                                 Model model){
 
-        User user = userService.findByUsername(getCurrentUsername()).orElse(null);
-        address.setUser(user);
-        addressService.save(address);
-        UserDTO userDto = new UserDTO();
-        userDto.setFirstName(user.getFirstName());
-        userDto.setLastName(user.getLastName());
-        userDto.setEmail(user.getEmail());
-        model.addAttribute("user", userDto);
-        model.addAttribute("address", user.getAddresses());
 
-        return "user/address-dashboard";
+        return "redirect:/user/address";
     }
 
 
@@ -170,14 +166,8 @@ public class UserController {
 
         addressService.deleteAddress(address);
 
-        User user = userService.findByUsername(getCurrentUsername()).orElse(null);
-        UserDTO userDto = new UserDTO();
-        userDto.setFirstName(user.getFirstName());
-        userDto.setLastName(user.getLastName());
-        userDto.setEmail(user.getEmail());
-        model.addAttribute("user", userDto);
-        model.addAttribute("address", user.getAddresses());
-        return "user/address-dashboard";
+
+        return "redirect:/user/address";
 
     }
 

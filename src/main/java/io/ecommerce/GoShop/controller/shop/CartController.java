@@ -2,6 +2,7 @@ package io.ecommerce.GoShop.controller.shop;
 
 import io.ecommerce.GoShop.DTO.CouponResponse;
 import io.ecommerce.GoShop.DTO.DeleteCartItemRequest;
+import io.ecommerce.GoShop.DTO.ReviewResponse;
 import io.ecommerce.GoShop.model.*;
 import io.ecommerce.GoShop.repository.CartItemRepository;
 import io.ecommerce.GoShop.repository.VariantRepository;
@@ -9,6 +10,7 @@ import io.ecommerce.GoShop.service.address.AddressService;
 import io.ecommerce.GoShop.service.cart.ICartService;
 import io.ecommerce.GoShop.service.coupon.CouponService;
 import io.ecommerce.GoShop.service.order.OrderService;
+import io.ecommerce.GoShop.service.product.ProductService;
 import io.ecommerce.GoShop.service.user.UserService;
 import io.ecommerce.GoShop.service.variant.VariantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +57,9 @@ public class CartController {
 
     @Autowired
     private CouponService couponService;
+
+    @Autowired
+    private ProductService productService;
 
 
     public String getCurrentUsername() {
@@ -283,6 +288,26 @@ public class CartController {
 
 
         return "checkout";
+    }
+
+    @PostMapping("/product/review")
+    public ResponseEntity<String> addProductReview(@RequestBody ReviewResponse reviewResponse) {
+        UUID productId = reviewResponse.getProductId();
+        int rating = reviewResponse.getRating();
+        String review = reviewResponse.getReview();
+
+        // Retrieve the product from the database
+        Optional<Product> optionalProduct = productService.getProductById(productId);
+        if (optionalProduct.isEmpty()) {
+            String errorMessage = "Product not found";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
+        }
+
+        System.out.println(reviewResponse);
+
+        // Assuming the review is successfully added, you can return a success message
+        String response = "Review added successfully";
+        return ResponseEntity.ok(response);
     }
 
 

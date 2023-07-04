@@ -152,6 +152,8 @@ public class StoreController {
         Optional<Product> product = productService.getProductById(id);
         product.ifPresent(value -> model.addAttribute("product", value));
 
+        //TODO: add the review object here
+
         return "single-product";
     }
 
