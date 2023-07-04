@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 
 public class UserInfoToUserDetailsConversion implements UserDetails {
 
-    private  String username;
-    private  String password;
-    private  List<GrantedAuthority> authorities;
+    private final String username;
+    private final String password;
+    private final List<GrantedAuthority> authorities;
 
-    private boolean isEnabled;
+    private final boolean isEnabled;
 
     public UserInfoToUserDetailsConversion(User user) {
         username = user.getUsername();

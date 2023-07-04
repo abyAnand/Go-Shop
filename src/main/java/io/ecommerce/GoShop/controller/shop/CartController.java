@@ -2,6 +2,7 @@ package io.ecommerce.GoShop.controller.shop;
 
 import io.ecommerce.GoShop.DTO.CouponResponse;
 import io.ecommerce.GoShop.DTO.DeleteCartItemRequest;
+import io.ecommerce.GoShop.DTO.ReviewResponse;
 import io.ecommerce.GoShop.model.*;
 import io.ecommerce.GoShop.repository.CartItemRepository;
 import io.ecommerce.GoShop.repository.VariantRepository;
@@ -9,6 +10,8 @@ import io.ecommerce.GoShop.service.address.AddressService;
 import io.ecommerce.GoShop.service.cart.ICartService;
 import io.ecommerce.GoShop.service.coupon.CouponService;
 import io.ecommerce.GoShop.service.order.OrderService;
+import io.ecommerce.GoShop.service.product.ProductService;
+import io.ecommerce.GoShop.service.review.ReviewService;
 import io.ecommerce.GoShop.service.user.UserService;
 import io.ecommerce.GoShop.service.variant.VariantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +59,12 @@ public class CartController {
     @Autowired
     private CouponService couponService;
 
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private ReviewService reviewService;
+
 
     public String getCurrentUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -66,8 +75,7 @@ public class CartController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
     public String getCartList(Model model){
 
-        String name = getCurrentUsername();
-        Optional<User> user = userService.findByUsername(name);
+        Optional<User> user = userService.findByUsername(getCurrentUsername());
         Optional<Cart> userCart = user.flatMap(cartService::getCart);
 
         List<CartItem> cart = userCart.map(Cart::getCartItems).orElse(Collections.emptyList());
@@ -76,7 +84,7 @@ public class CartController {
                 .collect(Collectors.toList());
 
         model.addAttribute("cart", filteredCart);
-        model.addAttribute("name", name);
+        model.addAttribute("name", user.get().getUsername());
 
         return "cart";
     }
@@ -283,6 +291,34 @@ public class CartController {
 
 
         return "checkout";
+    }
+
+    @PostMapping("/product/review")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
+    public ResponseEntity<String> addProductReview(@RequestBody ReviewResponse reviewResponse) {
+
+        User user = userService.findByUsername(getCurrentUsername()).orElse(null);
+
+        // Retrieve the product from the database
+        Optional<Product> optionalProduct = productService.getProductById(reviewResponse.getProductId());
+        if (optionalProduct.isEmpty()) {
+            String errorMessage = "Product not found";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
+        }
+
+        Review review = new Review();
+        review.setProduct(optionalProduct.get());
+        review.setRating(reviewResponse.getRating());
+        review.setComment(reviewResponse.getReview());
+        review.setUser(user);
+
+
+        reviewService.save(review);
+
+
+        // Assuming the review is successfully added, you can return a success message
+        String response = "Review added successfully";
+        return ResponseEntity.ok(response);
     }
 
 

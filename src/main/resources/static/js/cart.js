@@ -1,5 +1,5 @@
 function sendCartItem(variantId) {
-  console.log(variantId);
+
 
   $.ajax({
     type: "POST",
