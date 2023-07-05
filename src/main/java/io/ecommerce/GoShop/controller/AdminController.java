@@ -222,4 +222,20 @@ public String createUser(Model model){
 
         return "/user/order-history";
     }
+
+    @GetMapping("/orders/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
+    public String getSingleOrder(@PathVariable UUID id, Model model){
+
+        Optional<Order> order = orderService.findById(id);
+
+        List<Status> statusList = Arrays.asList(Status.values());
+
+        model.addAttribute("statusList", statusList);
+        model.addAttribute("order", order.get());
+
+//        model.addAttribute("orderItems", order.getOrderItems());
+
+        return "user/single-order";
+    }
 }
