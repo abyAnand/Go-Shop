@@ -121,6 +121,14 @@
     align-items: center;
     justify-content: flex-start; /* Adjust the justify-content value as needed to maintain the desired alignment */
 
+.filled-star {
+  color: goldenrod;
+}
+
+.empty-star {
+  color: lightgray;
+}
+
 </style>
 </head>
 
@@ -287,20 +295,30 @@
 									</div>
 								</div>
 								<div class="col-6">
-									<div class="rating_list">
-										<h3>Based on <span id="total-reviews-count">0</span> Reviews</h3>
-										<ul class="list" id="star-ratings">
-											<li><a href="#" data-rating="1"><i class="fa fa-star"></i></a></li>
-											<li><a href="#" data-rating="2"><i class="fa fa-star"></i></a></li>
-											<li><a href="#" data-rating="3"><i class="fa fa-star"></i></a></li>
-											<li><a href="#" data-rating="4"><i class="fa fa-star"></i></a></li>
-											<li><a href="#" data-rating="5"><i class="fa fa-star"></i></a></li>
-										</ul>
-									</div>
+<!--									<div class="rating_list">-->
+<!--										<h3>Based on <span th:text="${totalReviews}" id="total-reviews-count">0</span> Reviews</h3>-->
+<!--										<ul>-->
+<!--											<li>1 Star: <span th:text="${reviewCounts[0]}"></span></li>-->
+<!--											<li>2 Stars: <span th:text="${reviewCounts[1]}"></span></li>-->
+<!--											<li>3 Stars: <span th:text="${reviewCounts[2]}"></span></li>-->
+<!--											<li>4 Stars: <span th:text="${reviewCounts[3]}"></span></li>-->
+<!--											<li>5 Stars: <span th:text="${reviewCounts[4]}"></span></li>-->
+<!--										</ul>-->
+<!--									</div>-->
 								</div>
 							</div>
 							<div class="review_list" id="review-list">
 								<!-- Dynamic review items will be added here -->
+								<ul>
+									<li th:each="review : ${reviewList}">
+										<p style="color: #000">Rating:
+											<span style="font-size:2em; color: #ffba00;" th:each="star : ${#numbers.sequence(1, review.rating)}" class="filled-star">★</span>
+											<span style="font-size:2em" th:unless="${review.rating == 5}" th:each="star : ${#numbers.sequence(review.rating + 1, 5)}" class="empty-star">☆</span>
+										</p>
+										<p style="color: #000" th:text="${review.comment}"></p>
+										<p style="color: #000" th:text="${review.user.username}"></p>
+									</li>
+								</ul>
 							</div>
 						</div>
 						<div class="col-lg-6">
