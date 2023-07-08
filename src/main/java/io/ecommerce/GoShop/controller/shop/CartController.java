@@ -208,91 +208,6 @@ public class CartController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/checkout")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
-    public String checkOut(Model model){
-
-        User user = userService.findByUsername(getCurrentUsername()).orElse(null);
-        List<Address> addresses = addressService.findByUser(user);
-
-        model.addAttribute("addresses", addresses);
-        Cart cart = cartService.findByUser(user);
-
-        if(cart == null){
-            return "cart";
-        }
-
-        List<CartItem> cartItems = cart.getCartItems();
-
-        double total = cartItems.stream()
-                .mapToDouble(cartItem -> cartItem.getVariant().getPrice() * cartItem.getQuantity())
-                .sum();
-
-        double discount = 0.0;
-
-        if (cart.getCoupon() != null) {
-            Coupon coupon = cart.getCoupon();
-            coupon.setCouponStock(coupon.getCouponStock()-1);
-            couponService.save(coupon);
-
-            if (coupon.getType() == CouponType.GENERAL) {
-                double maxDiscount = coupon.getMaximumDiscountAmount();
-                discount = total * ((double) coupon.getDiscount() / 100);
-                if (discount > maxDiscount) {
-                    discount = maxDiscount;
-                }
-                model.addAttribute("couponType", "General");
-            } else if (coupon.getType() == CouponType.CATEGORY) {
-                double categoryTotal = cartItems.stream()
-                        .filter(cartItem -> cartItem.getVariant().getProduct().getCategory().equals(coupon.getCategory()))
-                        .mapToDouble(cartItem -> cartItem.getVariant().getPrice() * cartItem.getQuantity())
-                        .sum();
-
-                double maxDiscount = coupon.getMaximumDiscountAmount();
-                discount = categoryTotal * ((double) coupon.getDiscount() / 100);
-                if (discount > maxDiscount) {
-                    discount = maxDiscount;
-                }
-                model.addAttribute("couponType", "Category");
-                model.addAttribute("couponCategory", coupon.getCategory());
-            } else if (coupon.getType() == CouponType.PRODUCT) {
-                double productTotal = cartItems.stream()
-                        .filter(cartItem -> cartItem.getVariant().getProduct().equals(coupon.getProduct()))
-                        .mapToDouble(cartItem -> cartItem.getVariant().getPrice() * cartItem.getQuantity())
-                        .sum();
-
-                double maxDiscount = coupon.getMaximumDiscountAmount();
-                discount = productTotal * ((double) coupon.getDiscount() / 100);
-                if (discount > maxDiscount) {
-                    discount = maxDiscount;
-                }
-                model.addAttribute("couponType", "Product");
-                model.addAttribute("couponProduct", coupon.getProduct());
-            }
-
-            String formattedDiscount = String.format("%.2f", discount);
-            model.addAttribute("discount", formattedDiscount);
-            model.addAttribute("couponApplied", true);
-        } else {
-            model.addAttribute("couponApplied", false);
-        }
-
-        System.out.println("Original Total: $" + total);
-        System.out.println("Total After Coupon Discount: $" + (total > 0 ? total : 0));
-
-        int payment = cart.getPayment().ordinal();
-
-        if(payment == 0){
-            model.addAttribute("shipping", 40);
-        }
-
-        model.addAttribute("cartItems",cartItems);
-        model.addAttribute("subtotal",total);
-
-
-        return "checkout";
-    }
-
     @PostMapping("/product/review")
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
     public ResponseEntity<String> addProductReview(@RequestBody ReviewResponse reviewResponse) {
@@ -324,18 +239,23 @@ public class CartController {
 
     @PostMapping("/payment")
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
-    public String payment(@RequestBody String paymentOption) {
+    public ResponseEntity<String> payment(@RequestBody String paymentOption) {
 
         User user = userService.findByUsername(getCurrentUsername()).orElse(null);
         Cart cart = cartService.getCart(user).orElse(null);
+        
+        String response = null;
 
         assert cart != null;
         if(paymentOption.equals("cod")){
             cart.setPayment(Payment.COD);
+            response = "COD";
         }else if(paymentOption.equals("online_pay")){
             cart.setPayment(Payment.ONLINE);
+            response = "ONLINE";
         }
-        return "index";
+        
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/buy")
@@ -425,6 +345,92 @@ public class CartController {
         session.setAttribute("order", order.getId());
 
         return "index";
+    }
+
+    @GetMapping("/checkout")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
+    public String checkOut(Model model){
+
+        User user = userService.findByUsername(getCurrentUsername()).orElse(null);
+        List<Address> addresses = addressService.findByUser(user);
+
+        model.addAttribute("addresses", addresses);
+        Cart cart = cartService.findByUser(user);
+
+        if(cart == null){
+            return "cart";
+        }
+
+        List<CartItem> cartItems = cart.getCartItems();
+
+        double total = cartItems.stream()
+                .mapToDouble(cartItem -> cartItem.getVariant().getPrice() * cartItem.getQuantity())
+                .sum();
+
+        double discount = 0.0;
+
+        if (cart.getCoupon() != null) {
+            Coupon coupon = cart.getCoupon();
+            coupon.setCouponStock(coupon.getCouponStock()-1);
+            couponService.save(coupon);
+
+            if (coupon.getType() == CouponType.GENERAL) {
+                double maxDiscount = coupon.getMaximumDiscountAmount();
+                discount = total * ((double) coupon.getDiscount() / 100);
+                if (discount > maxDiscount) {
+                    discount = maxDiscount;
+                }
+                model.addAttribute("couponType", "General");
+            } else if (coupon.getType() == CouponType.CATEGORY) {
+                double categoryTotal = cartItems.stream()
+                        .filter(cartItem -> cartItem.getVariant().getProduct().getCategory().equals(coupon.getCategory()))
+                        .mapToDouble(cartItem -> cartItem.getVariant().getPrice() * cartItem.getQuantity())
+                        .sum();
+
+                double maxDiscount = coupon.getMaximumDiscountAmount();
+                discount = categoryTotal * ((double) coupon.getDiscount() / 100);
+                if (discount > maxDiscount) {
+                    discount = maxDiscount;
+                }
+                model.addAttribute("couponType", "Category");
+                model.addAttribute("couponCategory", coupon.getCategory());
+            } else if (coupon.getType() == CouponType.PRODUCT) {
+                double productTotal = cartItems.stream()
+                        .filter(cartItem -> cartItem.getVariant().getProduct().equals(coupon.getProduct()))
+                        .mapToDouble(cartItem -> cartItem.getVariant().getPrice() * cartItem.getQuantity())
+                        .sum();
+
+                double maxDiscount = coupon.getMaximumDiscountAmount();
+                discount = productTotal * ((double) coupon.getDiscount() / 100);
+                if (discount > maxDiscount) {
+                    discount = maxDiscount;
+                }
+                model.addAttribute("couponType", "Product");
+                model.addAttribute("couponProduct", coupon.getProduct());
+            }
+
+            String formattedDiscount = String.format("%.2f", discount);
+            model.addAttribute("discount", formattedDiscount);
+            model.addAttribute("couponApplied", true);
+        } else {
+            model.addAttribute("couponApplied", false);
+        }
+
+        System.out.println("Original Total: $" + total);
+        System.out.println("Total After Coupon Discount: $" + (total > 0 ? total : 0));
+
+        int payment = cart.getPayment().ordinal();
+
+        if(payment == 0){
+            model.addAttribute("shipping", 40);
+        }
+
+        model.addAttribute("payment", cart.getPayment());
+        model.addAttribute("cartItems",cartItems);
+        model.addAttribute("subtotal",total);
+
+
+        return "checkout";
     }
 
     @GetMapping("/confirmation")

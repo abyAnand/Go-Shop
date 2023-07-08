@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zxx" class="no-js" xmlns:th="http://www.thymeleaf.org">
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <head>
     <!-- Mobile Specific Meta -->
@@ -174,7 +175,7 @@
                             </tr>
                             <tr>
                                 <td><a href="#">Total</a></td>
-                                <td colspan="2" th:text="${shipping != null ? subtotal + shipping : subtotal}"></td>
+                                <td colspan="2" id="total" th:text="${shipping != null ? subtotal + shipping : subtotal}"></td>
                             </tr>
                             </tbody>
                         </table>
@@ -241,7 +242,9 @@
 
             <div class="row">
                 <div class="col-lg-12">
-                    <a class="primary-btn" onclick="proceedToBuy()">Proceed to Checkout</a>
+                            <input type="hidden" id="paymentStatus" name="paymentStatus" th:value="${payment}" />
+<!--                    <a class="primary-btn" onclick="proceedToBuy()">Proceed to Buy</a>-->
+                    <a class="primary-btn" id="buy">Proceed to Buy</a>
                 </div>
             </div>
         </div>
