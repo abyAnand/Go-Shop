@@ -289,7 +289,7 @@ public class CartController {
             OrderItem orderItem = new OrderItem();
             orderItem.setVariant(cartItem.getVariant());
             orderItem.setQuantity(cartItem.getQuantity());
-            orderItem.setPrice(cartItem.getVariant().getPrice());
+            orderItem.setPrice(cartItem.getVariant().getOfferPrice());
             orderItem.setOrder(order);
             orderItemList.add(orderItem);
         }
@@ -315,14 +315,14 @@ public class CartController {
             } else if (coupon.getType() == CouponType.CATEGORY) {
                 double categoryTotal = cartItems.stream()
                         .filter(cartItem -> cartItem.getVariant().getProduct().getCategory().equals(coupon.getCategory()))
-                        .mapToDouble(cartItem -> cartItem.getVariant().getPrice() * cartItem.getQuantity())
+                        .mapToDouble(cartItem -> cartItem.getVariant().getOfferPrice() * cartItem.getQuantity())
                         .sum();
 
                 discount = categoryTotal * ((double) coupon.getDiscount() / 100);
             } else if (coupon.getType() == CouponType.PRODUCT) {
                 double productTotal = cartItems.stream()
                         .filter(cartItem -> cartItem.getVariant().getProduct().equals(coupon.getProduct()))
-                        .mapToDouble(cartItem -> cartItem.getVariant().getPrice() * cartItem.getQuantity())
+                        .mapToDouble(cartItem -> cartItem.getVariant().getOfferPrice() * cartItem.getQuantity())
                         .sum();
 
                 discount = productTotal * ((double) coupon.getDiscount() / 100);
