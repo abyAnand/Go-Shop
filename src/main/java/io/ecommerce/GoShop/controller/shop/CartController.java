@@ -349,7 +349,7 @@ public class CartController {
 
     @GetMapping("/checkout")
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
-    public String checkOut(Model model){
+    public String checkOut(Model model, HttpServletRequest request){
 
         User user = userService.findByUsername(getCurrentUsername()).orElse(null);
         List<Address> addresses = addressService.findByUser(user);
@@ -364,7 +364,7 @@ public class CartController {
         List<CartItem> cartItems = cart.getCartItems();
 
         double total = cartItems.stream()
-                .mapToDouble(cartItem -> cartItem.getVariant().getPrice() * cartItem.getQuantity())
+                .mapToDouble(cartItem -> cartItem.getVariant().getOfferPrice() * cartItem.getQuantity())
                 .sum();
 
         double discount = 0.0;
@@ -384,7 +384,7 @@ public class CartController {
             } else if (coupon.getType() == CouponType.CATEGORY) {
                 double categoryTotal = cartItems.stream()
                         .filter(cartItem -> cartItem.getVariant().getProduct().getCategory().equals(coupon.getCategory()))
-                        .mapToDouble(cartItem -> cartItem.getVariant().getPrice() * cartItem.getQuantity())
+                        .mapToDouble(cartItem -> cartItem.getVariant().getOfferPrice() * cartItem.getQuantity())
                         .sum();
 
                 double maxDiscount = coupon.getMaximumDiscountAmount();
@@ -397,7 +397,7 @@ public class CartController {
             } else if (coupon.getType() == CouponType.PRODUCT) {
                 double productTotal = cartItems.stream()
                         .filter(cartItem -> cartItem.getVariant().getProduct().equals(coupon.getProduct()))
-                        .mapToDouble(cartItem -> cartItem.getVariant().getPrice() * cartItem.getQuantity())
+                        .mapToDouble(cartItem -> cartItem.getVariant().getOfferPrice() * cartItem.getQuantity())
                         .sum();
 
                 double maxDiscount = coupon.getMaximumDiscountAmount();
@@ -428,6 +428,10 @@ public class CartController {
         model.addAttribute("payment", cart.getPayment());
         model.addAttribute("cartItems",cartItems);
         model.addAttribute("subtotal",total);
+        model.addAttribute("total", total - discount);
+
+        HttpSession session = request.getSession();
+        session.setAttribute("grandTotal", total - discount);
 
 
         return "checkout";
@@ -437,7 +441,8 @@ public class CartController {
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or hasAuthority('ROLE_USER')")
     public String confirmation(HttpSession session, Model model){
         UUID orderId = (UUID) session.getAttribute("order");
-        System.out.println(orderId);
+
+        double grandTotal = (double) session.getAttribute("grandTotal");
 
         User user = userService.findByUsername(getCurrentUsername()).orElse(null);
         Order order = orderService.findById(orderId).orElse(null);
@@ -445,14 +450,14 @@ public class CartController {
         model.addAttribute("orderItems", order.getOrderItems());
 
         if(order.getPayment().equals(Payment.COD)){
-            model.addAttribute("subtotal", order.getTotal()-40);
+            model.addAttribute("subtotal", grandTotal-40);
             model.addAttribute("shipping", 40);
         }
 
 
         //TODO: show the coupon info and how much availed in the page
 
-        model.addAttribute("total", order.getTotal());
+        model.addAttribute("total", grandTotal);
         model.addAttribute("address", order.getAddress());
         model.addAttribute("order", order);
         Timestamp createdDate = order.getCreatedDate();

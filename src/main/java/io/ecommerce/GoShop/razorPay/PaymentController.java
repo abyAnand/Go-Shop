@@ -72,7 +72,7 @@ public class PaymentController {
             JSONObject responseJson = new JSONObject();
             responseJson.put("status", "success");
             responseJson.put("orderId", orderId);
-            responseJson.put("amount", total);
+            responseJson.put("amount", total*100);
             responseJson.put("key", keyId);
 
             return ResponseEntity.ok(responseJson.toString());
