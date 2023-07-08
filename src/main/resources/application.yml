@@ -38,3 +38,7 @@ firebase:
 logging:
   level:
     web: debug
+
+razorpay:
+  keyId: rzp_test_ti4COoTWxp1e7t
+  keySecret: lresCW3FKCaaVJxwo8THLWxk

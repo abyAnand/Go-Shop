@@ -2,6 +2,7 @@ package io.ecommerce.GoShop.controller.shop;
 
 import io.ecommerce.GoShop.model.Category;
 import io.ecommerce.GoShop.model.Product;
+import io.ecommerce.GoShop.model.Review;
 import io.ecommerce.GoShop.model.User;
 import io.ecommerce.GoShop.service.category.CategoryService;
 import io.ecommerce.GoShop.service.product.ProductService;
@@ -151,6 +152,14 @@ public class StoreController {
 
         Optional<Product> product = productService.getProductById(id);
         product.ifPresent(value -> model.addAttribute("product", value));
+
+        List<Review> reviewList = product.get().getReviews();
+
+
+
+        model.addAttribute("totalReviews", reviewList.size());
+        model.addAttribute("reviewList", reviewList);
+
 
         //TODO: add the review object here
 

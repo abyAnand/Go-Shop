@@ -153,6 +153,67 @@ function proceedToBuy() {
   });
 }
 
+
+const buy = document.querySelector("#buy");
+const paymentStatus = document.querySelector("#paymentStatus").value;
+const totalElement = document.querySelector("#total");
+
+buy.addEventListener("click", () => {
+  const total = totalElement.textContent.trim();
+  if (paymentStatus === "ONLINE") {
+    $.ajax({
+      type: "POST",
+      url: "/payment/checkout",
+      data: total,
+      success: function (response) {
+        console.log(response);
+        const orderId = response
+        // Update relevant elements in the Thymeleaf template
+        $('#successMessage').text(response);
+        fetch('/payment/confirm', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ orderId: orderId })
+                    })
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function (response) {
+                        var options = {
+                            key: response.key,
+                            currency: 'INR',
+                            amount: response.amount,
+                            order_id: response.id,
+                            name: 'GO-SHOP',
+                            description: 'Test Payment',
+                            handler: function (response) {
+                                proceedToBuy();
+                                // Handle payment success
+                            },
+                            prefill: {
+                                name: 'Abi Anand',
+                                email: 'abi@example.com',
+                                contact: '+1234567890'
+                            }
+                        };
+
+                        var rzp1 = new Razorpay(options);
+                        rzp1.open();
+                    });
+      },
+      error: function (xhr, status, error) {
+        console.log(error);
+        // Handle error case if needed
+      },
+      contentType: "text/plain"
+    });
+  } else {
+    proceedToBuy();
+  }
+});
+
 function applyCoupon() {
 
     var couponCode = document.getElementById("couponCodeInput").value;

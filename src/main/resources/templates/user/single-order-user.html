@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <title>Order Details</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -34,15 +32,13 @@
             background-color: #fff;
         }
 
-        th,
-        td {
+        th, td {
             padding: 10px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
     </style>
 </head>
-
 <body>
 <div class="container">
     <div class="view-account">
@@ -57,7 +53,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="orderItem : ${order.orderItems}">
+            <tr th:each="orderItem : ${orderItems}">
                 <td th:text="${orderItem.variant.product.productName}"></td>
                 <td th:text="${orderItem.variant.variantName}"></td>
                 <td th:text="${orderItem.quantity}"></td>
@@ -65,54 +61,9 @@
             </tr>
             </tbody>
         </table>
-
-        <!-- Dropdown List and Update Status Button -->
-        <div class="form-group">
-            <label for="status">Status:</label>
-            <select class="form-control" id="status">
-                <option th:each="status : ${statusList}"
-                        th:value="${status}"
-                        th:selected="${status == order.status}"
-                        th:text="${status}"></option>
-            </select>
-        </div>
-
-        <input type="hidden" id="orderId" name="orderId" th:value="${order.id}" />
-
-        <button class="btn btn-primary" onclick="updateStatus()">Update Status</button>
     </div>
 </div>
 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
-        function updateStatus() {
-  var selectedStatus = document.getElementById("status").value;
-    const orderId = document.getElementById('orderId').value;
-
-  var order = {
-    orderId: orderId,
-    status: selectedStatus
-  };
-
-  console.log(order)
-
-  // Send the order object to the backend
-  $.ajax({
-    url: "/orders/updateStatus",
-    type: "POST",
-    data: JSON.stringify(order),
-    contentType: "application/json",
-    success: function(response) {
-      window.location.href = "/admin/orders";
-      console.log(response);
-    },
-    error: function(error) {
-      // Handle any errors that occur during the AJAX request
-      console.error(error);
-    }
-  });
-}
-    </script>
 </body>
-
 </html>
