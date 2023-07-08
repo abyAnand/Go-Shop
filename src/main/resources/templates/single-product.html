@@ -213,7 +213,24 @@
 				<div class="col-lg-5 offset-lg-1">
 					<div class="s_product_text">
 						<h3 th:text="${product.productName}">Faded SkyBlu Denim Jeans</h3>
-						<h2 id="productPrice" th:text="${product.variant != null && product.variant.size() > 0} ? ('$' + ${product.variant[0].price}) : ('$' + ${product.price})">$149.99</h2>
+<!--						<h2 id="offerPrice" th:text="${product.variant != null && product.variant.size() > 0} ? ('$' + ${product.variant[0].offerPrice}) : ('$' + ${product.price})"></h2>-->
+<!--						<div id="newLottie" style=" position: relative; top: 0; right: 30;">-->
+<!--							<lottie-player src="https://assets8.lottiefiles.com/private_files/lf30_tmol6efn.json"-->
+<!--										   background="transparent" speed="2" style="width: 150px; height: 150px;"-->
+<!--										   loop autoplay></lottie-player>-->
+<!--						</div>-->
+
+						<div class="grouped_price" style="display:flex; justify-content:flex-start; align-items:center;">
+
+							<h2 id="offerPrice" th:text="${product.variant != null && product.variant.size() > 0} ? ('$' + ${product.variant[0].offerPrice}) : ('$' + ${product.price})"></h2>
+							<div id="newLottie" style="position: relative;top: 0;right: 30;">
+								<lottie-player style="width: 40px;height: 40px;"  src="https://assets8.lottiefiles.com/private_files/lf30_tmol6efn.json" background="transparent" speed="2"  loop="" autoplay=""></lottie-player>
+							</div>
+
+						</div>
+
+						<del><h2 id="productPrice" th:text="${product.variant != null && product.variant.size() > 0} ? ('$' + ${product.variant[0].price}) : ('$' + ${product.price})"></h2></del>
+
 						<ul class="list">
 							<li><a class="active" href="#"><span>Category</span> : <span th:text="${product.category.categoryName}"></span></a></li>
 							<li>
@@ -295,16 +312,6 @@
 									</div>
 								</div>
 								<div class="col-6">
-<!--									<div class="rating_list">-->
-<!--										<h3>Based on <span th:text="${totalReviews}" id="total-reviews-count">0</span> Reviews</h3>-->
-<!--										<ul>-->
-<!--											<li>1 Star: <span th:text="${reviewCounts[0]}"></span></li>-->
-<!--											<li>2 Stars: <span th:text="${reviewCounts[1]}"></span></li>-->
-<!--											<li>3 Stars: <span th:text="${reviewCounts[2]}"></span></li>-->
-<!--											<li>4 Stars: <span th:text="${reviewCounts[3]}"></span></li>-->
-<!--											<li>5 Stars: <span th:text="${reviewCounts[4]}"></span></li>-->
-<!--										</ul>-->
-<!--									</div>-->
 								</div>
 							</div>
 							<div class="review_list" id="review-list">
