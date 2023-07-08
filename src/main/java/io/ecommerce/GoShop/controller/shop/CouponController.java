@@ -40,7 +40,10 @@ public class CouponController {
     @GetMapping
     public String getAllCoupons(Model model){
 
-        List<Coupon> couponList = couponService.findAll();
+        List<Coupon> couponList = couponService.findAll().stream().filter(coupon -> !coupon.isDeleted()).toList();
+
+
+
         model.addAttribute("couponList", couponList);
 
         return "coupon/coupon-management";
@@ -63,7 +66,7 @@ public class CouponController {
     public String saveCoupon(@ModelAttribute Coupon coupon,
                              BindingResult result, Model model) {
 
-        if (couponService.findByCode(coupon.getCode()).isPresent()) {
+        if (couponService.findByCode(coupon.getCode()).isPresent() && !couponService.findByCode(coupon.getCode()).get().isDeleted()) {
             result.rejectValue("code", "error.coupon", "Coupon code must be unique");
             model.addAttribute("categoryList", productService.findAll());
             model.addAttribute("productList", categoryService.findAll());
@@ -87,6 +90,9 @@ public class CouponController {
     @GetMapping("/edit/{id}")
     public String editCoupon(@PathVariable String id, Model model){
 
+        List<Product> productList = productService.findAll();
+        List<Category> categoryList = categoryService.findAll();
+
         UUID uuid = UUID.fromString(id);
         Coupon coupon = couponService.findById(uuid).orElse(null);
         model.addAttribute("coupon", coupon);
@@ -98,12 +104,27 @@ public class CouponController {
 
         UUID uuid = UUID.fromString(id);
         Coupon coupon = couponService.findById(uuid).orElse(null);
-        couponService.deleteCoupon(coupon);
+        coupon.setDeleted(true);
+        couponService.save(coupon);
         return "redirect:/coupon/";
     }
 
     @PostMapping("/update")
     public String updateCoupon(@ModelAttribute Coupon coupon){
+
+        Coupon existingCoupon = couponService.findById(coupon.getId()).orElse(null);
+
+
+        existingCoupon.setCouponStock(coupon.getCouponStock());
+        existingCoupon.setExpirationPeriod(coupon.getExpirationPeriod());
+        existingCoupon.setDiscount(coupon.getDiscount());
+        existingCoupon.setMaximumDiscountAmount(coupon.getMaximumDiscountAmount());
+
+        couponService.save(existingCoupon);
+
+        System.out.println(coupon);
+
+//        couponService.save(coupon);
 
         return "redirect:/coupon/";
     }
