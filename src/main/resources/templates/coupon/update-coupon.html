@@ -25,14 +25,12 @@
 
     <div id="productSection" th:if="${coupon.type == 'PRODUCT'}">
         <label for="product"><i class="fas fa-box-open"></i> Product:</label>
-        <input type="hidden" id="product" name="product" th:value="${coupon.product != null ? coupon.product.id : ''}">
-        <input type="text" class="form-control" readonly th:value="${coupon.product != null ? coupon.product.productName : ''}">
+        <input type="text" name="product" class="form-control" readonly th:value="${coupon.product.productName}">
     </div>
 
     <div id="categorySection" th:if="${coupon.type == 'CATEGORY'}">
         <label for="category"><i class="fas fa-folder-open"></i> Category:</label>
-        <input type="hidden" id="category" name="category" th:value="${coupon.category != null ? coupon.category.id : ''}">
-        <input type="text" class="form-control" readonly th:value="${coupon.category != null ? coupon.category.categoryName : ''}">
+        <input type="text" name="category" class="form-control" readonly th:value="${coupon.category.categoryName}">
     </div>
 
     <div class="mb-3">

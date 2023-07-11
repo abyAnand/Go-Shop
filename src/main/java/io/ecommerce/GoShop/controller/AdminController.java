@@ -21,7 +21,7 @@ import javax.validation.Valid;
 import java.util.*;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping(value={"/dashboard/users", "/admin" })
 @PreAuthorize("hasAuthority('ROLE_ADMIN')")
 public class AdminController {
 
@@ -35,7 +35,7 @@ public class AdminController {
     OrderService orderService;
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    @GetMapping("/users")
+    @GetMapping(value = {"/users", ""})
     public String userList(Model model,
                            @RequestParam(name = "field", required = false, defaultValue = "username") String field,
                            @RequestParam(name = "sort", required = false, defaultValue = "DESC") String sort,
@@ -70,11 +70,11 @@ public class AdminController {
 
         model.addAttribute("empty", userList.getTotalElements() == 0);
 
-        return "/admin/user-management";
+        return "/app-admin/user/user-management";
     }
 
 @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-@GetMapping("/users/create")
+@GetMapping("/create")
 public String createUser(Model model){
 
     List<Role> roles = roleService.getRoles();
@@ -85,7 +85,7 @@ public String createUser(Model model){
         return "/admin/create-user";
 }
 
-    @GetMapping("/users/update/{id}")
+    @GetMapping( value = {"/users/update/{id}", "{id}"})
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String updateUser(@PathVariable UUID id, Model model){
 

@@ -5,6 +5,10 @@ import io.ecommerce.GoShop.model.Variant;
 import io.ecommerce.GoShop.service.product.ProductService;
 import io.ecommerce.GoShop.service.variant.VariantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,7 +20,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Controller
-@RequestMapping("/variants")
+@RequestMapping(value={"variants", "variant"})
 public class VariantController {
 
     @Autowired
@@ -24,6 +28,44 @@ public class VariantController {
 
     @Autowired
     VariantService variantService;
+
+
+    @GetMapping
+    public String listProducts(Model model,
+                               @RequestParam(name = "field", required = false, defaultValue = "productName") String field,
+                               @RequestParam(name = "sort", required = false, defaultValue = "DESC") String sort,
+                               @RequestParam(name ="page",required = false, defaultValue = "0") int page,
+                               @RequestParam(name ="size",required = false, defaultValue = "10") int size,
+                               @RequestParam(name ="keyword",required = false) String keyword,
+                               @RequestParam(name ="filter",required = false, defaultValue = "") String filter){
+
+        Pageable pageable = PageRequest.of(page,size, Sort.by(Sort.Direction.fromString(sort),field));
+
+        Page<Product> products = Page.empty();
+
+        if(keyword == null || keyword.equals("")){
+            products = productService.findAll(pageable);
+        }else{
+            products = productService.findByName(pageable, keyword);
+        }
+        // Replace this with the logic to fetch the products
+        model.addAttribute("products", products);
+
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", products.getTotalPages());
+        model.addAttribute("field", field);
+        model.addAttribute("sort", sort);
+        model.addAttribute("pageSize", size);
+        int startPage = Math.max(0, page - 1);
+        int endPage = Math.min(page + 1, products.getTotalPages() - 1);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+
+        model.addAttribute("empty", products.getTotalElements() == 0);
+
+        return "app-admin/variant/variant-management-product";
+    }
 
 
     @GetMapping("/{productId}")
@@ -39,14 +81,14 @@ public class VariantController {
         model.addAttribute("variants", variantList);
 
 
-        return "/variant/variant-management";
+        return "app-admin/variant/variant-management";
     }
 
 
     @GetMapping("/create/{productId}")
-    public String createVariant(@PathVariable("productId") String productId, Model model){
+    public String createVariant(@PathVariable("productId") UUID productId, Model model){
 
-        Optional<Product> product = productService.findById(UUID.fromString(productId));
+        Optional<Product> product = productService.findById(productId);
         String productName = product.get().getProductName();
 
         model.addAttribute("productName", productName);
@@ -54,7 +96,7 @@ public class VariantController {
         model.addAttribute("variant", new Variant());
 
 
-        return "variant/create-variant";
+        return "app-admin/variant/create-variant";
     }
 
     @PostMapping("/save")
@@ -109,7 +151,7 @@ public class VariantController {
         model.addAttribute("variant", variant.get());
         model.addAttribute("variantId", varId);
         model.addAttribute("productId", productId);
-        return "variant/update-variant";
+        return "app-admin/variant/edit-variant";
     }
 
     @PostMapping("/update")

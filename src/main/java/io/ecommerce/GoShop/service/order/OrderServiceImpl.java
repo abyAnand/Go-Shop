@@ -2,9 +2,13 @@ package io.ecommerce.GoShop.service.order;
 
 
 import io.ecommerce.GoShop.model.Order;
+import io.ecommerce.GoShop.model.Payment;
+import io.ecommerce.GoShop.model.Status;
 import io.ecommerce.GoShop.model.User;
 import io.ecommerce.GoShop.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -63,4 +67,25 @@ public class OrderServiceImpl implements OrderService{
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
+
+    @Override
+    public Page<Order> findByPayment(Payment payment, Pageable pageable) {
+        return orderRepository.findByPayment(payment, pageable);
+    }
+
+    @Override
+    public Page<Order> findByStatus(Status status, Pageable pageable) {
+        return orderRepository.getAllOrders(status, pageable);
+    }
+
+    @Override
+    public Page<Order> findAllOrders(Pageable pageable) {
+        return orderRepository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Order> findByIdLike(String keyword, Pageable pageable) {
+        return orderRepository.findAll(pageable);
+    }
+
 }

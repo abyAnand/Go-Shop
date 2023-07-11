@@ -5,7 +5,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 
 
@@ -42,4 +44,8 @@ public class Coupon extends BaseEntity{
     private User user;
 
     private boolean isDeleted;
+
+    public boolean isExpired() {
+        return (couponStock == 0 || expirationPeriod != null && expirationPeriod.before(new Date()));
+    }
 }

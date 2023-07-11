@@ -36,8 +36,8 @@ public class BannerController {
     public String getAllBanner(Model model){
 
 
-        model.addAttribute("bannerList", bannerService.findAll());
-        return "banner/banner-management";
+        model.addAttribute("banners", bannerService.findAll());
+        return "app-admin/banner/banner-management";
     }
 
     @GetMapping("/create")
@@ -45,7 +45,7 @@ public class BannerController {
 
         model.addAttribute("productList", productService.findAll());
         model.addAttribute("banner", new Banner());
-        return "banner/create-banner";
+        return "app-admin/banner/create-banner";
     }
 
     @PostMapping("/save")
@@ -53,7 +53,7 @@ public class BannerController {
                              BindingResult result,
                              @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
         if (result.hasErrors()) {
-            return "banner/create-banner";
+            return "app-admin/banner/create-banner";
         }
 
         String fileName = handleFileUpload(imageFile);
@@ -71,7 +71,7 @@ public class BannerController {
         Optional<Banner> banner = bannerService.findById(id);
         model.addAttribute("banner", banner.get());
 
-        return "banner/update-banner";
+        return "app-admin/banner/edit-banner";
     }
 
     @PostMapping("/update")
@@ -79,7 +79,7 @@ public class BannerController {
                                BindingResult result,
                                @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
         if (result.hasErrors()) {
-            return "banner/update-banner";
+            return "app-admin/banner/edit-banner";
         }
 
         if (imageFile != null && !imageFile.isEmpty()) {

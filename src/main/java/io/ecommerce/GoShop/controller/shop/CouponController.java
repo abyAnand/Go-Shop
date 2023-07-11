@@ -5,10 +5,15 @@ import io.ecommerce.GoShop.model.Category;
 import io.ecommerce.GoShop.model.Coupon;
 import io.ecommerce.GoShop.model.CouponType;
 import io.ecommerce.GoShop.model.Product;
+import io.ecommerce.GoShop.repository.CouponRepository;
 import io.ecommerce.GoShop.service.category.CategoryService;
 import io.ecommerce.GoShop.service.coupon.CouponService;
 import io.ecommerce.GoShop.service.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,19 +40,50 @@ public class CouponController {
 
     @Autowired
     CouponService couponService;
+    @Autowired
+    private CouponRepository couponRepository;
 
 
     @GetMapping
-    public String getAllCoupons(Model model){
+    public String getAllCoupons(Model model,
+                                @RequestParam(name = "field", required = false, defaultValue = "type") String field,
+                                @RequestParam(name = "sort", required = false, defaultValue = "DESC") String sort,
+                                @RequestParam(name ="page",required = false, defaultValue = "0") int page,
+                                @RequestParam(name ="size",required = false, defaultValue = "10") int size,
+                                @RequestParam(name ="keyword",required = false) String keyword,
+                                @RequestParam(name ="filter",required = false, defaultValue = "") String filter) {
 
-        List<Coupon> couponList = couponService.findAll().stream().filter(coupon -> !coupon.isDeleted()).toList();
+        Pageable pageable = PageRequest.of(page,size, Sort.by(Sort.Direction.fromString(sort),field));
+        Page<Coupon> coupons = Page.empty();
+        if(keyword == null || keyword.equals("")){
+            coupons = couponService.findAllPaged(pageable);
+        }else{
+            coupons = couponService.findByCodeLike(pageable, keyword);
+        }
+
+            model.addAttribute("filter", filter);
+            model.addAttribute("keyword", keyword);
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", coupons.getTotalPages());
+            model.addAttribute("sort", sort);
+            model.addAttribute("pageSize", size);
+            model.addAttribute("field", field);
+            int startPage = Math.max(0, page - 1);
+            int endPage = Math.min(page + 1, coupons.getTotalPages() - 1);
+            model.addAttribute("startPage", startPage);
+            model.addAttribute("endPage", endPage);
+            model.addAttribute("empty", coupons.getTotalElements() == 0);
 
 
+            model.addAttribute("coupons", coupons);
 
-        model.addAttribute("couponList", couponList);
+            coupons.stream()
+                    .map(Coupon::isExpired)
+                    .forEach(System.out::println);
 
-        return "coupon/coupon-management";
-    }
+            return "app-admin/coupon/coupon-management";
+        }
+
 
     @GetMapping("/create")
     public String createCoupon(Model model){
@@ -58,7 +94,7 @@ public class CouponController {
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("productList", productList);
         model.addAttribute("coupon", new Coupon());
-        return "coupon/create-coupon";
+        return "app-admin/coupon/create-coupon";
     }
 
 
@@ -96,7 +132,7 @@ public class CouponController {
         UUID uuid = UUID.fromString(id);
         Coupon coupon = couponService.findById(uuid).orElse(null);
         model.addAttribute("coupon", coupon);
-        return "coupon/update-coupon";
+        return "app-admin/coupon/edit-coupon";
     }
 
     @GetMapping("/delete/{id}")
@@ -111,6 +147,8 @@ public class CouponController {
 
     @PostMapping("/update")
     public String updateCoupon(@ModelAttribute Coupon coupon){
+
+        //TODO: NEW TEMPLATE CHECK THE UPDATE SPECIFICALLY THE DATE
 
         Coupon existingCoupon = couponService.findById(coupon.getId()).orElse(null);
 

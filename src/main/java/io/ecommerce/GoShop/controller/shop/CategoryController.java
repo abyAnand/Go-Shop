@@ -63,7 +63,7 @@ public class CategoryController {
         model.addAttribute("empty", categoryList.getTotalElements() == 0);
         model.addAttribute("categories",categoryList);
 
-        return "/category/category-management";
+        return "app-admin/category/category-management";
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -71,7 +71,7 @@ public class CategoryController {
     public String addCategory(Model model){
 
         model.addAttribute("category",new Category());
-        return "/category/add-category";
+        return "app-admin/category/create-category";
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -80,7 +80,7 @@ public class CategoryController {
         Optional<Category> category = categoryService.getById(id);
         if (category.isPresent()) {
             model.addAttribute("category", category.get());
-            return "/category/update-category";
+            return "app-admin/category/edit-category";
         }
         return "redirect:/category";
     }
@@ -97,7 +97,7 @@ public class CategoryController {
 
         if (existingCategory != null && !existingCategory.getId().equals(category.getId())) {
             result.rejectValue("categoryName", "error.categoryName", "Category name already exists");
-            return "/category/update-category";
+            return "app-admin/category/update-category";
         }
 
         categoryService.save(category);
@@ -118,7 +118,7 @@ public class CategoryController {
             return "redirect:/category";
         }
 
-        return "null";
+        return "redirect:/category";
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -133,7 +133,7 @@ public class CategoryController {
 
          if(theCategory!= null){
              result.rejectValue("categoryName", "error.categoryName", "Category name already exists");
-             return "category/add-category";
+             return "app-admin/category/add-category";
          }
 
          categoryService.save(category);

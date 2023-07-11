@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+
+
+<!-- beautify ignore:start -->
+
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  lang="en"
+  class="light-style layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="/assets/"
+  data-template="vertical-menu-template-free"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+
+    <title>Order Details</title>
+
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/app/assets/img/favicon/favicon.ico" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="/app/assets/vendor/fonts/boxicons.css" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="/app/assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="/app/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="/app/assets/css/demo.css" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="/app/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+
+    <link rel="stylesheet" href="/app/assets/vendor/libs/apex-charts/apex-charts.css" />
+
+    <!-- Page CSS -->
+
+    <!-- Helpers -->
+    <script src="/app/assets/vendor/js/helpers.js"></script>
+
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="/app/assets/js/config.js"></script>
+  </head>
+
+  <body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+          <div class="app-brand demo">
+            <a href="/dashboard/admin" class="app-brand-link">
+              <span class="app-brand-logo demo">
+              <img src="/images/system/logo.png" alt="IMG-LOGO" width="100px">
+              </span>
+
+            </a>
+
+            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+              <i class="bx bx-chevron-left bx-sm align-middle"></i>
+            </a>
+          </div>
+
+          <div class="menu-inner-shadow"></div>
+
+          <ul class="menu-inner py-1">
+            <!-- Dashboard -->
+            <li class="menu-item ">
+              <a href="/dashboard/admin" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <div data-i18n="Analytics">Dashboard</div>
+              </a>
+            </li>
+
+            <!-- users  -->
+            <li class="menu-item">
+              <a href="/dashboard/users" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-user"></i>
+                <div data-i18n="Analytics">Users</div>
+              </a>
+            </li>
+
+
+             <!-- Categories  -->
+             <li class="menu-item">
+              <a href="/category/" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-category"></i>
+                <div data-i18n="Analytics">Categories</div>
+              </a>
+            </li>
+
+             <!-- Products  -->
+             <li class="menu-item">
+              <a href="/product/" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-chip"></i>
+                <div data-i18n="Analytics">Products</div>
+              </a>
+            </li>
+
+             <!-- Variants  -->
+             <li class="menu-item">
+              <a href="/variant/" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-carousel"></i>
+                <div data-i18n="Analytics">Variants</div>
+              </a>
+            </li>
+
+             <!-- Orders  -->
+             <li class="menu-item active">
+              <a href="/order/" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-package"></i>
+                <div data-i18n="Analytics">Orders</div>
+              </a>
+            </li>
+             <!-- Banners  -->
+             <li class="menu-item">
+              <a href="/banner/" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-photo-album"></i>
+                <div data-i18n="Analytics">Banners</div>
+              </a>
+            </li>
+             <!-- Coupons  -->
+             <li class="menu-item">
+              <a href="/coupon/" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-star"></i>
+                <div data-i18n="Analytics">Coupons</div>
+              </a>
+            </li>
+
+
+          </ul>
+        </aside>
+        <!-- / Menu -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+
+
+
+
+
+
+          <nav
+            class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+            id="layout-navbar"
+          >
+            <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+              <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                <i class="bx bx-menu bx-sm"></i>
+              </a>
+            </div>
+
+            <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+              <!-- Search -->
+              <div class="navbar-nav align-items-center">
+                <div class="nav-item d-flex align-items-center">
+                  <i class="bx bx-search fs-4 lh-0"></i>
+                  <input
+                    type="text"
+                    class="form-control border-0 shadow-none"
+                    placeholder="Search..."
+                    aria-label="Search..."
+                  />
+                  <button class="btn-sm btn-info" >Search</button>
+                </div>
+              </div>
+              <!-- /Search -->
+
+              <ul class="navbar-nav flex-row align-items-center ms-auto">
+                <!-- Place this tag where you want the button to render. -->
+                <li class="nav-item lh-1 me-3">
+                   
+                  
+                </li>
+
+                <!-- User -->
+                <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                  <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                    <div class="avatar avatar-online">
+                      <img src="/app/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                    </div>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar avatar-online">
+                              <img src="/app/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <span class="fw-semibold d-block">John Doe</span>
+                            <small class="text-muted">Admin</small>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li>
+                      <div class="dropdown-divider"></div>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <i class="bx bx-user me-2"></i>
+                        <span class="align-middle">My Profile</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <i class="bx bx-cog me-2"></i>
+                        <span class="align-middle">Settings</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <span class="d-flex align-items-center align-middle">
+                          <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
+                          <span class="flex-grow-1 align-middle">Billing</span>
+                          <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <div class="dropdown-divider"></div>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="/logout">
+                        <i class="bx bx-power-off me-2"></i>
+                        <span class="align-middle">Log Out</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <!--/ User -->
+              </ul>
+            </div>
+          </nav>
+
+          <!-- / Navbar -->
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+
+            <div class="container-xxl flex-grow-1 container-p-y">
+              <div class="row">
+                
+                 <!-- DETAIL VIEW -->
+
+
+                  <div class="card">
+
+                      <legend>Order Details</legend>
+
+                      <div class="container mt-1" id="mainContainer">
+
+                          <div class="d-flex justify-content-end">
+                              <a data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<span>Regenerate and overwrite existing invoice</span>"  type="button" th:href="@{/order/generateInvoice?id={orderId}(orderId = ${order.id})}" class="btn btn-info m-1">Regenerate Invoice</a>
+<!--                              calling rest from a th:value-->
+                              <button type="button" th:data-uuid="${order.id}" onclick="viewInvoice(this.getAttribute('data-uuid'))" class="btn btn-success m-1"  data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<span>View existing Invoice. Generates new invoice if not found.</span>">View Invoice</button>
+
+                              <a type="button" href="/order/" class="btn btn-primary m-1">Order List</a>
+                              <button onclick="editOrder()" id="editBtn" type="button" class="btn btn-warning m-1">Edit</button>
+                              <button  data-bs-toggle="modal" data-bs-target="#exampleModal" hidden id="deleteBtn" type="button" class="btn btn-danger m-1">Delete</button>
+
+
+
+                          </div>
+
+                          <form  th:object="${order}"  method="post">
+                              <fieldset disabled id="orderFieldset">
+
+
+
+                                  <div class="mb-3"  id="idIn">
+                                      <label  class="form-label">ID</label>
+
+                                      <input th:value="${order.id}" name="id" type="text" class="form-control" placeHolder="Id">
+
+                                  </div>
+
+
+                                  <div class="mb-3">
+                                      <label  class="form-label">Order Date</label>
+                                      <input th:value="${order.createdDate}" type="text" id="date" class="form-control" placeHolder="Date" readonly="readonly">
+
+                                  </div>
+
+                                  <div class="mb-3">
+
+
+
+
+                                      <div class="col-6">
+                                          <div class="card">
+                                              <div class="card-body">
+                                                  <h5 class="card-title">User Information</h5>
+                                                  <p class="card-text">
+                                                      <a th:href="@{/dashboard/users/{id}(id=${order.user.id})}" class="my-2 badge bg-primary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="right" data-bs-html="true" title="" data-bs-original-title="<span>Open User/Wallet Management</span>" >View User Details</a><br>
+                                                      User ID: <span th:text="${order.user.id}"></span><br>
+                                                      Name: <span th:text="${order.user.firstName +' '+ order.user.lastName}"></span><br>
+                                                      username: <span th:text="${order.user.username}"></span><br>
+                                                      Email: <span th:text="${order.user.email}"></span><br>
+                                                      Phone: <span th:text="${order.user.phoneNumber}"></span><br>
+                                                  <div th:if="${order.user.createdDate != null}">
+                                                      User Since: <span th:text="${order.user.createdDate}"></span><br>
+                                                  </div>
+                                                  Wallet Balance: <span th:text="${order.user.wallet.balance}"></span><br>
+                                                  </p>
+                                              </div>
+                                          </div>
+
+                                      </div>
+
+                                      <div class="col-6 mt-3">
+                                          <div class="card">
+                                              <div class="card-body">
+                                                  <h5 class="card-title">User Address</h5>
+                                                  <p class="card-text">
+                                                      Flat: <span th:text="${order.address.flat}"></span><br>
+                                                      Area: <span th:text="${order.address.area}"></span><br>
+                                                      Town: <span th:text="${order.address.town}"></span><br>
+                                                      City: <span th:text="${order.address.city}"></span><br>
+                                                      State: <span th:text="${order.address.state}"></span><br>
+                                                      PIN: <span th:text="${order.address.pin}"></span><br>
+                                                      Landmark: <span th:text="${order.address.landmark}"></span>
+                                                  </p>
+                                              </div>
+                                          </div>
+
+                                      </div>
+
+
+                                  </div>
+
+
+                                  <div class="form-group">
+                                      <label for="status">Status:</label>
+                                      <select class="form-control" id="status">
+                                          <option th:each="status : ${statusList}"
+                                                  th:value="${status}"
+                                                  th:selected="${status == order.status}"
+                                                  th:text="${status}"></option>
+
+                                      </select>
+                                  </div>
+
+
+                                  <div th:if="${order.coupon != null}" class="mb-3">
+                                      <label  class="form-label">Coupon Applied</label>
+                                      <input th:value="${order.coupon.code}"  type="text" id="coupon" class="form-control" placeHolder="" readonly="readonly">
+
+                                  </div>
+
+                                  <div class="mb-3">
+                                      <label  class="form-label">Total</label>
+                                      <input th:value="${order.total}"  type="text" id="total" class="form-control" placeHolder="" readonly="readonly">
+
+                                  </div>
+                                  <!-- -->
+
+                                  <div class="container mt-5">
+                                      <div class="table-responsive">
+                                          <legend class="">Order Items</legend>
+                                          <table class="table table-bordered table-hover mb-5">
+                                              <thead class="table-primary">
+                                              <tr>
+                                                  <th>#</th>
+                                                  <th>Name</th>
+                                                  <th>Variant</th>
+                                                  <th>Price</th>
+                                                  <th>Quantity</th>
+
+                                              </tr>
+<!--                                              </thead>-->
+                                              <tbody>
+                                              <tr th:each="item, rowIndex : ${order.orderItems}">
+                                                  <td th:text="${rowIndex.count}"></td>
+                                                  <td th:text="${item.variant.product.productName}"></td>
+                                                  <td>
+                                                      <a th:text="${item.variant.variantName}"
+                                                         th:href="@{/variant/{id}(id=${item.variant.id})}"
+                                                         data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="right" data-bs-html="true" title="" data-bs-original-title="<span>View Variant Details</span>"
+                                                      >
+                                                      </a>
+                                                  </td>
+                                                  <td th:text="${item.price}"></td>
+
+                                                  <td th:text="${item.quantity}"></td>
+                                              </tr>
+                                              </tbody>
+                                          </table>
+                                      </div>
+
+                                  </div>
+
+
+                                  <div class="mb-3" id="passSection" hidden>
+
+                                  </div>
+
+                                      <div class="mb-3"  id="saveBtn" hidden>
+                                          <input type="hidden" id="orderId" name="orderId" th:value="${order.id}" />
+
+                                          <button class="btn btn-primary" onclick="updateStatus()">Update Status</button>
+                                      <button type="button" class="btn btn-warning mt-1 editable-field" id="cancel-btn" onclick="window.location.reload()" >Cancel</button>
+
+
+                                  </div>
+                              </fieldset>
+                          </form>
+
+
+                      </div>
+
+
+
+
+
+                      <!-- Modal -->
+
+
+
+
+
+
+                  </div>
+
+
+                  </div>
+                </div>
+               
+                
+                  
+               </div>
+                
+                
+         
+            </div>
+            <!-- / Content -->
+
+
+
+
+
+
+
+            <!-- Footer -->
+            <footer class="content-footer footer bg-footer-theme">
+             
+            </footer>
+            <!-- / Footer -->
+
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+
+
+
+    <!-- Core JS -->
+    <!-- build:js assets/vendor/js/core.js -->
+    <script src="/app/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="/app/assets/vendor/libs/popper/popper.js"></script>
+    <script src="/app/assets/vendor/js/bootstrap.js"></script>
+    <script src="/app/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+    <script src="/app/assets/vendor/js/menu.js"></script>
+    <!-- endbuild -->
+
+    <!-- Vendors JS -->
+    <script src="/app/assets/vendor/libs/apex-charts/apexcharts.js"></script>
+
+    <!-- Main JS -->
+    <script src="/app/assets/js/main.js"></script>
+
+    <!-- Page JS -->
+    <script src="/app/assets/js/dashboards-analytics.js"></script>
+
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+    <script>
+
+            function updateStatus() {
+  var selectedStatus = document.getElementById("status").value;
+    const orderId = document.getElementById('orderId').value;
+
+  var order = {
+    orderId: orderId,
+    status: selectedStatus
+  };
+
+  console.log(order)
+
+  // Send the order object to the backend
+  $.ajax({
+    url: "/order/updateStatus",
+    type: "POST",
+    data: JSON.stringify(order),
+    contentType: "application/json",
+    success: function(response) {
+      window.location.href = "/order/";
+      console.log(response);
+    },
+    error: function(error) {
+      // Handle any errors that occur during the AJAX request
+      console.error(error);
+    }
+  });
+}
+
+    function editOrder(){
+        const editBtn = document.getElementById("editBtn");
+        const deleteBtn = document.getElementById("deleteBtn");
+        const saveBtn = document.getElementById("saveBtn");
+        const orderFieldset = document.getElementById("orderFieldset");
+        const idIn = document.getElementById("idIn");
+        const passSection = document.getElementById("passSection");
+
+        passSection.hidden=false;
+        idIn.hidden=true;
+        orderFieldset.disabled=false;
+        editBtn.hidden=true;
+        deleteBtn.hidden=false;
+        saveBtn.hidden=false;
+
+    }
+
+    function saveOrder(){
+        const editBtn = document.getElementById("editBtn");
+        const deleteBtn = document.getElementById("deleteBtn");
+        const saveBtn = document.getElementById("saveBtn");
+        const orderFieldset = document.getElementById("orderFieldset");
+        const idIn = document.getElementById("idIn");
+        const passSection = document.getElementById("passSection");
+
+        passSection.hidden=true;
+        idIn.hidden=false;
+        orderFieldset.disabled=true;
+        editBtn.hidden=false;
+        deleteBtn.hidden=true;
+        saveBtn.hidden=true;
+
+    }
+    function deleteOrder(){
+        //show order deleted, link to dashboard
+        const modal = bootstrap.Modal.getInstance(exampleModal)
+        const delContainer = document.getElementById("delContainer");
+        const mainContainer = document.getElementById("mainContainer");
+        modal.hide();
+        delContainer.hidden=false;
+        mainContainer.hidden=true;
+
+        //call api to delete order
+    }
+
+    //view invoice
+function viewInvoice(orderId) {
+  fetch('/order/viewInvoice', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: orderId
+  })
+    .then(response => {
+      if (response.ok) {
+        return response.blob();
+      } else {
+        throw new Error('Error sending order ID');
+      }
+    })
+    .then(blob => {
+      // Create a temporary URL for the blob
+      const url = URL.createObjectURL(blob);
+
+      // Create a link element and set its attributes
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${orderId}.pdf`;
+
+      // Simulate a click event on the link to start the download
+      link.click();
+
+      // Clean up the temporary URL
+      URL.revokeObjectURL(url);
+    })
+    .catch(error => {
+      console.error('An error occurred while sending the order ID:', error);
+    });
+}
+/*
+1. The `viewInvoice` function takes an `orderId` parameter.
+2. It uses the `fetch` function to send a POST request to the `/order/viewInvoice` endpoint.
+3. The request includes the `orderId` as the request body.
+4. The `Content-Type` header is set to `application/json` to indicate that the request body is in JSON format.
+5. The response from the server is received in the first `.then()` block.
+6. It checks if the response was successful (`response.ok`). If it is, it proceeds to the next `.then()` block.
+7. In the next `.then()` block, the response body is converted to a `Blob` object using the `response.blob()` method. A `Blob` represents immutable raw data.
+8. A temporary URL for the `Blob` is created using `URL.createObjectURL(blob)`. This URL represents the content of the `Blob`.
+9. A link element (`<a>`) is created using `document.createElement('a')`.
+10. The `href` attribute of the link is set to the temporary URL, and the `download` attribute is set to `${orderId}.pdf`. This sets the filename for the downloaded file.
+11. A simulated click event is triggered on the link using `link.click()`. This initiates the download of the file.
+12. After the download completes, the temporary URL is cleaned up using `URL.revokeObjectURL(url)`. This frees up memory resources associated with the temporary URL.
+13. Any errors that occur during the process are caught in the `.catch()` block and logged to the console.
+
+In summary, the code sends a POST request to the server, receives a PDF file in response, converts it to a `Blob` object, and initiates the download of the file in the browser by creating a temporary URL and simulating a click on a dynamically created link element.
+
+
+
+*/
+
+
+
+</script>
+
+
+
+
+  </body>
+</html>

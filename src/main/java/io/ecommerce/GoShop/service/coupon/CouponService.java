@@ -1,6 +1,8 @@
 package io.ecommerce.GoShop.service.coupon;
 
 import io.ecommerce.GoShop.model.Coupon;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,4 +21,9 @@ public interface CouponService {
     Optional<Coupon> findById(UUID uuid);
 
     Optional<Coupon> findByCode(String code);
+
+
+    Page<Coupon> findAllPaged(Pageable pageable);
+
+    Page<Coupon> findByCodeLike(Pageable pageable, String keyword);
 }
