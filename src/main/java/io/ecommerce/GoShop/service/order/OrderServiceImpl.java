@@ -11,6 +11,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -86,6 +89,19 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public Page<Order> findByIdLike(String keyword, Pageable pageable) {
         return orderRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Order> findOrdersByDate(Date startDate, Date endDate) {
+        Timestamp startTime = new Timestamp(startDate.getTime());
+        Timestamp endTime = new Timestamp(endDate.getTime());
+        return orderRepository.findByCreatedDateBetween(startTime, endTime);
+
+    }
+
+    @Override
+    public List<Order> findAll() {
+        return orderRepository.findAll();
     }
 
 }

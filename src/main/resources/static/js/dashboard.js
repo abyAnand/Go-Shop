@@ -3,6 +3,7 @@ var today = new Date();
 var todayMinusSevenDays = new Date(today);
 todayMinusSevenDays.setDate(today.getDate() - 7);
 
+
 // Format the date as YYYY-MM-DD (compatible with the date input field)
 var formattedDate = today.toISOString().split('T')[0];
 var formattedDateTodayMinusSevenDays = todayMinusSevenDays.toISOString().split('T')[0];
@@ -117,47 +118,50 @@ function getPdf(data){
 }
 
 function renderProductChart() {
-  var labels = Object.keys(categoryCount).map(function(key) {
-    // Extracting the name from the key string
-    return key.match(/name=([^,]+)/)[1];
-  });
+console.log('in render product chart');
+console.log(categoryCount)
+  if (categoryCount) {
+    var labels = Object.keys(categoryCount).map(function(key) {
+      return key.match(/name=([^,]+)/)[1];
+    });
 
-  var data = Object.values(categoryCount);
+    var data = Object.values(categoryCount);
 
-  var ctx = document.getElementById('myChart').getContext('2d');
-  var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: labels,
-      datasets: [{
-        label: 'Category',
-        data: data,
-        backgroundColor: generateRandomColors(data.length),
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true
-        }
+    var ctx = document.getElementById('orderStatisticsChartCanvas').getContext('2d');
+    var myChart = new Chart(ctx, {
+      type: 'bar', // Change the chart type to 'bar'
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Category',
+          data: data,
+          backgroundColor: generateRandomColors(data.length),
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }]
       },
-      plugins: {
-        legend: {
-          display: false
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
         },
-        tooltips: {
-          callbacks: {
-            label: function(context) {
-              return context.dataset.label + ': ' + context.raw;
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltips: {
+            callbacks: {
+              label: function(context) {
+                return context.dataset.label + ': ' + context.raw;
+              }
             }
           }
         }
       }
-    }
-  });
+    });
+  }
 }
 
 // Helper function to generate random colors

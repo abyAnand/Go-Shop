@@ -7,6 +7,7 @@ import io.ecommerce.GoShop.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,4 +34,8 @@ public interface OrderService {
     Page<Order> findAllOrders(Pageable pageable);
 
     Page<Order> findByIdLike(String keyword, Pageable pageable);
+
+    List<Order> findOrdersByDate(Date startDate, Date endDate);
+
+    List<Order> findAll();
 }
