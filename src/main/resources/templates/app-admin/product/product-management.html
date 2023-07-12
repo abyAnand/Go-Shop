@@ -296,7 +296,7 @@
                            <tr>
                              <th style="width: 5%;">#</th>
 <!--                             <th style="width: 25%;">ID</th>-->
-                             <th style="width: 50%;"  onclick="sortTable('name')"><a href="#">Name</a></th>
+                             <th style="width: 50%;"  onclick="sortTable('productName')"><a href="#">Name</a></th>
                              <th style="width: 30%;"  onclick="sortTable('category')"><a href="#">Category</a></th>
                              <th style="width: 10%;"  onclick="sortTable('enabled')"><a href="#">Enabled</a></th>
                              <th>Actions</th>
@@ -312,7 +312,7 @@
                              <td>
 
                                <div class="form-check form-switch mb-2">
-                                 <a th:href="@{/product/toggleStatus(id=${product.id})}">
+                                 <a th:href="@{/product/toggleStatus/{id}(id=${product.id})}">
                                    <input  class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" th:checked="${product.isDeleted == false}">
                                  </a>
                                </div>
@@ -345,15 +345,15 @@
                            <div th:unless="${empty}" class="pagination d-flex justify-content-end mt-3">
                              <ul class="pagination">
                                <li class="page-item prev" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
-                                 <a class="page-link" th:href="@{/product/all(page=0, sort=${sort}, field=${field}, filter=${filter}, keyword=${keyword})}"><i class="tf-icon bx bx-chevrons-left"></i></a>
+                                 <a class="page-link" th:href="@{/product(page=0, sort=${sort}, field=${field}, filter=${filter}, keyword=${keyword})}"><i class="tf-icon bx bx-chevrons-left"></i></a>
                                </li>
 
                                <li class="page-item" th:each="pageNum : ${#numbers.sequence(startPage, endPage)}" th:classappend="${pageNum == currentPage ? 'active' : ''}">
-                                 <a class="page-link" th:href="@{/product/all(page=${pageNum}, sort=${sort}, field=${field}, filter=${filter}, keyword=${keyword})}" th:text="${pageNum + 1}"></a>
+                                 <a class="page-link" th:href="@{/product(page=${pageNum}, sort=${sort}, field=${field}, filter=${filter}, keyword=${keyword})}" th:text="${pageNum + 1}"></a>
                                </li>
 
                                <li class="page-item next" th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}">
-                                 <a class="page-link" th:href="@{/product/all(page=${totalPages - 1}, sort=${sort}, field=${field}, filter=${filter}, keyword=${keyword})}"><i class="tf-icon bx bx-chevrons-right"></i></a>
+                                 <a class="page-link" th:href="@{/product(page=${totalPages - 1}, sort=${sort}, field=${field}, filter=${filter}, keyword=${keyword})}"><i class="tf-icon bx bx-chevrons-right"></i></a>
                                </li>
                              </ul>
                            </div>
@@ -503,12 +503,12 @@ $(document).on("click", ".delete-link", function(e) {
     });
 });
 
-function filterProduct(uuid){
-  window.location.href="/product/all?filter="+uuid;
+function filterProduct(id){
+  window.location.href="/product/?filter="+id;
 }
 
 function resetList(){
-  window.location.href="/product/all";
+  window.location.href="/product/";
 }
 
 //Sorting
@@ -526,7 +526,7 @@ function resetList(){
 
     var currentPage = /*[[${currentPage}]]*/ 0;
 
-    window.location.href = "/product/all?page=" + currentPage +  "&field=" + field + "&sort=" + sort + "&keyword=" + searchBox + "&filter=" + filterValue;
+    window.location.href = "/product/?page=" + currentPage +  "&field=" + field + "&sort=" + sort + "&keyword=" + searchBox + "&filter=" + filterValue;
 
   }
   /*]]>*/
@@ -536,9 +536,9 @@ function resetList(){
   function searchProduct(){
     var searchBox = document.getElementById("searchBox").value;
    if(searchBox == ""){
-      window.location.href = "/product/all";
+      window.location.href = "/product/";
     }else{
-      window.location.href = "/product/all?keyword=" + searchBox;
+      window.location.href = "/product/?keyword=" + searchBox;
     }
 }
 </script>

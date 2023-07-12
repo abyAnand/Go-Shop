@@ -42,10 +42,10 @@ public class CategoryController {
 
         Page<Category> categoryList = Page.empty();
 
-        if(keyword == null || keyword.equals("")){
-            categoryList = categoryService.findAll(pageable);
-        }else{
-            categoryList = categoryService.findByCategoryName(pageable, keyword);
+        if (keyword == null || keyword.isEmpty()) {
+            categoryList = categoryService.findAll(PageRequest.of(page, size, Sort.Direction.fromString(sort), field));
+        } else {
+            categoryList = categoryService.findByCategoryName(PageRequest.of(page, size, Sort.Direction.fromString(sort), field),keyword);
         }
 
         //        model.addAttribute("filter", filter);
@@ -61,7 +61,7 @@ public class CategoryController {
         model.addAttribute("endPage", endPage);
 
         model.addAttribute("empty", categoryList.getTotalElements() == 0);
-        model.addAttribute("categories",categoryList);
+        model.addAttribute("categories",categoryList.stream().filter(c -> !c.isDeleted()).toList());
 
         return "app-admin/category/category-management";
     }
@@ -78,7 +78,7 @@ public class CategoryController {
     @GetMapping("/update/{id}")
     public String updateCategory(@PathVariable UUID id, RedirectAttributes attributes, Model model) {
         Optional<Category> category = categoryService.getById(id);
-        if (category.isPresent()) {
+        if (category.isPresent() && !category.get().isDeleted()) {
             model.addAttribute("category", category.get());
             return "app-admin/category/edit-category";
         }
@@ -95,7 +95,7 @@ public class CategoryController {
 
         Category existingCategory = categoryService.getByCategoryName(name);
 
-        if (existingCategory != null && !existingCategory.getId().equals(category.getId())) {
+        if (existingCategory != null && !existingCategory.getId().equals(category.getId()) && !existingCategory.isDeleted()) {
             result.rejectValue("categoryName", "error.categoryName", "Category name already exists");
             return "app-admin/category/update-category";
         }
@@ -131,7 +131,7 @@ public class CategoryController {
 
          Category theCategory = categoryService.getByCategoryName(name);
 
-         if(theCategory!= null){
+         if(theCategory!= null && !theCategory.isDeleted()){
              result.rejectValue("categoryName", "error.categoryName", "Category name already exists");
              return "app-admin/category/add-category";
          }

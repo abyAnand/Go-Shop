@@ -110,7 +110,7 @@ public class LoginController {
     @ResponseBody
     public String checkUsernameAvailability(@RequestParam("username") String username) {
         Optional<User> existingUser = userService.findByUsername(username);
-        return existingUser.isPresent() ? "taken" : "available";
+        return existingUser.isPresent() && !existingUser.get().isDeleted() ? "taken" : "available";
     }
 
     @PostMapping("/user/check-email")

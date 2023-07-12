@@ -50,14 +50,14 @@ public class StoreController {
 
         Page<Product> products = Page.empty();
 
-        if(keyword == null || keyword.equals("")){
-            products = productService.findAll(pageable);
-        }else{
-            products = productService.findByName(pageable, keyword);
+        if (keyword == null || keyword.isEmpty()) {
+            products = productService.findAll(PageRequest.of(page, size, Sort.Direction.fromString(sort), field));
+        } else {
+            products = productService.findByName(PageRequest.of(page, size, Sort.Direction.fromString(sort), field),keyword);
         }
 
         List<Category> categories = categoryService.findAll();
-        model.addAttribute("products", products);
+        model.addAttribute("products", products.stream().filter(p -> !p.isEnabled()).toList());
         model.addAttribute("categories", categories);
 
         model.addAttribute("keyword", keyword);
@@ -88,8 +88,13 @@ public class StoreController {
 
         Pageable pageable = PageRequest.of(page,size, Sort.by(Sort.Direction.fromString(sort),field));
 
+        Page<Product> products = Page.empty();
 
-        Page<Product> products = productService.getByNamePaged(keyword, pageable);
+        if (keyword == null || keyword.isEmpty()) {
+            products = productService.findAll(PageRequest.of(page, size, Sort.Direction.fromString(sort), field));
+        } else {
+            products = productService.findByName(PageRequest.of(page, size, Sort.Direction.fromString(sort), field),keyword);
+        }
 
 
         List<Category> categories = categoryService.findAll();

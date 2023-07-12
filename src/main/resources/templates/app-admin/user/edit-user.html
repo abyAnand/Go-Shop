@@ -24,7 +24,7 @@
     <meta name="description" content="" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/assets/img/favicon/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/app/assets/img/favicon/favicon.ico" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -35,26 +35,27 @@
     />
 
     <!-- Icons. Uncomment required icon fonts -->
-    <link rel="stylesheet" href="/assets/vendor/fonts/boxicons.css" />
+    <link rel="stylesheet" href="/app/assets/vendor/fonts/boxicons.css" />
 
     <!-- Core CSS -->
-    <link rel="stylesheet" href="/assets/vendor/css/core.css" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
-    <link rel="stylesheet" href="/assets/css/demo.css" />
+    <link rel="stylesheet" href="/app/assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="/app/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="/app/assets/css/demo.css" />
 
     <!-- Vendors CSS -->
-    <link rel="stylesheet" href="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="/app/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
-    <link rel="stylesheet" href="/assets/vendor/libs/apex-charts/apex-charts.css" />
+    <link rel="stylesheet" href="/app/assets/vendor/libs/apex-charts/apex-charts.css" />
 
     <!-- Page CSS -->
 
     <!-- Helpers -->
-    <script src="/assets/vendor/js/helpers.js"></script>
+    <script src="/app/assets/vendor/js/helpers.js"></script>
 
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-    <script src="/assets/js/config.js"></script>
+    <script src="/app/assets/js/config.js"></script>
+      <script type="text/javascript" th:src="@{/js/form-validation.js}"></script>
   </head>
 
   <body>
@@ -99,7 +100,7 @@
 
              <!-- Categories  -->
              <li class="menu-item">
-              <a href="/category/all" class="menu-link">
+              <a href="/category/" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-category"></i>
                 <div data-i18n="Analytics">Categories</div>
               </a>
@@ -107,7 +108,7 @@
 
              <!-- Products  -->
              <li class="menu-item">
-              <a href="/product/all" class="menu-link">
+              <a href="/product/" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-chip"></i>
                 <div data-i18n="Analytics">Products</div>
               </a>
@@ -115,7 +116,7 @@
 
              <!-- Variants  -->
              <li class="menu-item">
-              <a href="/variant/all" class="menu-link">
+              <a href="/variant/" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-carousel"></i>
                 <div data-i18n="Analytics">Variants</div>
               </a>
@@ -123,21 +124,21 @@
 
              <!-- Orders  -->
              <li class="menu-item">
-              <a href="/order/all" class="menu-link">
+              <a href="/order/" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-package"></i>
                 <div data-i18n="Analytics">Orders</div>
               </a>
             </li>
              <!-- Banners  -->
              <li class="menu-item">
-              <a href="/banner/all" class="menu-link">
+              <a href="/banner/" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-photo-album"></i>
                 <div data-i18n="Analytics">Banners</div>
               </a>
             </li>
              <!-- Coupons  -->
              <li class="menu-item">
-              <a href="/coupon/all" class="menu-link">
+              <a href="/coupon/" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-star"></i>
                 <div data-i18n="Analytics">Coupons</div>
               </a>
@@ -194,7 +195,7 @@
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
                   <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
-                      <img src="/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                      <img src="/app/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
                     </div>
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end">
@@ -203,7 +204,7 @@
                         <div class="d-flex">
                           <div class="flex-shrink-0 me-3">
                             <div class="avatar avatar-online">
-                              <img src="/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                              <img src="/app/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
                             </div>
                           </div>
                           <div class="flex-grow-1">
@@ -272,35 +273,25 @@
                         <h1>User Deleted Successfully</h1>
                         <h4>Click <a href="/admin">here</a> to go to dashboard.</h4>
                     </div>
-                    
-                    <div class="container mt-2" id="mainContainer">
 
-                        <p th:if="${deleted}" class="badge bg-danger">Deleted</p>
-                    
-                        <div class="d-flex justify-content-end">
-                            <!-- <a type="button" href="/admin" class="btn btn-primary m-1">Home</a> -->
-                            <button onclick="editUser()" id="editBtn" type="button" class="btn btn-warning m-1">Edit</button>
-                            <button  data-bs-toggle="modal" data-bs-target="#exampleModal" hidden id="deleteBtn" type="button" class="btn btn-danger m-1">Delete</button>
-                    
-                    
-                    
-                        </div>
-                    
-                        <form  th:action="@{/updateUser}" th:object="${userInfo}"  method="post">
-                            <fieldset disabled id="userFieldset">
-                                
-                    
-                    
-                                <div class="mb-3"  id="idIn">
-                                    <label  class="form-label">ID</label>
-                                   
-                                    <input th:value="${uuid}" id="uuid" name="uuid" type="text" class="form-control" placeHolder="Id">
-                    
-                                </div>
+                        <div class="container mt-2" id="mainContainer">
+                            <p th:if="${deleted}" class="badge bg-danger">Deleted</p>
+
+                            <div class="d-flex justify-content-end">
+                                <button onclick="editUser()" id="editBtn" type="button" class="btn btn-warning m-1">Edit</button>
+                                <button data-bs-toggle="modal" data-bs-target="#exampleModal" hidden id="deleteBtn" type="button" class="btn btn-danger m-1">Delete</button>
+                            </div>
+
+                            <form role="form" th:action="@{/admin/save}" method="post" th:object="${user}">
+                                <fieldset disabled id="userFieldset">
+                                    <div class="mb-3" id="idIn">
+                                        <label class="form-label">ID</label>
+                                        <input th:value="${id}" id="id" name="id" type="text" class="form-control" placeHolder="Id">
+                                    </div>
                     
                                 <div class="mb-3">
                                     <label  class="form-label">First Name</label>
-                                    <input th:value="${firstName}" name="firstName" type="text" id="firstName" class="form-control" placeHolder="First Name">
+                                    <input th:value="${user.firstName}" name="firstName" type="text" id="firstName" class="form-control" placeHolder="First Name">
                     
                                 </div>
                     
@@ -308,7 +299,7 @@
                     
                                 <div class="mb-3">
                                     <label  class="form-label">Last Name</label>
-                                    <input th:value="${lastName}" name="lastName" type="text" id="lastName" class="form-control" placeHolder="Last Name">
+                                    <input th:value="${user.lastName}" name="lastName" type="text" id="lastName" class="form-control" placeHolder="Last Name">
                     
                                 </div>
                     
@@ -316,17 +307,18 @@
                     
                                 <div class="mb-3">
                                     <label  class="form-label">Username</label>
-                                    <input th:value="${username}" name="username"  type="text" id="usernameIn" class="form-control" placeholder="Username">
+                                    <input th:value="${user.username}" name="username"  type="text" id="usernameIn" class="form-control" placeholder="Username">
+                                    <span class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
                                 </div>
                     
                                 <div class="mb-3">
                                     <label  class="form-label">Phone</label>
-                                    <input th:value="${phone}" name="phone"  type="text" id="phone" class="form-control" placeholder="Phone">
+                                    <input th:value="${user.phoneNumber}" name="phoneNumber"  type="text" id="phoneNumber" class="form-control" placeholder="Phone">
                                 </div>
                     
                                 <div class="mb-3">
                                     <label  class="form-label">Email</label>
-                                    <input th:value="${email}" name="email"  type="text" id="email" class="form-control" placeholder="Email">
+                                    <input th:value="${user.email}" name="email"  type="text" id="email" class="form-control" placeholder="Email">
                                 </div>
                     
                     
@@ -340,42 +332,48 @@
                     
                                 <div class="mb-3">
                                     <label class="form-label">Role</label>
-                                    <select name="role.roleName" class="form-select" required>
-                                        <option value="ROLE_USER" th:selected="${role.roleName == 'ROLE_USER'}">User</option>
-                                        <option value="ROLE_ADMIN" th:selected="${role.roleName == 'ROLE_ADMIN'}">Admin</option>
+                                    <select class="form-control" name="role.roleName" id="userRole" onchange="updateUserRole(this.value)">
+                                        <option th:each="option : ${roles}" th:value="${option.roleName}"
+                                                th:text="${option.roleName == 'ROLE_ADMIN' ? 'ADMIN' : (option.roleName == 'ROLE_USER' ? 'USER' : 'VENDOR')}"
+                                                th:selected="${option == user.role}"></option>
                                     </select>
                                 </div>
-                    
+
                                 <div class="mb-3">
                                     <label class="form-label">Account Status</label>
-                                    <select name="enabled" class="form-select" required>
-                                        <option value=true th:selected="${enabled == true}">Enabled</option>
-                                        <option value=false th:selected="${enabled == false}">Disabled</option>
+                                    <select class="form-control" name="enabled" id="enabled">
+                                        <option value="true" th:selected="${user.enabled == true}">Enabled</option>
+                                        <option value="false" th:selected="${user.enabled == false}">Disabled</option>
                                     </select>
                                 </div>
 
-                    
-                    
-                                <div class="mb-3" id="passSection" hidden>
-                                    <label  class="form-label">Password</label>
-                                    <input type="text" id="passwordIn" name="password" class="form-control" placeholder="New Password">
+
+
+                                    <div class="form-group col-md-6" id="passSection">
+                                        <label for="password">Password</label>
+                                        <input type="password" class="form-control" name="password" id="password" placeholder="Password" >
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="confirm_password">Confirm Password</label>
+                                        <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password" >
+                                    </div>
+
+
+
+
+                                <div class="form-group col-md-6">
+                                    <label for="walletAmount">Wallet Amount</label>
+                                    <input th:value="${user != null and user.wallet != null ? user.wallet.balance : ''}" type="text" class="form-control" name="wallet.balance" id="walletAmount" placeholder="Wallet Amount">
                                 </div>
 
 
 
-
-
-
-
-                                <div class="mb-3"  id="saveBtn" hidden>
-                                    <button   type="submit" class="btn btn-success m-1">Save</button>
-                                    <button type="button" class="btn btn-warning mt-1 editable-field" id="cancelBtn" onclick="window.location.reload()" >Cancel</button>
-                    
-                                    <!-- <button   type="button" onclick="saveUser()" class="btn btn-warning m-1">Cancel</button> -->
-                                    
-                                </div>
-                            </fieldset>
-                        </form>
+                                    <div class="mb-3" id="saveBtn" hidden>
+                                        <button type="submit" class="btn btn-success m-1">Save</button>
+                                        <button type="button" class="btn btn-warning mt-1 editable-field" id="cancelBtn" onclick="window.location.reload()">Cancel</button>
+                                    </div>
+                                </fieldset>
+                            </form>
 
 
 
@@ -394,11 +392,11 @@
                               <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                              <form  th:action="@{/deleteUser}" th:object="${userInfo}"  method="post">
+                              <form  th:action="@{/deleteUser}" th:object="${user}"  method="post">
                                     <div class="modal-body">
                                       <p>Are you sure that you want to delete the user?</p>
-                                      <p name="usernameModal" th:text="${username}"></p>
-                                        <input hidden th:value="${uuid}" name="uuid" type="text" class="form-control" placeHolder="Id">
+                                      <p name="usernameModal" th:text="${user.username}"></p>
+                                        <input hidden th:value="${user.id}" name="id" type="text" class="form-control" placeHolder="Id">
                     
                                     </div>
                                     <div class="modal-footer">
@@ -428,97 +426,95 @@
                   </div>
                 </div>
 
-              <div class="container-xxl flex-grow-1 pb-4">
-                  <div class="row">
-                      <div class="card pb">
-                          <h5 class="mt-2">User Wallet</h5>
-                          <div class="pb-3">
+<!--              <div class="container-xxl flex-grow-1 pb-4">-->
+<!--                  <div class="row">-->
+<!--                      <div class="card pb">-->
+<!--                          <h5 class="mt-2">User Wallet</h5>-->
+<!--                          <div class="pb-3">-->
 
-                              <div class="mb-3 col-2">
-                                  <label  class="form-label">Wallet Balance</label>
-                                  <input disabled th:value="${walletBalance}" type="text" id="walletBalance" class="form-control">
-                              </div>
-                              <div class="mb-3 col-2">
-                                  <label  class="form-label">Amount</label>
-                                  <input type="number" name="amount" class="form-control">
-                              </div>
-                              <button onclick="debitWallet()" id="debitBtn" type="button" class="btn btn-danger col-1">Debit</button>
-                              <button onclick="creditWallet()" id="creditBtn" type="button" class="btn btn-success col-1">Credit</button>
+<!--                              <div class="mb-3 col-2">-->
+<!--                                  <label  class="form-label">Wallet Balance</label>-->
+<!--                                  <input disabled th:value="${walletBalance}" type="text" id="walletBalance" class="form-control">-->
+<!--                              </div>-->
+<!--                              <div class="mb-3 col-2">-->
+<!--                                  <label  class="form-label">Amount</label>-->
+<!--                                  <input type="number" name="amount" class="form-control">-->
+<!--                              </div>-->
+<!--                              <button onclick="debitWallet()" id="debitBtn" type="button" class="btn btn-danger col-1">Debit</button>-->
+<!--                              <button onclick="creditWallet()" id="creditBtn" type="button" class="btn btn-success col-1">Credit</button>-->
 
-                          </div>
+<!--                          </div>-->
 
-                          <table class="table card-table" th:unless="${transactionsEmpty}">
-                              <thead>
-                              <tr>
-                                  <th>#</th>
-                                  <th>ID</th>
-                                  <th>Date</th>
-                                  <th>Amount</th>
-                                  <th>Type</th>
-                              </tr>
-                              </thead>
-                              <tbody class="table-border-bottom-0">
-                              <tr th:each="txn, rowIndex : ${transactions}">
-                                  <td th:text="${rowIndex.count}"> </td>
-                                  <td th:text="${txn.uuid}">txn id</td>
-                                  <td th:text="${#dates.format(txn.createdAt, 'dd-MM-yyyy HH:mm:ss')}">date</td>
-                                  <td th:text="${#numbers.formatDecimal(txn.amount, 0, 0)}">amount</td>
-                                  <td><span th:text="${txn.type}"
-                                            th:class="${#strings.equals(txn.type, 'CREDITED') ? 'badge bg-success me-1' :
-                                                #strings.equals(txn.type, 'DEBITED') ? 'badge badge bg-danger me-1' :
-                                                #strings.equals(txn.type, 'REDEEMED') ? 'badge badge bg-primary me-1' :
-                                                #strings.equals(txn.type, 'EXPIRED') ? 'badge badge bg-warning me-1' :
-                                                #strings.equals(txn.type, 'AWARDED') ? 'badge badge bg-primary me-1' :
-                                                'badge bg-label-default me-1'}">
-                                      type
-                                      </span>
-                                  </td>
-
-<!--                                  <td>-->
-<!--                                      <div class="dropdown">-->
-<!--                                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">-->
-<!--                                              <i class="bx bx-dots-vertical-rounded"></i>-->
-<!--                                          </button>-->
-<!--                                          <div class="dropdown-menu">-->
-<!--                                              <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-edit-alt me-1"></i> Edit</a>-->
-<!--                                              <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Delete</a>-->
-<!--                                          </div>-->
-<!--                                      </div>-->
+<!--                          <table class="table card-table" th:unless="${transactionsEmpty}">-->
+<!--                              <thead>-->
+<!--                              <tr>-->
+<!--                                  <th>#</th>-->
+<!--                                  <th>ID</th>-->
+<!--                                  <th>Date</th>-->
+<!--                                  <th>Amount</th>-->
+<!--                                  <th>Type</th>-->
+<!--                              </tr>-->
+<!--                              </thead>-->
+<!--                              <tbody class="table-border-bottom-0">-->
+<!--                              <tr th:each="txn, rowIndex : ${transactions}">-->
+<!--                                  <td th:text="${rowIndex.count}"> </td>-->
+<!--                                  <td th:text="${txn.uuid}">txn id</td>-->
+<!--                                  <td th:text="${#dates.format(txn.createdAt, 'dd-MM-yyyy HH:mm:ss')}">date</td>-->
+<!--                                  <td th:text="${#numbers.formatDecimal(txn.amount, 0, 0)}">amount</td>-->
+<!--                                  <td><span th:text="${txn.type}"-->
+<!--                                            th:class="${#strings.equals(txn.type, 'CREDITED') ? 'badge bg-success me-1' :-->
+<!--                                                #strings.equals(txn.type, 'DEBITED') ? 'badge badge bg-danger me-1' :-->
+<!--                                                #strings.equals(txn.type, 'REDEEMED') ? 'badge badge bg-primary me-1' :-->
+<!--                                                #strings.equals(txn.type, 'EXPIRED') ? 'badge badge bg-warning me-1' :-->
+<!--                                                #strings.equals(txn.type, 'AWARDED') ? 'badge badge bg-primary me-1' :-->
+<!--                                                'badge bg-label-default me-1'}">-->
+<!--                                      type-->
+<!--                                      </span>-->
 <!--                                  </td>-->
-                              </tr>
 
-                              </tbody>
-                          </table>
+<!--&lt;!&ndash;                                  <td>&ndash;&gt;-->
+<!--&lt;!&ndash;                                      <div class="dropdown">&ndash;&gt;-->
+<!--&lt;!&ndash;                                          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">&ndash;&gt;-->
+<!--&lt;!&ndash;                                              <i class="bx bx-dots-vertical-rounded"></i>&ndash;&gt;-->
+<!--&lt;!&ndash;                                          </button>&ndash;&gt;-->
+<!--&lt;!&ndash;                                          <div class="dropdown-menu">&ndash;&gt;-->
+<!--&lt;!&ndash;                                              <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-edit-alt me-1"></i> Edit</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                                              <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i> Delete</a>&ndash;&gt;-->
+<!--&lt;!&ndash;                                          </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                      </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                  </td>&ndash;&gt;-->
+<!--                              </tr>-->
 
-                          <!-- Pagination -->
-                          <div th:unless="${empty}" class="pagination d-flex justify-content-end mt-3 mb-3">
-                              <ul class="pagination">
-                                  <li class="page-item prev" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
-                                      <a class="page-link" th:href="@{/dashboard/users/{uuid}(uuid=${uuid},page=0, sort=${sort}, field=${field}, filter=${filter}, keyword=${keyword})}">
-                                          <i class="tf-icon bx bx-chevrons-left"></i>
-                                      </a>
-                                  </li>
+<!--                              </tbody>-->
+<!--                          </table>-->
 
-                                  <li class="page-item" th:each="pageNum : ${#numbers.sequence(startPage, endPage)}" th:classappend="${pageNum == currentPage ? 'active' : ''}">
-                                      <a class="page-link" th:href="@{/dashboard/users/{uuid}(uuid=${uuid}, page=${pageNum}, sort=${sort}, field=${field}, filter=${filter}, keyword=${keyword})}" th:text="${pageNum + 1}"></a>
-                                  </li>
+<!--                          &lt;!&ndash; Pagination &ndash;&gt;-->
+<!--                          <div th:unless="${empty}" class="pagination d-flex justify-content-end mt-3 mb-3">-->
+<!--                              <ul class="pagination">-->
+<!--                                  <li class="page-item prev" th:classappend="${currentPage == 0 ? 'disabled' : ''}">-->
+<!--                                      <a class="page-link" th:href="@{/dashboard/users/{uuid}(uuid=${uuid},page=0, sort=${sort}, field=${field}, filter=${filter}, keyword=${keyword})}">-->
+<!--                                          <i class="tf-icon bx bx-chevrons-left"></i>-->
+<!--                                      </a>-->
+<!--                                  </li>-->
 
-                                  <li class="page-item next" th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}">
-                                      <a class="page-link" th:href="@{/dashboard/users/{uuid}(uuid=${uuid},page=${totalPages - 1}, sort=${sort}, field=${field}, filter=${filter}, keyword=${keyword})}">
-                                          <i class="tf-icon bx bx-chevrons-right"></i>
-                                      </a>
-                                  </li>
-                              </ul>
-                          </div>
-                          <div class="d-flex justify-content-end mt-3">
-                              <p th:text="'Page ' + ${currentPage + 1} + ' of ' + ${totalPages}"></p>
-                          </div>
+<!--                                  <li class="page-item" th:each="pageNum : ${#numbers.sequence(startPage, endPage)}" th:classappend="${pageNum == currentPage ? 'active' : ''}">-->
+<!--                                      <a class="page-link" th:href="@{/dashboard/users/{uuid}(uuid=${uuid}, page=${pageNum}, sort=${sort}, field=${field}, filter=${filter}, keyword=${keyword})}" th:text="${pageNum + 1}"></a>-->
+<!--                                  </li>-->
 
-                      </div>
-                  </div>
+<!--                                  <li class="page-item next" th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}">-->
+<!--                                      <a class="page-link" th:href="@{/dashboard/users/{uuid}(uuid=${uuid},page=${totalPages - 1}, sort=${sort}, field=${field}, filter=${filter}, keyword=${keyword})}">-->
+<!--                                          <i class="tf-icon bx bx-chevrons-right"></i>-->
+<!--                                      </a>-->
+<!--                                  </li>-->
+<!--                              </ul>-->
+<!--                          </div>-->
+<!--                          <div class="d-flex justify-content-end mt-3">-->
+<!--                              <p th:text="'Page ' + ${currentPage + 1} + ' of ' + ${totalPages}"></p>-->
+<!--                          </div>-->
 
-
-              </div>
+<!--                      </div>-->
+<!--                  </div>-->
+<!--              </div>-->
                
                 
                   
@@ -558,29 +554,29 @@
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
-    <script src="/assets/vendor/libs/jquery/jquery.js"></script>
-    <script src="/assets/vendor/libs/popper/popper.js"></script>
-    <script src="/assets/vendor/js/bootstrap.js"></script>
-    <script src="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="/app/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="/app/assets/vendor/libs/popper/popper.js"></script>
+    <script src="/app/assets/vendor/js/bootstrap.js"></script>
+    <script src="/app/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
 
-    <script src="/assets/vendor/js/menu.js"></script>
+    <script src="/app/assets/vendor/js/menu.js"></script>
     <!-- endbuild -->
 
     <!-- Vendors JS -->
-    <script src="/assets/vendor/libs/apex-charts/apexcharts.js"></script>
+    <script src="/app/assets/vendor/libs/apex-charts/apexcharts.js"></script>
 
     <!-- Main JS -->
-    <script src="/assets/js/main.js"></script>
+    <script src="/app/assets/js/main.js"></script>
 
     <!-- Page JS -->
-    <script src="/assets/js/dashboards-analytics.js"></script>
+    <script src="/app/assets/js/dashboards-analytics.js"></script>
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
 
 
 <script>
-  function editUser(){
+function editUser() {
       const editBtn = document.getElementById("editBtn");
       const deleteBtn = document.getElementById("deleteBtn");
       const saveBtn = document.getElementById("saveBtn");
@@ -588,14 +584,13 @@
       const idIn = document.getElementById("idIn");
       const passSection = document.getElementById("passSection");
 
-      passSection.hidden=false;
-      idIn.hidden=true;
-      userFieldset.disabled=false;
-      editBtn.hidden=true;
-      deleteBtn.hidden=false;
-      saveBtn.hidden=false;
-
-  }
+      passSection.hidden = false;
+      idIn.hidden = true;
+      userFieldset.disabled = false;
+      editBtn.hidden = true;
+      deleteBtn.hidden = false;
+      saveBtn.hidden = false;
+    }
 
   function saveUser(){
       const editBtn = document.getElementById("editBtn");

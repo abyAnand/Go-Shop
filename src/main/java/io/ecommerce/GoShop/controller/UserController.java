@@ -61,7 +61,7 @@ public class UserController {
 
         Optional<User> existingUser = userService.findByUsername(user.getUsername());
 
-        if (existingUser.isPresent() && !existingUser.get().getId().equals(user.getId())) {
+        if (existingUser.isPresent() && !existingUser.get().getId().equals(user.getId()) && !existingUser.get().isDeleted()) {
             result.rejectValue("username", "error.username", "Username already exists");
             return "/user/user-dashboard";
         }

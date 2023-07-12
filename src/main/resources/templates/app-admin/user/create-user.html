@@ -24,7 +24,7 @@
     <meta name="description" content="" />
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/assets/img/favicon/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/app/assets/img/favicon/favicon.ico" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -35,26 +35,26 @@
     />
 
     <!-- Icons. Uncomment required icon fonts -->
-    <link rel="stylesheet" href="/assets/vendor/fonts/boxicons.css" />
+    <link rel="stylesheet" href="/app/assets/vendor/fonts/boxicons.css" />
 
     <!-- Core CSS -->
-    <link rel="stylesheet" href="/assets/vendor/css/core.css" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
-    <link rel="stylesheet" href="/assets/css/demo.css" />
+    <link rel="stylesheet" href="/app/assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="/app/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="/app/assets/css/demo.css" />
 
     <!-- Vendors CSS -->
-    <link rel="stylesheet" href="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="/app/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
-    <link rel="stylesheet" href="/assets/vendor/libs/apex-charts/apex-charts.css" />
+    <link rel="stylesheet" href="/app/assets/vendor/libs/apex-charts/apex-charts.css" />
 
     <!-- Page CSS -->
 
     <!-- Helpers -->
-    <script src="/assets/vendor/js/helpers.js"></script>
+    <script src="/app/assets/vendor/js/helpers.js"></script>
 
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-    <script src="/assets/js/config.js"></script>
+    <script src="/app/assets/js/config.js"></script>
   </head>
 
   <body>
@@ -99,7 +99,7 @@
 
              <!-- Categories  -->
              <li class="menu-item">
-              <a href="/category/all" class="menu-link">
+              <a href="/category/" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-category"></i>
                 <div data-i18n="Analytics">Categories</div>
               </a>
@@ -107,7 +107,7 @@
 
              <!-- Products  -->
              <li class="menu-item">
-              <a href="/product/all" class="menu-link">
+              <a href="/product/" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-chip"></i>
                 <div data-i18n="Analytics">Products</div>
               </a>
@@ -115,7 +115,7 @@
 
              <!-- Variants  -->
              <li class="menu-item">
-              <a href="/variant/all" class="menu-link">
+              <a href="/variant/" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-carousel"></i>
                 <div data-i18n="Analytics">Variants</div>
               </a>
@@ -123,21 +123,21 @@
 
              <!-- Orders  -->
              <li class="menu-item">
-              <a href="/order/all" class="menu-link">
+              <a href="/order/" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-package"></i>
                 <div data-i18n="Analytics">Orders</div>
               </a>
             </li>
              <!-- Banners  -->
              <li class="menu-item">
-              <a href="/banner/all" class="menu-link">
+              <a href="/banner/" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-photo-album"></i>
                 <div data-i18n="Analytics">Banners</div>
               </a>
             </li>
              <!-- Coupons  -->
              <li class="menu-item">
-              <a href="/coupon/all" class="menu-link">
+              <a href="/coupon/" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-star"></i>
                 <div data-i18n="Analytics">Coupons</div>
               </a>
@@ -194,7 +194,7 @@
                 <li class="nav-item navbar-dropdown dropdown-user dropdown">
                   <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
-                      <img src="/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                      <img src="/app/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
                     </div>
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end">
@@ -203,7 +203,7 @@
                         <div class="d-flex">
                           <div class="flex-shrink-0 me-3">
                             <div class="avatar avatar-online">
-                              <img src="/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                              <img src="/app/assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
                             </div>
                           </div>
                           <div class="flex-grow-1">
@@ -269,91 +269,100 @@
                       <div class="container">
                           <h2 class="mt-4">Create User</h2>
 
-                          <div th:if="${#fields.hasErrors('userInfo.username')}" th:errors="*{userInfo.username}" class="alert alert-danger" role="alert">
+                          <div th:if="${#fields.hasErrors('user.username')}" th:errors="*{user.username}" class="alert alert-danger" role="alert">
                               alert
                           </div>
-                          <div th:if="${#fields.hasErrors('userInfo.phone')}" th:errors="*{userInfo.phone}" class="alert alert-danger" role="alert">
+                          <div th:if="${#fields.hasErrors('user.phoneNumber')}" th:errors="*{user.phoneNumber}" class="alert alert-danger" role="alert">
                               alert
                           </div>
-                          <div th:if="${#fields.hasErrors('userInfo.email')}" th:errors="*{userInfo.email}" class="alert alert-danger" role="alert">
+                          <div th:if="${#fields.hasErrors('user.email')}" th:errors="*{user.email}" class="alert alert-danger" role="alert">
                               alert
                           </div>
 
 
-                          <form th:action="@{/createUser}" th:object="${userInfo}"  method="post" class="row g-3 needs-validation" novalidate>
+                          <form role="form" th:action="@{/admin/saveNewUser}" method="post" th:object="${user}">
+                              <legend class="text-center">Register</legend>
+                              <fieldset>
+                                  <legend>Account Details <input class="text-center form-control" readonly></legend>
 
-                             <input type="hidden" name="uuid">
 
-                              <div class="col-md-4">
-                                  <label for="validationCustom01" class="form-label">First Name</label>
-                                  <input th:value="${userInfo.firstName}" type="text" name="firstName" class="form-control" id="validationCustom01" required>
-                                  <div class="valid-feedback">
-                                      Looks good!
+                                  <div class="form-group col-md-6">
+                                      <label for="firstname">First name</label>
+                                      <input th:field="${user.firstName}"  name="firstName" type="text" id="firstName" class="form-control" placeHolder="First Name">
                                   </div>
-                              </div>
-
-                              <div class="col-md-4">
-                                  <label for="validationCustom01" class="form-label">Last Name</label>
-                                  <input th:value="${userInfo.lastName}"  type="text" name="lastName" class="form-control" id="lastname" required>
-                                  <div class="valid-feedback">
-                                      Looks good!
+                                  <div class="form-group col-md-6">
+                                      <label for="lastName">Last name</label>
+                                      <input th:field="${user.lastName}" name="lastName" type="text" id="lastName" class="form-control" placeHolder="Last Name">
                                   </div>
-                              </div>
-
-                              <div class="col-md-4">
-                                  <label for="validationCustom01" class="form-label">Email</label>
-                                  <input  th:value="${userInfo.email}" type="email" name="email" class="form-control" id="email" required>
-                                  <div class="valid-feedback">
-                                      Looks good!
+                                  <div class="form-group col-md-6">
+                                      <label for="username">Username</label>
+                                      <input name="username"  type="text" id="username" class="form-control" placeholder="Username">
+                                      <span class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
                                   </div>
-                              </div>
-
-                              <div class="col-md-4">
-                                  <label for="validationCustom01" class="form-label">Phone</label>
-                                  <input  th:value="${userInfo.phone}" type="tel" name="phone" class="form-control" id="phone" required>
-                                  <div class="valid-feedback">
-                                      Looks good!
+                                  <div class="form-group col-md-6">
+                                      <label for="phonenumber">Phonenumber</label>
+                                      <input th:field="${user.phoneNumber}" type="text" class="form-control" name="phoneNumber" id="phonenumber" placeholder="Phonenumber" pattern="[0-9]{10}" required>
+                                      <span class="text-danger" id="phoneNumberError"></span>
+                                      <span id="phoneNumberCount"></span>
                                   </div>
-                              </div>
-
-
-                              <div class="col-md-4">
-                                  <label for="validationCustomUsername" class="form-label">Username</label>
-                                  <div class="input-group has-validation">
-                                      <span class="input-group-text" id="inputGroupPrepend">@</span>
-                                      <input  th:value="${userInfo.username}"  type="text" name="username" class="form-control required" id="validationCustomUsername" aria-describedby="inputGroupPrepend" required>
-                                      <div class="invalid-feedback">
-                                          Please choose a username.
-                                      </div>
+                                  <div class="form-group col-md-12">
+                                      <label for="email">Email</label>
+                                      <input th:field="${user.email}" type="email" class="form-control" name="email" id="email" placeholder="Email">
                                   </div>
-                              </div>
-
-                              <div class="col-md-4">
-                                  <label for="validationCustom02" class="form-label">Password</label>
-                                  <input type="text" name="password" class="form-control" id="validationCustom02"  required>
-                                  <div class="valid-feedback">
-                                      Looks good!
+                                  <div class="form-group col-md-6">
+                                      <label for="password">Password</label>
+                                      <input th:field="${user.password}" type="password" class="form-control" name="password" id="password" placeholder="Password">
                                   </div>
-                              </div>
-
-
-                              <div class="col-md-3">
-                                  <label for="validationCustom04" class="form-label">Role</label>
-                                  <select name="role.roleName" class="form-select" id="validationCustom04" required>
-                                      <option disabled value="">Select Role</option>
-                                      <option value="ROLE_USER" th:selected>User</option>
-                                      <option value="ROLE_ADMIN">Admin</option>
-                                  </select>
-                                  <div class="invalid-feedback">
-                                      Please select a role.
+                                  <div class="form-group col-md-6">
+                                      <label for="confirm_password">Confirm Password</label>
+                                      <input  type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
                                   </div>
-                              </div>
-
-
-                              <div class="col-12">
-                                  <button class="btn btn-success " type="submit">Save</button>
+                              </fieldset>
+                              <fieldset>
+                                  <legend>Optional Details</legend>
+                                  <div class="form-group col-md-6">
+                                      <label for="enabled">User Enabled</label>
+                                      <select class="form-control" name="enabled" id="enabled">
+                                          <option value="true" th:selected="${user.enabled == true}">Enabled</option>
+                                          <option value="false" th:selected="${user.enabled == false}">Disabled</option>
+                                      </select>
+                                  </div>
+                                  <div class="form-group col-md-12">
+                                      <label for="userRole">User Role</label>
+                                      <select class="form-control" th:field="${user.role.roleName}" name="role.roleName" id="userRole" onchange="updateUserRole(this.value)">
+                                          <option th:each="option : ${roles}" th:value="${option.roleName}"
+                                                  th:text="${option.roleName == 'ROLE_ADMIN' ? 'ADMIN' : (option.roleName == 'ROLE_USER' ? 'USER' : 'VENDOR')}"
+                                                  th:selected="${option == user.role}"></option>
+                                      </select>
+                                  </div>
+                              </fieldset>
+                              <div class="form-group">
+                                  <div class="col-md-12">
+                                      <button type="submit" class="btn btn-primary">Register</button>
+                                  </div>
                               </div>
                           </form>
+                          <script>
+  // Get references to the password and confirm password fields
+  var passwordInput = document.getElementById("password");
+  var confirmPasswordInput = document.getElementById("confirm_password");
+
+  // Add an event listener to the form on submit
+  document.querySelector("form").addEventListener("submit", function(event) {
+    // Check if the password and confirm password fields have matching values
+    if (passwordInput.value !== confirmPasswordInput.value) {
+      // Passwords do not match, prevent form submission and show an error message
+      event.preventDefault();
+      alert("Passwords do not match!");
+    }
+  });
+
+
+  function updateUserRole(role) {
+    document.getElementById('userRole').value = role;
+  }
+
+</script>
 
 
 
@@ -408,22 +417,22 @@
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
-    <script src="/assets/vendor/libs/jquery/jquery.js"></script>
-    <script src="/assets/vendor/libs/popper/popper.js"></script>
-    <script src="/assets/vendor/js/bootstrap.js"></script>
-    <script src="/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="/app/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="/app/assets/vendor/libs/popper/popper.js"></script>
+    <script src="/app/assets/vendor/js/bootstrap.js"></script>
+    <script src="/app/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
 
-    <script src="/assets/vendor/js/menu.js"></script>
+    <script src="/app/assets/vendor/js/menu.js"></script>
     <!-- endbuild -->
 
     <!-- Vendors JS -->
-    <script src="/assets/vendor/libs/apex-charts/apexcharts.js"></script>
+    <script src="/app/assets/vendor/libs/apex-charts/apexcharts.js"></script>
 
     <!-- Main JS -->
-    <script src="/assets/js/main.js"></script>
+    <script src="/app/assets/js/main.js"></script>
 
     <!-- Page JS -->
-    <script src="/assets/js/dashboards-analytics.js"></script>
+    <script src="/app/assets/js/dashboards-analytics.js"></script>
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>

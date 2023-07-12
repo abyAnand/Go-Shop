@@ -51,7 +51,7 @@ public class AdminProductController {
                                @RequestParam(name = "field", required = false, defaultValue = "productName") String field,
                                @RequestParam(name = "sort", required = false, defaultValue = "DESC") String sort,
                                @RequestParam(name ="page",required = false, defaultValue = "0") int page,
-                               @RequestParam(name ="size",required = false, defaultValue = "10") int size,
+                               @RequestParam(name ="size",required = false, defaultValue = "5") int size,
                                @RequestParam(name ="keyword",required = false) String keyword,
                                @RequestParam(name ="filter",required = false, defaultValue = "") String filter){
 
@@ -111,6 +111,16 @@ public class AdminProductController {
     public String deleteProduct(@PathVariable UUID id, Model model, RedirectAttributes attributes) {
         productService.deleteById(id);
         attributes.addFlashAttribute("message", "Product deleted successfully");
+        return "redirect:/product";
+    }
+
+    @GetMapping("/toggleStatus/{id}")
+    public String toggleStatus(@PathVariable UUID id){
+        productService.findById(id)
+                .ifPresent(product -> {
+                    product.setEnabled(!product.isEnabled());
+                    productService.save(product);
+                });
         return "redirect:/product";
     }
 

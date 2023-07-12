@@ -297,7 +297,7 @@
                              <td>
                                <a th:href="@{/category/update/{id}(id=${category.id})}"  class="edit" title="Edit" data-toggle="tooltip"><i class="bx bx-edit-alt me-1"></i></a>
 
-                               <a th:href="@{/category/delete/{id}(id=${category.id})}" onclick="return confirmDeleteCategory()" class="delete-link" data-toggle="modal" data-target="#delete-confirm-modal"><i class="bx bx-trash me-1"></i></a>
+                               <a th:href="@{/category/delete/{id}(id=${category.id})}"  class="delete-link" data-toggle="modal" data-target="#delete-confirm-modal"><i class="bx bx-trash me-1"></i></a>
 
 
 
@@ -308,16 +308,30 @@
 
                            </tbody>
                          </table>
+                         <div class="pagination d-flex justify-content-end mt-3">
+                           <ul class="pagination">
+                             <li class="page-item prev" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+                               <a class="page-link" th:href="@{/category(page=0, sort=${sort}, field=${field})}"><i class="tf-icon bx bx-chevrons-left"></i></a>
+                             </li>
+
+                             <li class="page-item" th:each="pageNum : ${#numbers.sequence(startPage, endPage)}" th:classappend="${pageNum == currentPage ? 'active' : ''}">
+                               <a class="page-link" th:href="@{/category(page=${pageNum}, sort=${sort}, field=${field})}" th:text="${pageNum + 1}"></a>
+                             </li>
+
+                             <li class="page-item next" th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}">
+                               <a class="page-link" th:href="@{/category(page=${totalPages - 1}, sort=${sort}, field=${field})}"><i class="tf-icon bx bx-chevrons-right"></i></a>
+                             </li>
+                           </ul>
+                         </div>
+                         <div class="d-flex justify-content-end mt-3">
+                           <p th:text="'Page ' + ${currentPage + 1} + ' of ' + ${totalPages}"></p>
+                         </div>
                        </div>
                      </div>
                    </div>
                 </div>
 
-                <script>
-    function confirmDeleteCategory() {
-        return confirm("Are you sure you want to delete this category?");
-    }
-</script>
+
                   
                </div>
                 

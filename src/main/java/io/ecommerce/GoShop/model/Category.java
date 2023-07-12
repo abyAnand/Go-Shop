@@ -25,4 +25,6 @@ public class Category extends BaseEntity{
     @JoinColumn(name = "coupon_id")
     @ToString.Exclude
     private List<Coupon> coupon;
+
+    private boolean isDeleted;
 }

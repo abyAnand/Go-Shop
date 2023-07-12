@@ -65,5 +65,7 @@ public class User extends BaseEntity{
     @ToString.Exclude
     private List<Review> reviews;
 
+    private boolean isDeleted;
+
 
 }

@@ -50,4 +50,6 @@ public class Product extends BaseEntity{
 
     private boolean isDeleted;
 
+    private boolean enabled;
+
 }
