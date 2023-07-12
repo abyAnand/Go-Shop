@@ -4,6 +4,7 @@ import io.ecommerce.GoShop.model.Banner;
 import io.ecommerce.GoShop.model.BannerImage;
 import io.ecommerce.GoShop.model.Product;
 import io.ecommerce.GoShop.service.banner.BannerService;
+import io.ecommerce.GoShop.service.bannerImage.BannerImageService;
 import io.ecommerce.GoShop.service.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,10 @@ public class BannerController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private BannerImageService bannerImageService;
+
 
 
     @GetMapping
@@ -83,6 +88,12 @@ public class BannerController {
         }
 
         if (imageFile != null && !imageFile.isEmpty()) {
+
+            BannerImage existingImage = bannerImageService.findByBannerId(banner.getId());
+            existingImage.setBanner(null);
+            bannerImageService.save(existingImage);
+            banner.setImage(null);
+
             String fileName = handleFileUpload(imageFile);
             BannerImage image = new BannerImage(fileName, banner);
             banner.setImage(image);
