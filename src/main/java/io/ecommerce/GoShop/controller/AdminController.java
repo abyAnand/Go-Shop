@@ -1,6 +1,7 @@
 package io.ecommerce.GoShop.controller;
 
 import io.ecommerce.GoShop.model.*;
+import io.ecommerce.GoShop.repository.UserRepository;
 import io.ecommerce.GoShop.service.order.OrderService;
 import io.ecommerce.GoShop.service.order.OrderServiceImpl;
 import io.ecommerce.GoShop.service.role.RoleService;
@@ -21,9 +22,11 @@ import javax.validation.Valid;
 import java.util.*;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping(value={"/dashboard/users", "/admin" })
 @PreAuthorize("hasAuthority('ROLE_ADMIN')")
 public class AdminController {
+
+    //TODO: CHECK USRE PASSWORD SAVE
 
     @Autowired
     UserService userService;
@@ -33,9 +36,11 @@ public class AdminController {
 
     @Autowired
     OrderService orderService;
+    @Autowired
+    private UserRepository userRepository;
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    @GetMapping("/users")
+    @GetMapping(value = {"/users", ""})
     public String userList(Model model,
                            @RequestParam(name = "field", required = false, defaultValue = "username") String field,
                            @RequestParam(name = "sort", required = false, defaultValue = "DESC") String sort,
@@ -48,15 +53,14 @@ public class AdminController {
 
         Page<User> userList = Page.empty();
 
-        if(keyword == null || keyword.equals("")){
-             userList = userService.findAll(pageable);
-        }else{
-             userList = userService.findByUsername(pageable, keyword);
+        if (keyword == null || keyword.isEmpty()) {
+            userList = userService.findAll(PageRequest.of(page, size, Sort.Direction.fromString(sort), field));
+        } else {
+            userList = userService.findByUsername(PageRequest.of(page, size, Sort.Direction.fromString(sort), field),keyword);
         }
 
-        model.addAttribute("users", userList);
 
-//        model.addAttribute("filter", filter);
+        model.addAttribute("users", userList.getContent());
         model.addAttribute("keyword", keyword);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", userList.getTotalPages());
@@ -67,14 +71,13 @@ public class AdminController {
         int endPage = Math.min(page + 1, userList.getTotalPages() - 1);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
+        model.addAttribute("empty", userList.isEmpty());
 
-        model.addAttribute("empty", userList.getTotalElements() == 0);
-
-        return "/admin/user-management";
+        return "/app-admin/user/user-management";
     }
 
 @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-@GetMapping("/users/create")
+@GetMapping("/create")
 public String createUser(Model model){
 
     List<Role> roles = roleService.getRoles();
@@ -82,10 +85,10 @@ public String createUser(Model model){
     model.addAttribute("roles", roles);
 
 
-        return "/admin/create-user";
+        return "app-admin/user/create-user";
 }
 
-    @GetMapping("/users/update/{id}")
+    @GetMapping( value = {"/users/update/{id}", "{id}"})
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String updateUser(@PathVariable UUID id, Model model){
 
@@ -96,11 +99,11 @@ public String createUser(Model model){
         model.addAttribute("roles", role);
 
 
-        return "/admin/update-user";
+        return "app-admin/user/edit-user";
     }
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    @GetMapping("/users/delete/{id}")
+    @GetMapping(value = {"/users/delete/{id}", "/delete/{id}"})
     public String deleteUser(@PathVariable UUID id,
                              RedirectAttributes attributes,
                              Model model) {
@@ -108,8 +111,8 @@ public String createUser(Model model){
         Optional<User> user = Optional.ofNullable(userService.findById(id));
 
         if (user.isPresent()) {
-            UUID userId = user.get().getId();
-            userService.delete(userId);
+            user.get().setDeleted(true);
+            userService.save(user.get());
             attributes.addFlashAttribute("message", "User deleted successfully");
         }
 
@@ -133,7 +136,7 @@ public String createUser(Model model){
 
         Optional<User> existingUser = userService.findByUsername(user.getUsername());
 
-        if (existingUser.isPresent() && !existingUser.get().getId().equals(user.getId())) {
+        if (existingUser.isPresent() && !existingUser.get().getId().equals(user.getId()) && !existingUser.get().isDeleted()) {
             result.rejectValue("username", "error.username", "Username already exists");
             model.addAttribute("roles", roles);
             return "/admin/update-user";
@@ -199,7 +202,7 @@ public String createUser(Model model){
 
         Optional<User> existingUser = userService.findByUsername(user.getUsername());
 
-        if (existingUser.isPresent() && !existingUser.get().getId().equals(user.getId())) {
+        if (existingUser.isPresent() && !existingUser.get().getId().equals(user.getId()) && !existingUser.get().isDeleted()) {
             result.rejectValue("username", "error.username", "Username already exists");
             model.addAttribute("roles", roles);
             return "/admin/create-user";

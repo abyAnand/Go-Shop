@@ -13,23 +13,24 @@
     <input type="hidden" id="id" name="id" th:value="${coupon.id}" />
 
     <div class="mb-3">
-        <label for="coupon"><i class="fas fa-ticket-alt"></i> Coupon Code:</label>
-        <input type="text" id="coupon" name="coupon" class="form-control" th:value="${coupon.code}" readonly>
+        <label for="code"><i class="fas fa-ticket-alt"></i> Coupon Code:</label>
+        <input type="text" id="code" name="code" class="form-control" th:value="${coupon.code}" readonly>
     </div>
 
     <div class="mb-3">
         <label for="associatedItem"><i class="fas fa-link"></i> Associated Item:</label>
-        <input type="text" id="associatedItem" name="associatedItem" class="form-control" th:value="${coupon.type.toString()}" readonly>
+        <input type="hidden" id="associatedItem" name="associatedItem" th:value="${coupon.type.toString()}">
+        <input type="text" class="form-control" readonly th:value="${coupon.type.toString()}">
     </div>
 
     <div id="productSection" th:if="${coupon.type == 'PRODUCT'}">
         <label for="product"><i class="fas fa-box-open"></i> Product:</label>
-        <input type="text" id="product" name="product" class="form-control" th:value="${coupon.product != null ? coupon.product.productName : ''}" readonly>
+        <input type="text" name="product" class="form-control" readonly th:value="${coupon.product.productName}">
     </div>
 
     <div id="categorySection" th:if="${coupon.type == 'CATEGORY'}">
         <label for="category"><i class="fas fa-folder-open"></i> Category:</label>
-        <input type="text" id="category" name="category" class="form-control" th:value="${coupon.category != null ? coupon.category.categoryName : ''}" readonly>
+        <input type="text" name="category" class="form-control" readonly th:value="${coupon.category.categoryName}">
     </div>
 
     <div class="mb-3">

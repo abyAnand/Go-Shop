@@ -4,6 +4,7 @@ import io.ecommerce.GoShop.model.Banner;
 import io.ecommerce.GoShop.model.BannerImage;
 import io.ecommerce.GoShop.model.Product;
 import io.ecommerce.GoShop.service.banner.BannerService;
+import io.ecommerce.GoShop.service.bannerImage.BannerImageService;
 import io.ecommerce.GoShop.service.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,13 +32,17 @@ public class BannerController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private BannerImageService bannerImageService;
+
+
 
     @GetMapping
     public String getAllBanner(Model model){
 
 
-        model.addAttribute("bannerList", bannerService.findAll());
-        return "banner/banner-management";
+        model.addAttribute("banners", bannerService.findAll());
+        return "app-admin/banner/banner-management";
     }
 
     @GetMapping("/create")
@@ -45,7 +50,7 @@ public class BannerController {
 
         model.addAttribute("productList", productService.findAll());
         model.addAttribute("banner", new Banner());
-        return "banner/create-banner";
+        return "app-admin/banner/create-banner";
     }
 
     @PostMapping("/save")
@@ -53,7 +58,7 @@ public class BannerController {
                              BindingResult result,
                              @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
         if (result.hasErrors()) {
-            return "banner/create-banner";
+            return "app-admin/banner/create-banner";
         }
 
         String fileName = handleFileUpload(imageFile);
@@ -71,7 +76,7 @@ public class BannerController {
         Optional<Banner> banner = bannerService.findById(id);
         model.addAttribute("banner", banner.get());
 
-        return "banner/update-banner";
+        return "app-admin/banner/edit-banner";
     }
 
     @PostMapping("/update")
@@ -79,10 +84,16 @@ public class BannerController {
                                BindingResult result,
                                @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
         if (result.hasErrors()) {
-            return "banner/update-banner";
+            return "app-admin/banner/edit-banner";
         }
 
         if (imageFile != null && !imageFile.isEmpty()) {
+
+            BannerImage existingImage = bannerImageService.findByBannerId(banner.getId());
+            existingImage.setBanner(null);
+            bannerImageService.save(existingImage);
+            banner.setImage(null);
+
             String fileName = handleFileUpload(imageFile);
             BannerImage image = new BannerImage(fileName, banner);
             banner.setImage(image);

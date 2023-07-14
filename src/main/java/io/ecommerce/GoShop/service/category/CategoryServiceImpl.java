@@ -38,7 +38,12 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public void deleteById(UUID id) {
-         categoryRepository.deleteById(id);
+        categoryRepository.findById(id)
+                .ifPresent(category -> {
+                    category.setDeleted(true);
+                    categoryRepository.save(category);
+                });
+
     }
 
     @Override

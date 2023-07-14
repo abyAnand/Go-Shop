@@ -9,6 +9,8 @@ public enum Status {
     RETURNED,
     RETURN_REQUESTED,
     SHIPPING,
-    RECEIVED
+    RECEIVED,
+    DELIVERED,
+    REFUNDED
 
 }
