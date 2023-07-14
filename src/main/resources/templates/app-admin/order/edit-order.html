@@ -274,7 +274,7 @@
                           <div class="d-flex justify-content-end">
                               <a data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<span>Regenerate and overwrite existing invoice</span>"  type="button" th:href="@{/order/generateInvoice?id={orderId}(orderId = ${order.id})}" class="btn btn-info m-1">Regenerate Invoice</a>
 <!--                              calling rest from a th:value-->
-                              <button type="button" th:data-uuid="${order.id}" onclick="viewInvoice(this.getAttribute('data-uuid'))" class="btn btn-success m-1"  data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<span>View existing Invoice. Generates new invoice if not found.</span>">View Invoice</button>
+                              <button type="button" th:data-uuid="${order.id}" onclick="viewInvoice(this.getAttribute('data-id'))" class="btn btn-success m-1"  data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true" title="" data-bs-original-title="<span>View existing Invoice. Generates new invoice if not found.</span>">View Invoice</button>
 
                               <a type="button" href="/order/" class="btn btn-primary m-1">Order List</a>
                               <button onclick="editOrder()" id="editBtn" type="button" class="btn btn-warning m-1">Edit</button>

@@ -18,6 +18,8 @@ public interface OrderService {
 
     Optional<Order> getOrder(User user);
 
+    void generateInvoice(UUID uuid);
+
 
     Order saveOrder(Order order);
 

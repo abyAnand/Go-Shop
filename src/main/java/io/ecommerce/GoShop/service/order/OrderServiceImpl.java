@@ -1,6 +1,7 @@
 package io.ecommerce.GoShop.service.order;
 
 
+import io.ecommerce.GoShop.misc.TemplateInvoiceGenerator;
 import io.ecommerce.GoShop.model.Order;
 import io.ecommerce.GoShop.model.Payment;
 import io.ecommerce.GoShop.model.Status;
@@ -11,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -20,6 +20,9 @@ import java.util.UUID;
 
 @Service
 public class OrderServiceImpl implements OrderService{
+
+    @Autowired
+    TemplateInvoiceGenerator templateInvoiceGenerator;
 
     @Autowired
     OrderRepository orderRepository;
@@ -47,8 +50,10 @@ public class OrderServiceImpl implements OrderService{
         return null;
     }
 
-
-
+    @Override
+    public void generateInvoice(UUID uuid) {
+        templateInvoiceGenerator.generateInvoice(findById(uuid).get());
+    }
 
 
     @Override

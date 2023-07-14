@@ -16,7 +16,7 @@ public class OtpServiceImpl implements OtpService {
 
         Optional<OtpDto> exist = otpRepository.findBySessionId(sessionId);
 
-        exist.ifPresent(otpDto -> otpRepository.deleteBySessionId(otpDto.getSessionId()));
+        exist.ifPresent(otpDto -> otpRepository.delete(exist.get()));
 
         OtpDto otpDto   = new OtpDto();
         otpDto.setOtp(otp);

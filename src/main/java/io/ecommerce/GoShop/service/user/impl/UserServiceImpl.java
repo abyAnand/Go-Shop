@@ -4,8 +4,10 @@ import io.ecommerce.GoShop.DTO.UserDTO;
 import io.ecommerce.GoShop.model.Cart;
 import io.ecommerce.GoShop.model.Role;
 import io.ecommerce.GoShop.model.User;
+import io.ecommerce.GoShop.model.Wallet;
 import io.ecommerce.GoShop.repository.RoleRepository;
 import io.ecommerce.GoShop.repository.UserRepository;
+import io.ecommerce.GoShop.service.Wallet.WalletService;
 import io.ecommerce.GoShop.service.user.UserService;
 import io.ecommerce.GoShop.service.user.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,9 @@ public class UserServiceImpl implements UserService, UserServiceInterface, UserD
         this.roleRepository = roleRepository;
     }
 
+    @Autowired
+    WalletService walletService;
+
     public void save(User user){
 
         Role userRole = roleRepository.findByRoleName(user.getRole().getRoleName());
@@ -59,11 +64,19 @@ public class UserServiceImpl implements UserService, UserServiceInterface, UserD
         user.setEnabled(true);
 
         Role role = roleRepository.findByRoleName("ROLE_USER");
-
         user.setRole(role);
 
 
+        user = userRepository.save(user);
+
+        Wallet wallet = new Wallet();
+        wallet.setBalance(0.0);
+        wallet.setUser(user);
+        wallet = walletService.saveWallet(wallet);
+        user.setWallet(wallet);
         userRepository.save(user);
+
+
 
     }
 

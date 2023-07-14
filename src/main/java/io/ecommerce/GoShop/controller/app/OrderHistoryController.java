@@ -6,18 +6,24 @@ import io.ecommerce.GoShop.model.Payment;
 import io.ecommerce.GoShop.model.Status;
 import io.ecommerce.GoShop.service.order.OrderService;
 import io.ecommerce.GoShop.service.user.UserService;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -124,6 +130,69 @@ public class OrderHistoryController {
         String response = "Order updated successfully";
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/generateInvoice")
+    public String generateInvoice(@RequestParam UUID uuid){
+        orderService.generateInvoice(uuid);
+
+        return "redirect:/order/" + uuid;
+    }
+
+    @PostMapping("/viewInvoice")
+    @ResponseBody
+    public ResponseEntity<ByteArrayResource> viewInvoice(@RequestBody String uuid) throws IOException {
+        String rootPath = System.getProperty("user.dir");
+        String uploadDir = rootPath + "/src/main/resources/static/uploads/invoices/";
+
+        String requestedFileName = uuid + ".pdf";
+        File requestedFile = new File(uploadDir+requestedFileName);
+        System.out.println("Searching for " + requestedFileName);
+
+        File directory = new File(uploadDir);
+        boolean found = false;
+
+        // Check if the directory exists
+        if (directory.exists() && directory.isDirectory()) {
+            // Get the list of files in the directory
+            File[] files = directory.listFiles();
+            // Iterate over the files
+            for (File file : files) {
+                if (file.isFile()) {
+                    // Get the file name
+                    String fileName = file.getName();
+                    if (fileName.equals(requestedFileName)) {
+                        requestedFile = file;
+                        found = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+
+        if(found){
+            System.out.println(requestedFileName + " found");
+        }else{
+            System.out.println(requestedFileName+"+ not Found. Generating...");
+            orderService.generateInvoice(UUID.fromString(uuid));
+        }
+
+
+        ByteArrayResource resource = new ByteArrayResource(FileUtils.readFileToByteArray(requestedFile));
+
+        // Set the content type as application/pdf
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+
+        // Set the file name for download
+        headers.setContentDispositionFormData("attachment", requestedFileName);
+
+        // Return the resource as a response with OK status
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(resource);
+    }
+
 
 
 

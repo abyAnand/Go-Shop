@@ -80,7 +80,7 @@ public class LoginController {
             userService.save(user);
         }
 
-        return "index";
+        return "redirect:/";
     }
 
     @GetMapping("/access-denied")

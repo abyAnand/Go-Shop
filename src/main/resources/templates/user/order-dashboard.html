@@ -77,9 +77,9 @@
                                     <td>
                                         <a th:href="@{/orders/{id}(id=${order.id})}"
                                            class="btn btn-info btn-sm order-actions">Details</a>
-                                        <a th:href="@{/orders/delete/{id}(id=${order.id})}"
+                                        <a th:href="@{/orders/cancel/{id}(id=${order.id})}"
                                            class="btn btn-danger btn-sm order-actions"
-                                           onclick="return confirmDeleteOrder()">Delete</a>
+                                        >Cancel</a>
                                     </td>
                                 </tr>
                                 </tbody>
