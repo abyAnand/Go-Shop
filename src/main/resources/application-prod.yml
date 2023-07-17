@@ -1,4 +1,8 @@
 spring:
+  datasource:
+    url: jdbc:mysql://ls-00a3ad5f07dc236ab71c8f5766771c1de7250595.cx4iajig5qnr.ap-south-1.rds.amazonaws.com:3306/goshop
+    username: dbmasteruser
+    password: Wo9iySrWe`Ra*vI-8ONSC4UGJJ&pl8Cx
   jpa:
     generate-ddl: true
     properties:
@@ -9,10 +13,7 @@ spring:
   devtools:
     restart:
       log-condition-evaluation-delta: false
-  datasource:
-    url: jdbc:mysql://ls-00a3ad5f07dc236ab71c8f5766771c1de7250595.cx4iajig5qnr.ap-south-1.rds.amazonaws.com:3306/goshop
-username: dbmasteruser
-password: Wo9iySrWe`Ra*vI-8ONSC4UGJJ&pl8Cx
+
 #    show-sql: true
 #    properties:
 #      hibernate:
