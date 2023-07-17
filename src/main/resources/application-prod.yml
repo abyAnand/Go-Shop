@@ -1,0 +1,42 @@
+spring:
+  jpa:
+    generate-ddl: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  resources:
+    static-locations: classpath:/static/
+  devtools:
+    restart:
+      log-condition-evaluation-delta: false
+  datasource:
+    url: jdbc:mysql://ls-00a3ad5f07dc236ab71c8f5766771c1de7250595.cx4iajig5qnr.ap-south-1.rds.amazonaws.com:3306/goshop
+username: dbmasteruser
+password: Wo9iySrWe`Ra*vI-8ONSC4UGJJ&pl8Cx
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        show_sql: true
+#        format_sql: true
+#        use_sql_comments: true
+session:
+  store-type: jdbc
+  jdbc:
+    initialize-schema: always
+
+
+twilio:
+  accountSid: ACafd4d89b5fcf368f857c56cfeb125288
+  authToken: ec3fcb8c61fbf9eddb9b34cfe202e99c
+  phone:
+    number: +13614540810
+
+
+
+logging:
+  level:
+    web: debug
+
+razorpay:
+  keyId: rzp_test_ti4COoTWxp1e7t
+  keySecret: lresCW3FKCaaVJxwo8THLWxk
