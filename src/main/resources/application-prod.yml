@@ -20,10 +20,10 @@ spring:
 #        show_sql: true
 #        format_sql: true
 #        use_sql_comments: true
-session:
-  store-type: jdbc
-  jdbc:
-    initialize-schema: always
+  session:
+    store-type: jdbc
+    jdbc:
+      initialize-schema: always
 
 
 twilio:
