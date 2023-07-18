@@ -52,7 +52,7 @@ public class OrderController {
 
         model.addAttribute("orderList", orders);
 
-        return "/user/order-dashboard";
+        return "user/order-dashboard";
     }
 
     @GetMapping("/{id}")
