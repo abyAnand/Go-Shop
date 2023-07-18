@@ -313,16 +313,16 @@
                                               <div class="card-body">
                                                   <h5 class="card-title">User Information</h5>
                                                   <p class="card-text">
-                                                      <a th:href="@{/dashboard/users/{id}(id=${order.user.id})}" class="my-2 badge bg-primary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="right" data-bs-html="true" title="" data-bs-original-title="<span>Open User/Wallet Management</span>" >View User Details</a><br>
+                                                      <a th:href="@{/dashboard/users/{id}(id=${order.user.id})}" class="my-2 badge bg-primary" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="right" data-bs-html="true" title="" data-bs-original-title="<span>Open User/Wallet Management</span>">View User Details</a><br>
                                                       User ID: <span th:text="${order.user.id}"></span><br>
                                                       Name: <span th:text="${order.user.firstName +' '+ order.user.lastName}"></span><br>
-                                                      username: <span th:text="${order.user.username}"></span><br>
+                                                      Username: <span th:text="${order.user.username}"></span><br>
                                                       Email: <span th:text="${order.user.email}"></span><br>
                                                       Phone: <span th:text="${order.user.phoneNumber}"></span><br>
                                                   <div th:if="${order.user.createdDate != null}">
                                                       User Since: <span th:text="${order.user.createdDate}"></span><br>
                                                   </div>
-                                                  Wallet Balance: <span th:text="${order.user.wallet.balance}"></span><br>
+                                                  Wallet Balance: <span th:text="${order.user.wallet != null ? order.user.wallet.balance : '0'}"></span><br>
                                                   </p>
                                               </div>
                                           </div>

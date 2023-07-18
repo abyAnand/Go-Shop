@@ -19,7 +19,7 @@ public class Wallet extends BaseEntity {
     @JoinColumn(name = "user_id")
     User user;
 
-    double balance;
+    double balance = 0;
 
     @OneToMany(mappedBy = "wallet", cascade = CascadeType.ALL)
     @ToString.Exclude
