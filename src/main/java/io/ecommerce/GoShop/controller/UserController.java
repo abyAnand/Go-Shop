@@ -56,7 +56,7 @@ public class UserController {
 
         if (result.hasErrors()) {
             model.addAttribute("user", user);
-            return "/admin/update-user";
+            return "admin/update-user";
         }
 
         Optional<User> existingUser = userService.findByUsername(user.getUsername());
