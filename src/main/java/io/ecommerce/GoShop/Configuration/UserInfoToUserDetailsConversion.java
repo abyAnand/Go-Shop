@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 public class UserInfoToUserDetailsConversion implements UserDetails {
 
+
     private final String username;
     private final String password;
     private final List<GrantedAuthority> authorities;
@@ -22,6 +23,9 @@ public class UserInfoToUserDetailsConversion implements UserDetails {
     public UserInfoToUserDetailsConversion(User user) {
         username = user.getUsername();
         password = user.getPassword();
+
+        System.out.println(username );
+        System.out.println(password);
         authorities = Arrays.stream(user.getRole().getRoleName().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
