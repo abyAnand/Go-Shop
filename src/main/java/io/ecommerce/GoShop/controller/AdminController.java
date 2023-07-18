@@ -23,7 +23,6 @@ import java.util.*;
 
 @Controller
 @RequestMapping(value={"/dashboard/users", "/admin" })
-@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 public class AdminController {
 
     //TODO: CHECK USRE PASSWORD SAVE
@@ -73,7 +72,7 @@ public class AdminController {
         model.addAttribute("endPage", endPage);
         model.addAttribute("empty", userList.isEmpty());
 
-        return "/app-admin/user/user-management";
+        return "app-admin/user/user-management";
     }
 
 @PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -131,7 +130,7 @@ public String createUser(Model model){
         if (result.hasErrors()) {
             model.addAttribute("user", user);
             model.addAttribute("roles", roles);
-            return "/admin/update-user";
+            return "admin/update-user";
         }
 
         Optional<User> existingUser = userService.findByUsername(user.getUsername());
@@ -139,7 +138,7 @@ public String createUser(Model model){
         if (existingUser.isPresent() && !existingUser.get().getId().equals(user.getId()) && !existingUser.get().isDeleted()) {
             result.rejectValue("username", "error.username", "Username already exists");
             model.addAttribute("roles", roles);
-            return "/admin/update-user";
+            return "admin/update-user";
         }
 
         Wallet wallet = user.getWallet();
@@ -197,7 +196,7 @@ public String createUser(Model model){
 
         if (result.hasErrors()) {
             model.addAttribute("roles", roles);
-            return "/admin/create-user";
+            return "admin/create-user";
         }
 
         Optional<User> existingUser = userService.findByUsername(user.getUsername());
@@ -223,7 +222,7 @@ public String createUser(Model model){
 
         model.addAttribute("orderList", allOrders);
 
-        return "/user/order-history";
+        return "user/order-history";
     }
 
     @GetMapping("/orders/{id}")
