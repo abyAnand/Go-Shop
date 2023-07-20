@@ -33,7 +33,7 @@ server:
 
 twilio:
   accountSid: ACafd4d89b5fcf368f857c56cfeb125288
-  authToken: e5f669b301cd70f4edd96ed82a8f399a
+  authToken: 54f497b9c5e568dd66b79563a8861684
   phone:
     number: +13614540810
 
