@@ -154,11 +154,13 @@ public class dashboard {
 
         model.addAttribute("totalProfit", totalProfit);
 
-        Map<Category, Integer> catCount = new HashMap<>();
-        orders.forEach(order -> order.getOrderItems().forEach(item -> {
-            Category category = item.getVariant().getProduct().getCategory();
-            catCount.put(category, catCount.getOrDefault(category, 0) + item.getQuantity());
-        }));
+        Map<Category,Integer> catCount = new HashMap<>();
+        orders.forEach(order ->{
+            order.getOrderItems().forEach(item ->{
+                Category category = item.getVariant().getProduct().getCategory();
+                catCount.put(category, catCount.getOrDefault(category, 0) + 1);
+            });
+        });
 
         model.addAttribute("categoryCount", catCount);
 
@@ -181,10 +183,10 @@ public class dashboard {
             Date modifiedDate = calendar.getTime();
             order.setCreatedDate(new Timestamp(modifiedDate.getTime()));
 
-            revenueMap.put(order.getCreatedDate(), revenueMap.getOrDefault(order.getCreatedDate(), 0F) + order.getTotal());
+            revenueMap.put(order.getCreatedDate(), revenueMap.getOrDefault(order.getCreatedDate(), 0F)+order.getTotal());
         });
 
-        model.addAttribute("revenueMap", revenueMap);
+        model.addAttribute("revenueMap",revenueMap);
 
         Map<Status, Long> orderStatusCounts = orders.stream()
                 .collect(Collectors.groupingBy(Order::getStatus, Collectors.counting()));
