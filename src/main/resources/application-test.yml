@@ -25,15 +25,15 @@ spring:
     jdbc:
       initialize-schema: always
 
-server:
-  error:
-    path: /error
-    whitelabel:
-      enabled: false
+#server:
+#  error:
+#    path: /error
+#    whitelabel:
+#      enabled: false
 
 twilio:
   accountSid: ACafd4d89b5fcf368f857c56cfeb125288
-  authToken: e3cee72acb3c8727dea7091d83bccbfd
+  authToken: e5f669b301cd70f4edd96ed82a8f399a
   phone:
     number: +13614540810
 

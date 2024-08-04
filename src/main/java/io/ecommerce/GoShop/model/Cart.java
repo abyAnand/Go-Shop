@@ -26,6 +26,7 @@ public class Cart extends BaseEntity{
     @ToString.Exclude
     private List<CartItem> cartItems = new ArrayList<CartItem>();
 
+    @Enumerated(EnumType.STRING)
     Payment payment;
 
     @OneToOne

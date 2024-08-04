@@ -48,4 +48,6 @@ public class Coupon extends BaseEntity{
     public boolean isExpired() {
         return (couponStock == 0 || expirationPeriod != null && expirationPeriod.before(new Date()));
     }
+
+
 }
