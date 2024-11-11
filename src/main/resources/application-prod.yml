@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://ls-00a3ad5f07dc236ab71c8f5766771c1de7250595.cx4iajig5qnr.ap-south-1.rds.amazonaws.com:3306/goshop
+    url: jdbc:mysql://ls-1f2745b35971146a8412b219f79ee70239caf8cc.cx4iajig5qnr.ap-south-1.rds.amazonaws.com:3306/goshop
     username: dbmasteruser
-    password: Wo9iySrWe`Ra*vI-8ONSC4UGJJ&pl8Cx
+    password: yyn4uk+ynaoQ>1<}Qyu+q$OOQ~OSzo5l
   jpa:
     generate-ddl: true
     properties:
@@ -33,7 +33,7 @@ spring:
 
 twilio:
   accountSid: ACafd4d89b5fcf368f857c56cfeb125288
-  authToken: 54f497b9c5e568dd66b79563a8861684
+  authToken: 1d92c0f5c07d4ebac5d432e36bce939f
   phone:
     number: +13614540810
 
